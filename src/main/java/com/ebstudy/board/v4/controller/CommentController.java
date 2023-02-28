@@ -10,8 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping(value = "/boards/free")
@@ -20,7 +21,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/comment")
-    public ResponseEntity saveComment(@ModelAttribute CommentDTO comment) {
+    public ResponseEntity<?> saveComment(@ModelAttribute CommentDTO comment) {
         log.info("commnet : " + comment);
         try {
             commentService.saveComment(comment);
