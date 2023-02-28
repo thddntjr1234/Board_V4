@@ -60,7 +60,9 @@ public class PostService {
      * @return 게시글 데이터와 viewName을 가진 ModelAndView 객체 반환
      */
     public PostDTO getPost(Long postId) {
-        return postServiceUtil.convertPostDataFormat(boardMapper.getPost(postId));
+        increaseHits(postId);
+        PostDTO post = postServiceUtil.convertPostDataFormat(boardMapper.getPost(postId));
+        return post;
     }
 
     /**

@@ -67,7 +67,8 @@ public class PostController {
         }
 
         PostDTO post = postService.getPost(postId);
-        postService.increaseHits(post.getPostId());
+        List<FileDTO> fileList = fileService.getFileList(postId);
+        List<CommentDTO> commentList = commentService.getCommentList(postId);
 
         mv.addObject("post", post);
         mv.setViewName("view");
