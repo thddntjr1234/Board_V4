@@ -52,8 +52,6 @@ public class CommentService {
         return result;
     }
 
-    //TODO: NullPointerException이 일어날 메소드가 아닌데 발생, intellij에서 자동으로 @NotNull 어노테이션을 추가해서 발생한 문제
-    // 해결 --> 생성자 주입을 쓰는데 private final 접근제어자를 안 붙여서 초기화가 안 되었기 때문에 null 오류가 생겼던 것
     /**
      * 댓글 저장 메소드
      * @param comment 저장할 댓글

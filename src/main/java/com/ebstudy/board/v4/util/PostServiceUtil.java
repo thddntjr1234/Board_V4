@@ -33,6 +33,7 @@ public class PostServiceUtil {
 
         Integer currentPage = pageNumber;
         // 유효 페이지 이외의 값을 파라미터로 받게 되는 경우의 예외처리
+        // 꼭 이렇게 이상한 값을 넣는 걸 감지하고 예외 처리해야 할까? 그냥 예외를 냅두고 전역으로 처리하는게 어떨까
         if (currentPage == null || currentPage > totalPage || currentPage <= 0) {
             currentPage = 1;
         }

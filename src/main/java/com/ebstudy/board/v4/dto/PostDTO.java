@@ -21,7 +21,7 @@ public class PostDTO {
     private String author;
     private String category;
     private String passwd;
-    private String secondPasswd;
-    private boolean fileFlag = false;
-    private List<MultipartFile> file;
+    private String secondPasswd; // 비밀번호 확인
+    private boolean fileFlag = false; // checkExistence()로 파일 존재여부 확인 뒤 true로 변경
+    private List<MultipartFile> file; // 게시글 저장 시 전달할 용도로 사용하는 파일 리스트
 }
