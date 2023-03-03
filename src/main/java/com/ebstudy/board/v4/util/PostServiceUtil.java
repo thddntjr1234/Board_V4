@@ -146,6 +146,35 @@ public class PostServiceUtil {
         return true;
     }
 
+    // TODO: 기존 유효성 검증과 동일한 로직이므로 메소드 분리 필요
+    public boolean checkUpdateValidation(PostDTO post, String originPasswd) {
+
+        if (post.getCategoryId() == null) {
+            return false;
+        }
+
+        int authorLength = post.getAuthor().length();
+//        authorLength += 100; // error유도
+        if (authorLength < 3 || authorLength >= 5) {
+            return false;
+        }
+
+        if (!post.getPasswd().equals(originPasswd)) {
+            return false;
+        }
+
+        int titleLength = post.getTitle().length();
+        if (titleLength < 4 || titleLength >= 100) {
+            return false;
+        }
+
+        int contentLength = post.getContent().length();
+        if (contentLength < 4 || contentLength >= 2000) {
+            return false;
+        }
+
+        return true;
+    }
 
     // TODO: 스프링부트에서 보편적으로 사용하는 암호화 방식으로 리팩토링
     /**

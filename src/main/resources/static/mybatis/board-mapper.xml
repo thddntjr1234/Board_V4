@@ -59,9 +59,28 @@
     <!--PostDTO 객체에 담긴 게시글 값을 저장-->
     <insert id="savePost" parameterType="com.ebstudy.board.v4.dto.PostDTO" useGeneratedKeys="true"
             keyProperty="postId">
-        INSERT INTO posts(title, category_id, author, content, passwd, created_date)
-        VALUES (#{title}, #{categoryId}, #{author}, #{content}, #{passwd}, #{createdDate});
+        INSERT INTO posts(title, category_id, author, content, passwd, created_date, modified_date)
+        VALUES (#{title}, #{categoryId}, #{author}, #{content}, #{passwd}, #{createdDate}, #{modifiedDate});
     </insert>
+
+    <!--postId값의 게시글을 수정-->
+    <update id="updatePost" parameterType="PostDTO">
+        UPDATE posts
+        SET author        = #{author},
+            passwd        = #{passwd},
+            title         = #{title},
+            content       = #{content},
+            modified_date = #{modifiedDate}
+        WHERE post_id = #{postId};
+    </update>
+
+    <!--해당 postId값의 게시글을 삭제-->
+    <delete id="deletePost" parameterType="long">
+        DELETE
+        from posts
+        WHERE post_id = #{postId};
+    </delete>
+
     <!--postId값을 가진 열의 조회수를 증가-->
     <update id="increaseHits" parameterType="long">
         UPDATE posts

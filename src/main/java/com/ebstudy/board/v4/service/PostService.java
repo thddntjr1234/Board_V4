@@ -90,7 +90,39 @@ public class PostService {
         boardMapper.savePost(post);
     }
 
+    /**
+     * 조회수 증가
+     * @param postId 증가시킬 게시글의 id
+     */
     public void increaseHits(Long postId) {
         boardMapper.increaseHits(postId);
+    }
+
+    /**
+     * 게시글 수정
+     * @param requestPost 수정할 게시글 정보가 담긴 게시글 DTO
+     */
+    public void updatePost(PostDTO requestPost) {
+
+        PostDTO originPost = getPost(requestPost.getPostId());
+
+        requestPost.setPasswd(postServiceUtil.getSHA512(requestPost.getPasswd()));
+        postServiceUtil.checkUpdateValidation(requestPost, originPost.getPasswd());
+        requestPost.setModifiedDate(String.valueOf(LocalDateTime.now()));
+
+        boardMapper.updatePost(requestPost);
+    }
+
+    /**
+     * 게시글 삭제
+     * @param postId 삭제할 게시글 id
+     */
+    public void deletePost(Long postId) {
+
+        if (postId == null) {
+            throw new NullPointerException();
+        }
+
+        boardMapper.deletePost(postId);
     }
 }

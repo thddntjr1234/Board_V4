@@ -1,6 +1,7 @@
 package com.ebstudy.board.v4.service;
 
 import com.ebstudy.board.v4.dto.FileDTO;
+import com.ebstudy.board.v4.dto.PostDTO;
 import com.ebstudy.board.v4.repository.BoardMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,7 @@ public class FileService {
 
     /**
      * 파일 리스트를 가져오는 메소드
+     *
      * @param postId 가져올 파일 리스트가 포함된 게시글의 id
      * @return 파일 리스트
      */
@@ -45,7 +47,8 @@ public class FileService {
 
     /**
      * 파일의 논리정보를 DB에, 실제 파일을 서버의 파일 저장소 폴더에 저장
-     * @param postId 저장할 파일의 부모 게시글 id
+     *
+     * @param postId            저장할 파일의 부모 게시글 id
      * @param multipartFileList MultipartFile로 변환된 파일 리스트
      * @throws IOException transferTo 메소드에서 발생할 수 있는 예외
      */
@@ -60,7 +63,7 @@ public class FileService {
             FileDTO file = new FileDTO();
 
             file.setPostId(postId);
-            file.setFileName(UUID.randomUUID()+ "_" + multipartFile.getOriginalFilename());
+            file.setFileName(UUID.randomUUID() + "_" + multipartFile.getOriginalFilename());
             file.setFileRealName(multipartFile.getOriginalFilename());
             file.setExtension(multipartFile.getContentType());
             file.setSize(multipartFile.getSize());
@@ -72,9 +75,35 @@ public class FileService {
         }
     }
 
+    public void updateFiles(Long postId, List<MultipartFile> multipartFileList) throws IOException {
+        // TODO: 기존 파일과 동일 여부를 검사한 뒤 다른 경우 파일을 삭제하고 새로 추가해야 함
+        // TODO: DB 내용은 UPDATE 쿼리로 충분
+        for (MultipartFile multipartFile : multipartFileList) {
+            if (!(multipartFile.getSize() > 0)) {
+                continue;
+            }
+            System.out.println();
+
+            FileDTO file = new FileDTO();
+
+            file.setPostId(postId);
+            file.setFileName(UUID.randomUUID() + "_" + multipartFile.getOriginalFilename());
+            file.setFileRealName(multipartFile.getOriginalFilename());
+            file.setExtension(multipartFile.getContentType());
+            file.setSize(multipartFile.getSize());
+
+            File fileName = new File(file.getFileName());
+            multipartFile.transferTo(fileName);
+
+//            boardMapper.upFile(file);
+        }
+
+    }
+
     /**
      * fileName을 주소에서 입력받아 실제 파일을 저장소에서 전달하는 메소드
-     * @param fileName 서버에서 변환된 파일명
+     *
+     * @param fileName     서버에서 변환된 파일명
      * @param fileRealName 사용자가 실제로 입력한 파일명
      * @return 파일과 헤더, HttpStatus 정보를 포함한 ResponseEntity<Resource> 객체
      */
@@ -101,4 +130,5 @@ public class FileService {
             return new ResponseEntity<>(null, HttpStatus.CONFLICT);
         }
     }
+
 }

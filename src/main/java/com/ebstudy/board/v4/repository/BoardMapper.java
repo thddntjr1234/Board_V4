@@ -29,7 +29,15 @@ public interface BoardMapper {
 
     void saveFile(FileDTO file);
 
+    void updateFile(FileDTO file);
+
     List<CommentDTO> getCommentList(long postId);
 
     void saveComment(CommentDTO comment);
+
+    void updateComment(CommentDTO comment);
+
+    void updatePost(PostDTO post);
+
+    void deletePost(long postId);
 }

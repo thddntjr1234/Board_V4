@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -109,11 +108,50 @@ public class PostController {
         try {
             // TODO: @Transactional 어노테이션의 위치(컨트롤러? 혹은 각 서비스?)
             postService.savePost(post);
+            log.info("savePost 수행 완료");
             fileService.saveFile(post.getPostId(), post.getFile()); // -> 이렇게 각 서비스를 실행하지 않고 원자성을 가지는 서비스 단위로 묶어서 실행해야 한다
         } catch (Exception e) {
             // TODO: 2/25 checked exception unchecked exception의 차이
+            log.info("savePost 오류 발생, error type=" + e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     * 게시글 수정
+     * @param post 수정할 내용이 담긴 게시글 DTO
+     * @return
+     */
+    @PutMapping("/post/{postId}")
+    public ResponseEntity<?> updatePost(@ModelAttribute PostDTO post) {
+
+        try {
+            postService.updatePost(post);
+            //TODO: file update 메소드 추가
+        } catch (Exception e) {
+            log.info("updatePost 오류 발생, error:" + e);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     * 게시글 삭제, cascade로 db에서 자체 삭제하므로 부모인 게시글만 삭제하면 된다.
+     * @param postId 삭제할 게시글 id
+     * @return
+     */
+    @DeleteMapping("/post/{postId}")
+    public ResponseEntity<?> deletePost(@PathVariable(required = false) Long postId) {
+
+        try {
+            postService.deletePost(postId);
+        } catch (Exception e) {
+            log.info("deletePost 오류 발생, error" + e);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
