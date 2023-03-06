@@ -32,6 +32,7 @@ public class PostService {
         List<PostDTO> sourcePostList = boardMapper.getPostList(startPostNumber);
 
         for (PostDTO post : sourcePostList) {
+            // TODO: 3/4. 비즈니스 로직에서 처리하기 전에 쿼리로 처리할 수 있는지 확인.
             if (boardMapper.checkFileExistence(post.getPostId())) {
                 post.setFileFlag(true);
             }
@@ -83,7 +84,6 @@ public class PostService {
             throw new RuntimeException();
         }
 
-        // TODO: 2/25. 단방향 암호화만 하고 복호화를 못하게 하는 이유?
         post.setPasswd(postServiceUtil.getSHA512(post.getPasswd()));
         post.setCreatedDate(String.valueOf(LocalDateTime.now()));
 
@@ -106,9 +106,10 @@ public class PostService {
 
         PostDTO originPost = getPost(requestPost.getPostId());
 
+        // 형식에 맞게 데이터 set 및 유효성 검증
         requestPost.setPasswd(postServiceUtil.getSHA512(requestPost.getPasswd()));
-        postServiceUtil.checkUpdateValidation(requestPost, originPost.getPasswd());
         requestPost.setModifiedDate(String.valueOf(LocalDateTime.now()));
+        postServiceUtil.checkUpdateValidation(requestPost, originPost.getPasswd());
 
         boardMapper.updatePost(requestPost);
     }

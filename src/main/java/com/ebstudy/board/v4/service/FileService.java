@@ -58,7 +58,6 @@ public class FileService {
             if (!(multipartFile.getSize() > 0)) {
                 continue;
             }
-            System.out.println();
 
             FileDTO file = new FileDTO();
 
@@ -95,7 +94,7 @@ public class FileService {
             File fileName = new File(file.getFileName());
             multipartFile.transferTo(fileName);
 
-//            boardMapper.upFile(file);
+//            boardMapper.updateFile(file);
         }
 
     }
@@ -108,9 +107,6 @@ public class FileService {
      * @return 파일과 헤더, HttpStatus 정보를 포함한 ResponseEntity<Resource> 객체
      */
     public ResponseEntity<Resource> downloadFile(String fileName, String fileRealName) {
-
-        // TODO: 2/25 path는 프로퍼티에서 관리(개발 환경에 따라 달라질 수 있기 때문에)
-
 
         String requestPath = basicPath + fileName;
         log.info("requestPath : " + requestPath);

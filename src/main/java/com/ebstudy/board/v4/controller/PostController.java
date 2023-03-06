@@ -32,7 +32,7 @@ public class PostController {
      * @param pageNumber 로딩할 페이지 번호
      * @return 페이지 번호별로 로딩한 게시글 리스트
      */
-    @GetMapping(value = {"/list/{pageNumber}", "/list"})
+    @GetMapping(value = {"/list/{pageNumber}", "/list"}) //TODO: 3/4. 검색 조건이 추가되게 된다면 path로 뺄 것과 파라미터로 뺄 것에 대해 고민하는게 좋다.
     public ResponseEntity<PostListResponseDTO> getPostList(@PathVariable(required = false) Integer pageNumber) {
 
         List<CategoryDTO> categoryList = postService.getCategoryList();
@@ -55,7 +55,7 @@ public class PostController {
      * @param postId 가져올 게시글 번호
      * @return 가져온 게시글 데이터
      */
-    @GetMapping(value = {"/view/{postId}", "/view"})
+    @GetMapping(value = {"/post/{postId}", "/post"})
     public ResponseEntity<PostResponseDTO> getPost(@PathVariable(required = false) Long postId) {
 
         // null, 0, ""은 list 페이지로 리다이렉트
@@ -87,7 +87,7 @@ public class PostController {
      *
      * @return 게시글 폼 viewName과 카테고리 리스트를 가진 ModelAndView 객체
      */
-    @GetMapping("/write")
+    @GetMapping("/post/form")
     public ResponseEntity<List<CategoryDTO>> getWriteForm() {
 
         List<CategoryDTO> categoryList = postService.getCategoryList();
@@ -100,13 +100,12 @@ public class PostController {
      * @param post 저장할 게시글
      * @return HttpStatus를 가진 ResponseEntity<> 객체
      */
-    @PostMapping("/write")
+    @PostMapping("/post")
     // ResponseEntity 로 리턴하면 raw type 경고가 나타나므로 와일드카드 ?를 선언해서 raw type의 불안정성을 제거
     public ResponseEntity<?> savePost(@ModelAttribute PostDTO post) {
 
         log.info("post: " + post);
         try {
-            // TODO: @Transactional 어노테이션의 위치(컨트롤러? 혹은 각 서비스?)
             postService.savePost(post);
             log.info("savePost 수행 완료");
             fileService.saveFile(post.getPostId(), post.getFile()); // -> 이렇게 각 서비스를 실행하지 않고 원자성을 가지는 서비스 단위로 묶어서 실행해야 한다
@@ -129,6 +128,8 @@ public class PostController {
         try {
             postService.updatePost(post);
             //TODO: file update 메소드 추가
+
+            //TODO: 3/4. GlobalExceptionHandler로 이런 예외처리를 해보자
         } catch (Exception e) {
             log.info("updatePost 오류 발생, error:" + e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -144,7 +145,7 @@ public class PostController {
      */
     @DeleteMapping("/post/{postId}")
     public ResponseEntity<?> deletePost(@PathVariable(required = false) Long postId) {
-
+        // TODO: 3/4. CASCADE로 전부 지워지지 않게(RESTRICT) 리팩토링
         try {
             postService.deletePost(postId);
         } catch (Exception e) {

@@ -67,12 +67,13 @@ public class PostServiceUtil {
      * @return 수정된 파라미터값(게시글 리스트)을 반환
      */
     public PostDTO convertToListFormat(PostDTO post) {
-
+            // TODO: 3/4. 포맷은 보여지는 것 비즈니스 로직에서는 raw data를 보내주는게 더 나을 수 있다.
+            // TODO: 3/4. 보여주는 형식의 데이터들은 프론트(뷰)에서 처리하게 하는게 좋다.
             post = convertPostDataFormat(post);
 
             // 제목 길이 수정
             if (post.getTitle().length() > 80) {
-                //TODO: 2/25. byte단위로 잘라야 할 때 post.getTitle().getBytes()로 하면 한글은 잘려버릴 텐데 어떻게 해야 할까?
+                //TODO: 2/25. (Q)byte단위로 잘라야 할 때 post.getTitle().getBytes()로 하면 한글은 잘려버릴 텐데 어떻게 해야 할까?
                 post.setTitle(post.getTitle().substring(0, 80) + "...");
             }
 
