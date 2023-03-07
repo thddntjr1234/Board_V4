@@ -1,4 +1,4 @@
-package com.ebstudy.board.v4.util;
+package com.ebstudy.board.v4.global.util;
 
 import com.ebstudy.board.v4.dto.PaginationDTO;
 import com.ebstudy.board.v4.dto.PostDTO;
@@ -88,7 +88,6 @@ public class PostServiceUtil {
      */
     public PostDTO convertPostDataFormat(PostDTO post) {
 
-        // 날짜 부분 메소
         String createdDate = post.getCreatedDate();
         // 날짜 포맷 변경
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
