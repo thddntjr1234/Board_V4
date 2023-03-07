@@ -21,6 +21,7 @@ public class PostService {
     private final BoardMapper boardMapper;
     private final PostServiceUtil postServiceUtil;
 
+    //TODO: 각 메소드별로 unchecked exception 발생할 수 있는지 여부 찾아서 custonexception 던지기
     /**
      * 요구 데이터 포맷에 맞게 변환된 게시글 리스트를 가져오는 메소드
      * @param startPostNumber 예외처리 없이 입력된 페이지 값
