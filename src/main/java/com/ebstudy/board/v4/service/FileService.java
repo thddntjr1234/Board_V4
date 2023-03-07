@@ -21,6 +21,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -104,27 +105,33 @@ public class FileService {
      *
      * @param fileName     서버에서 변환된 파일명
      * @param fileRealName 사용자가 실제로 입력한 파일명
-     * @return 파일과 헤더, HttpStatus 정보를 포함한 ResponseEntity<Resource> 객체
+     * @return
      */
-    public ResponseEntity<Resource> downloadFile(String fileName, String fileRealName) {
+    public HashMap<String, Object> downloadFile(String fileName, String fileRealName) {
 
         String requestPath = basicPath + fileName;
         log.info("requestPath : " + requestPath);
 
+        Path filePath = Paths.get(requestPath);
+        Resource resource = null;
+
         try {
-            Path filePath = Paths.get(requestPath);
-            Resource resource = new InputStreamResource(Files.newInputStream(filePath));
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentDisposition(ContentDisposition.builder("attachment")
-                    .filename(fileRealName, StandardCharsets.UTF_8)
-                    .build());
-
-            return new ResponseEntity<>(resource, headers, HttpStatus.OK);
-
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+            // IOException이 발생할 수 있는 부분 에러처리
+            resource = new InputStreamResource(Files.newInputStream(filePath));
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.FILE_NOT_FOUND);
         }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentDisposition(ContentDisposition.builder("attachment")
+                .filename(fileRealName, StandardCharsets.UTF_8)
+                .build());
+
+        HashMap<String, Object> headerAndResource = new HashMap<>();
+        headerAndResource.put("resource", resource);
+        headerAndResource.put("headers", headers);
+
+        return headerAndResource;
     }
 
 }
