@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 @RestController
@@ -27,7 +28,7 @@ public class FileController {
      * @return 사용자가 입력한 실제 파일명의 파일을 담은 ResponseEntity<Resource> 객체
      */
     @GetMapping("/file")
-    public ResponseEntity<?> downloadFile(@RequestParam String fileName, @RequestParam String fileRealName) {
+    public ResponseEntity<?> downloadFile(@RequestParam String fileName, @RequestParam String fileRealName) throws IOException {
 
         HashMap<String, Object> headerAndResourece = fileService.downloadFile(fileName, fileRealName);
 

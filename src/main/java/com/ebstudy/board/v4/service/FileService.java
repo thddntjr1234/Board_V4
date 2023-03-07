@@ -1,7 +1,8 @@
 package com.ebstudy.board.v4.service;
 
 import com.ebstudy.board.v4.dto.FileDTO;
-import com.ebstudy.board.v4.dto.PostDTO;
+import com.ebstudy.board.v4.global.exception.CustomException;
+import com.ebstudy.board.v4.global.exception.ErrorCode;
 import com.ebstudy.board.v4.repository.BoardMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,8 +11,6 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -69,6 +68,7 @@ public class FileService {
             file.setSize(multipartFile.getSize());
 
             File fileName = new File(file.getFileName());
+
             multipartFile.transferTo(fileName);
 
             boardMapper.saveFile(file);
@@ -93,8 +93,8 @@ public class FileService {
             file.setSize(multipartFile.getSize());
 
             File fileName = new File(file.getFileName());
-            multipartFile.transferTo(fileName);
 
+            multipartFile.transferTo(fileName);
 //            boardMapper.updateFile(file);
         }
 
@@ -107,7 +107,7 @@ public class FileService {
      * @param fileRealName 사용자가 실제로 입력한 파일명
      * @return
      */
-    public HashMap<String, Object> downloadFile(String fileName, String fileRealName) {
+    public HashMap<String, Object> downloadFile(String fileName, String fileRealName) throws IOException {
 
         String requestPath = basicPath + fileName;
         log.info("requestPath : " + requestPath);
@@ -115,12 +115,7 @@ public class FileService {
         Path filePath = Paths.get(requestPath);
         Resource resource = null;
 
-        try {
-            // IOException이 발생할 수 있는 부분 에러처리
-            resource = new InputStreamResource(Files.newInputStream(filePath));
-        } catch (IOException e) {
-            throw new CustomException(ErrorCode.FILE_NOT_FOUND);
-        }
+        resource = new InputStreamResource(Files.newInputStream(filePath));
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentDisposition(ContentDisposition.builder("attachment")
