@@ -8,6 +8,7 @@
         <result property="categoryId" column="category_id"/>
         <result property="createdDate" column="created_date"/>
         <result property="modifiedDate" column="modified_date"/>
+        <result property="fileFlag" column="file_flag"/>
     </resultMap>
 
     <resultMap id="mapCategoryDTO" type="com.ebstudy.board.v4.dto.CategoryDTO">
@@ -29,9 +30,16 @@
     <!--List<PostDTO> 형식으로 startPostNumber 번째 게시글부터 10개를 뽑아 리스트를 반환-->
     <select id="getPostList" parameterType="int" resultType="com.ebstudy.board.v4.dto.PostDTO"
             resultMap="mapPostDTO">
-        SELECT *
+        SELECT A.*,
+               B.category,
+               EXISTS(
+                   SELECT 1
+                   FROM files
+                   WHERE post_id = A.post_id
+                   ) AS file_flag
         FROM posts A
-                 LEFT JOIN categorys B ON A.category_id = B.category_id
+            LEFT JOIN categorys B
+                ON A.category_id = B.category_id
         ORDER BY post_id DESC LIMIT #{startPostNumber}, 10;
     </select>
     <!--현재 데이터베이스에 존재하는 게시글의 총 개수를 반환-->
@@ -59,8 +67,10 @@
     <!--PostDTO 객체에 담긴 게시글 값을 저장-->
     <insert id="savePost" parameterType="com.ebstudy.board.v4.dto.PostDTO" useGeneratedKeys="true"
             keyProperty="postId">
-        INSERT INTO posts(title, category_id, author, content, passwd, created_date, modified_date)
-        VALUES (#{title}, #{categoryId}, #{author}, #{content}, #{passwd}, #{createdDate}, #{modifiedDate});
+        INSERT INTO posts(title, category_id, author, content, passwd,
+                          created_date, modified_date)
+        VALUES (#{title}, #{categoryId}, #{author}, #{content}, #{passwd},
+                #{createdDate}, #{modifiedDate});
     </insert>
 
     <!--postId값의 게시글을 수정-->

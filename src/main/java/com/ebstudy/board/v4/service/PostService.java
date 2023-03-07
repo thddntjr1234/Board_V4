@@ -4,7 +4,7 @@ import com.ebstudy.board.v4.dto.CategoryDTO;
 import com.ebstudy.board.v4.dto.PaginationDTO;
 import com.ebstudy.board.v4.dto.PostDTO;
 import com.ebstudy.board.v4.repository.BoardMapper;
-import com.ebstudy.board.v4.util.PostServiceUtil;
+import com.ebstudy.board.v4.global.util.PostServiceUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,10 +32,6 @@ public class PostService {
         List<PostDTO> sourcePostList = boardMapper.getPostList(startPostNumber);
 
         for (PostDTO post : sourcePostList) {
-            // TODO: 3/4. 비즈니스 로직에서 처리하기 전에 쿼리로 처리할 수 있는지 확인.
-            if (boardMapper.checkFileExistence(post.getPostId())) {
-                post.setFileFlag(true);
-            }
             PostDTO convertedPost = postServiceUtil.convertToListFormat(post);
             postList.add(convertedPost);
         }
