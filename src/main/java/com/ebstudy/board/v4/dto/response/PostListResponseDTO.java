@@ -10,7 +10,6 @@ import lombok.Setter;
 import java.util.List;
 
 @Getter
-@Setter
 @Builder
 public class PostListResponseDTO {
     List<CategoryDTO> categoryList;
