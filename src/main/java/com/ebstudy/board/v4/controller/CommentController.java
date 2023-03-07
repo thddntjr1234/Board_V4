@@ -1,6 +1,7 @@
 package com.ebstudy.board.v4.controller;
 
 import com.ebstudy.board.v4.dto.CommentDTO;
+import com.ebstudy.board.v4.dto.response.CommonApiResponseDTO;
 import com.ebstudy.board.v4.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,13 +22,13 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/comment")
-    public ResponseEntity<?> saveComment(@ModelAttribute CommentDTO comment) {
-        log.info("commnet : " + comment);
-        try {
-            commentService.saveComment(comment);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(HttpStatus.OK);
+    public CommonApiResponseDTO<?> saveComment(@ModelAttribute CommentDTO comment) {
+
+        commentService.saveComment(comment);
+
+        return CommonApiResponseDTO.builder()
+                .success(true)
+                .status(HttpStatus.OK.value())
+                .build();
     }
 }

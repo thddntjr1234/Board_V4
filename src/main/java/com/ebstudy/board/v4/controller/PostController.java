@@ -1,6 +1,7 @@
 package com.ebstudy.board.v4.controller;
 
 import com.ebstudy.board.v4.dto.*;
+import com.ebstudy.board.v4.dto.response.CommonApiResponseDTO;
 import com.ebstudy.board.v4.dto.response.PostListResponseDTO;
 import com.ebstudy.board.v4.dto.response.PostResponseDTO;
 import com.ebstudy.board.v4.service.CommentService;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -33,20 +35,25 @@ public class PostController {
      * @return 페이지 번호별로 로딩한 게시글 리스트
      */
     @GetMapping(value = {"/list/{pageNumber}", "/list"}) //TODO: 3/4. 검색 조건이 추가되게 된다면 path로 뺄 것과 파라미터로 뺄 것에 대해 고민하는게 좋다.
-    public ResponseEntity<PostListResponseDTO> getPostList(@PathVariable(required = false) Integer pageNumber) {
+    public CommonApiResponseDTO<?> getPostList(@PathVariable(required = false) Integer pageNumber) {
 
         List<CategoryDTO> categoryList = postService.getCategoryList();
         PaginationDTO pagingValues = postService.getPaginationValues(pageNumber);
         List<PostDTO> postList = postService.getPostList(pagingValues.getStartPostNumber());
 
-        // 반환하는 값에 어떤 정보가 들었는지 명확하게 알 수 있도록 Map 사용을 지양하기 위해 별도의 DTO를 추가
+        log.info("getPostList 정상 수행에 따른 게시글 리스트 로드 완료");
+
         PostListResponseDTO postListResponseDTO = PostListResponseDTO.builder()
                 .categoryList(categoryList)
                 .pagingValues(pagingValues)
                 .postList(postList)
                 .build();
 
-        return new ResponseEntity<>(postListResponseDTO, HttpStatus.OK);
+        return CommonApiResponseDTO.builder()
+                .success(true)
+                .status(HttpStatus.OK.value())
+                .data(postListResponseDTO)
+                .build();
     }
 
     /**
@@ -55,31 +62,31 @@ public class PostController {
      * @param postId 가져올 게시글 번호
      * @return 가져온 게시글 데이터
      */
-    @GetMapping(value = {"/post/{postId}", "/post"})
-    public ResponseEntity<PostResponseDTO> getPost(@PathVariable(required = false) Long postId) {
+    @GetMapping("/post/{postId}")
+    public CommonApiResponseDTO<?> getPost(@PathVariable(required = false) Long postId) {
 
-        // null, 0, ""은 list 페이지로 리다이렉트
         // TODO : 예외처리(ExceptionHandler
-        if (postId == null || postId <= 0) {
-            // redirect의 주체는 규약에 따라 각기 다름, 서버가 주체면 이 방식이 맞고 클라이언트가 주체면 true, false와 같은 규약된 정보만 리턴
-//            mv.setViewName("redirect:/boards/free/list");
-            log.info("파라미터 postId값이 유효하지 않음");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+//        if (postId == null || postId <= 0) {
+//            log.info("파라미터 postId값이 유효하지 않음");
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
 
         PostDTO post = postService.getPost(postId);
         List<FileDTO> fileList = fileService.getFileList(postId);
         List<CommentDTO> commentList = commentService.getCommentList(postId);
 
-        // 반환하는 값에 어떤 정보가 들었는지 명확하게 알 수 있도록 Map 사용을 지양하기 위해 별도의 DTO를 추가
-        PostResponseDTO responseDTO = PostResponseDTO.builder()
+        log.info("getPost 정상 수행에 따른 게시글 로드 완료");
+
+        PostResponseDTO postResponseDTO = PostResponseDTO.builder()
                 .post(post)
                 .commentList(commentList)
                 .fileList(fileList)
                 .build();
 
-        log.info("getPost 정상 수행에 따른 파일 리스트 및 댓글 리스트 로딩 완료");
-        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+        return CommonApiResponseDTO.builder()
+                .success(true)
+                .data(postResponseDTO)
+                .build();
     }
 
     /**
@@ -88,10 +95,15 @@ public class PostController {
      * @return 게시글 폼 viewName과 카테고리 리스트를 가진 ModelAndView 객체
      */
     @GetMapping("/post/form")
-    public ResponseEntity<List<CategoryDTO>> getWriteForm() {
+    public CommonApiResponseDTO<?> getWriteForm() {
 
         List<CategoryDTO> categoryList = postService.getCategoryList();
-        return new ResponseEntity<>(categoryList, HttpStatus.OK);
+
+        return CommonApiResponseDTO.builder()
+                .success(true)
+                .status(HttpStatus.OK.value())
+                .data(categoryList)
+                .build();
     }
 
     /**
@@ -102,57 +114,51 @@ public class PostController {
      */
     @PostMapping("/post")
     // ResponseEntity 로 리턴하면 raw type 경고가 나타나므로 와일드카드 ?를 선언해서 raw type의 불안정성을 제거
-    public ResponseEntity<?> savePost(@ModelAttribute PostDTO post) {
+    public CommonApiResponseDTO<?> savePost(@ModelAttribute PostDTO post) throws IOException {
 
         log.info("post: " + post);
-        try {
-            postService.savePost(post);
-            log.info("savePost 수행 완료");
-            fileService.saveFile(post.getPostId(), post.getFile()); // -> 이렇게 각 서비스를 실행하지 않고 원자성을 가지는 서비스 단위로 묶어서 실행해야 한다
-        } catch (Exception e) {
-            // TODO: 2/25 checked exception unchecked exception의 차이
-            log.info("savePost 오류 발생, error type=" + e);
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(HttpStatus.OK);
+        postService.savePost(post);
+        log.info("savePost 수행 완료");
+        fileService.saveFile(post.getPostId(), post.getFile());
+
+        return CommonApiResponseDTO.builder()
+                .success(true)
+                .status(HttpStatus.OK.value())
+                .build();
     }
 
     /**
      * 게시글 수정
+     *
      * @param post 수정할 내용이 담긴 게시글 DTO
      * @return
      */
     @PutMapping("/post/{postId}")
-    public ResponseEntity<?> updatePost(@ModelAttribute PostDTO post) {
+    public CommonApiResponseDTO<?> updatePost(@ModelAttribute PostDTO post) {
 
-        try {
-            postService.updatePost(post);
-            //TODO: file update 메소드 추가
+        postService.updatePost(post);
+        //TODO: file update 메소드 추가
 
-            //TODO: 3/4. GlobalExceptionHandler로 이런 예외처리를 해보자
-        } catch (Exception e) {
-            log.info("updatePost 오류 발생, error:" + e);
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        return new ResponseEntity<>(HttpStatus.OK);
+        return CommonApiResponseDTO.builder()
+                .success(true)
+                .status(HttpStatus.OK.value())
+                .build();
     }
 
     /**
      * 게시글 삭제, cascade로 db에서 자체 삭제하므로 부모인 게시글만 삭제하면 된다.
+     *
      * @param postId 삭제할 게시글 id
      * @return
      */
     @DeleteMapping("/post/{postId}")
-    public ResponseEntity<?> deletePost(@PathVariable(required = false) Long postId) {
-        // TODO: 3/4. CASCADE로 전부 지워지지 않게(RESTRICT) 리팩토링
-        try {
-            postService.deletePost(postId);
-        } catch (Exception e) {
-            log.info("deletePost 오류 발생, error" + e);
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    public CommonApiResponseDTO<?> deletePost(@PathVariable(required = false) Long postId) {
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        postService.deletePost(postId);
+
+        return CommonApiResponseDTO.builder()
+                .success(true)
+                .status(HttpStatus.OK.value())
+                .build();
     }
 }
