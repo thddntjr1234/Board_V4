@@ -58,7 +58,9 @@ public class PostService {
      * @return 게시글 데이터와 viewName을 가진 ModelAndView 객체 반환
      */
     public PostDTO getPost(Long postId) {
+
         increaseHits(postId);
+
         PostDTO post = postServiceUtil.convertPostDataFormat(boardMapper.getPost(postId));
         return post;
     }
@@ -106,6 +108,7 @@ public class PostService {
         // 형식에 맞게 데이터 set 및 유효성 검증
         requestPost.setPasswd(postServiceUtil.getSHA512(requestPost.getPasswd()));
         requestPost.setModifiedDate(String.valueOf(LocalDateTime.now()));
+
         postServiceUtil.checkUpdateValidation(requestPost, originPost.getPasswd());
 
         boardMapper.updatePost(requestPost);
@@ -116,11 +119,6 @@ public class PostService {
      * @param postId 삭제할 게시글 id
      */
     public void deletePost(Long postId) {
-
-        if (postId == null) {
-            throw new NullPointerException();
-        }
-
         boardMapper.deletePost(postId);
     }
 }
