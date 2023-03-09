@@ -115,36 +115,36 @@ public class PostServiceUtil {
      * @param post 유효성 검사를 수행할 게시글
      * @return 검사 결과(true, false)
      */
-    public boolean checkValidation(PostDTO post) {
-
-        if (post.getCategoryId() == null) {
-            return false;
-        }
-
-        int authorLength = post.getAuthor().length();
-//        authorLength += 100; // error유도
-        if (authorLength < 3 || authorLength >= 5) {
-            return false;
-        }
-
-        if (!post.getPasswd().matches("^.*(?=^.{4,15}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$")) {
-            return false;
-        } else if (!post.getPasswd().equals(post.getSecondPasswd())) {
-            return false;
-        }
-
-        int titleLength = post.getTitle().length();
-        if (titleLength < 4 || titleLength >= 100) {
-            return false;
-        }
-
-        int contentLength = post.getContent().length();
-        if (contentLength < 4 || contentLength >= 2000) {
-            return false;
-        }
-
-        return true;
-    }
+//    public boolean checkValidation(PostDTO post) {
+//
+//        if (post.getCategoryId() == null) {
+//            return false;
+//        }
+//
+//        int authorLength = post.getAuthor().length();
+////        authorLength += 100; // error유도
+//        if (authorLength < 3 || authorLength >= 5) {
+//            return false;
+//        }
+//
+//        if (!post.getPasswd().matches("^.*(?=^.{4,15}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$")) {
+//            return false;
+//        } else if (!post.getPasswd().equals(post.getConfirmPasswd())) {
+//            return false;
+//        }
+//
+//        int titleLength = post.getTitle().length();
+//        if (titleLength < 4 || titleLength >= 100) {
+//            return false;
+//        }
+//
+//        int contentLength = post.getContent().length();
+//        if (contentLength < 4 || contentLength >= 2000) {
+//            return false;
+//        }
+//
+//        return true;
+//    }
 
     // TODO: 기존 유효성 검증과 동일한 로직이므로 메소드 분리 필요
     public boolean checkUpdateValidation(PostDTO post, String originPasswd) {

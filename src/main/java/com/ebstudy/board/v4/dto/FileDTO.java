@@ -4,7 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter @Setter @ToString
+@Getter
+@Setter
+@ToString
 public class FileDTO {
     private Long postId; // 소속된 게시글의 pk값(fk)
     private Long fileId; // 파일의 pk값
