@@ -3,6 +3,8 @@ package com.ebstudy.board.v4.service;
 import com.ebstudy.board.v4.dto.CategoryDTO;
 import com.ebstudy.board.v4.dto.PaginationDTO;
 import com.ebstudy.board.v4.dto.PostDTO;
+import com.ebstudy.board.v4.global.exception.CustomException;
+import com.ebstudy.board.v4.global.exception.ErrorCode;
 import com.ebstudy.board.v4.repository.BoardMapper;
 import com.ebstudy.board.v4.global.util.PostServiceUtil;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +23,7 @@ public class PostService {
     private final BoardMapper boardMapper;
     private final PostServiceUtil postServiceUtil;
 
-    //TODO: 각 메소드별로 unchecked exception 발생할 수 있는지 여부 찾아서 custonexception 던지기
+    //TODO: 각 메소드별로 unchecked exception 발생할 수 있는지 여부 찾아서 customexception 던지기
     /**
      * 요구 데이터 포맷에 맞게 변환된 게시글 리스트를 가져오는 메소드
      * @param startPostNumber 예외처리 없이 입력된 페이지 값
@@ -58,6 +60,11 @@ public class PostService {
      * @return 게시글 데이터와 viewName을 가진 ModelAndView 객체 반환
      */
     public PostDTO getPost(Long postId) {
+        // TODO: custom exception
+//        if (postId == null || postId <= 0) {
+//            log.info("파라미터 postId값이 유효하지 않음");
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
 
         increaseHits(postId);
 
@@ -78,10 +85,6 @@ public class PostService {
      * @param post 저장할 게시글
      */
     public void savePost(PostDTO post) {
-
-        if (!postServiceUtil.checkValidation(post)) {
-            throw new RuntimeException();
-        }
 
         post.setPasswd(postServiceUtil.getSHA512(post.getPasswd()));
         post.setCreatedDate(String.valueOf(LocalDateTime.now()));

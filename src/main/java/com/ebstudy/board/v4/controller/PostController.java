@@ -4,21 +4,24 @@ import com.ebstudy.board.v4.dto.*;
 import com.ebstudy.board.v4.dto.response.CommonApiResponseDTO;
 import com.ebstudy.board.v4.dto.response.PostListResponseDTO;
 import com.ebstudy.board.v4.dto.response.PostResponseDTO;
+import com.ebstudy.board.v4.global.validator.EqualEachPasswd;
 import com.ebstudy.board.v4.service.CommentService;
 import com.ebstudy.board.v4.service.FileService;
 import com.ebstudy.board.v4.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
 @RestController
 @Slf4j
 @RequiredArgsConstructor
+@Validated // TODO: 3/11(질문) Custom Validation을 사용할 때 @Validated를 적용해야 Custom Validation이 적용되었음.
 @RequestMapping(value = "/boards/free")
 public class PostController {
 
@@ -65,12 +68,6 @@ public class PostController {
     @GetMapping("/post/{postId}")
     public CommonApiResponseDTO<?> getPost(@PathVariable(required = false) Long postId) {
 
-        // TODO : 예외처리(ExceptionHandler
-//        if (postId == null || postId <= 0) {
-//            log.info("파라미터 postId값이 유효하지 않음");
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-
         PostDTO post = postService.getPost(postId);
         List<FileDTO> fileList = fileService.getFileList(postId);
         List<CommentDTO> commentList = commentService.getCommentList(postId);
@@ -114,7 +111,7 @@ public class PostController {
      */
     @PostMapping("/post")
     // ResponseEntity 로 리턴하면 raw type 경고가 나타나므로 와일드카드 ?를 선언해서 raw type의 불안정성을 제거
-    public CommonApiResponseDTO<?> savePost(@ModelAttribute PostDTO post) throws IOException {
+    public CommonApiResponseDTO<?> savePost(@ModelAttribute @Valid @EqualEachPasswd({"passwd", "confirmPasswd"}) PostDTO post) throws IOException {
 
         log.info("post: " + post);
         postService.savePost(post);
@@ -152,7 +149,7 @@ public class PostController {
      * @return
      */
     @DeleteMapping("/post/{postId}")
-    public CommonApiResponseDTO<?> deletePost(@PathVariable(required = false) Long postId) {
+    public CommonApiResponseDTO<?> deletePost(@Validated @EqualEachPasswd({"passwd", "confirmPasswd"}) @PathVariable(required = false) Long postId) {
 
         postService.deletePost(postId);
 
