@@ -1,17 +1,18 @@
 package com.ebstudy.board.v4.repository;
 
-import com.ebstudy.board.v4.dto.CategoryDTO;
-import com.ebstudy.board.v4.dto.CommentDTO;
-import com.ebstudy.board.v4.dto.FileDTO;
-import com.ebstudy.board.v4.dto.PostDTO;
+import com.ebstudy.board.v4.dto.*;
+import com.ebstudy.board.v4.global.validator.EqualEachPasswd;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import java.util.List;
 
+@Validated
 @Mapper // SqlSession을 만들고 Mapper를 등록할 필요가 없이 이 어노테이션으로 해결 가능
 public interface BoardMapper {
 
-    List<PostDTO> getPostList(int startPostNumber);
+    List<PostDTO> getPostList(PaginationDTO paginationValues);
 
     int getPostCount();
 
@@ -37,7 +38,7 @@ public interface BoardMapper {
 
     void updateComment(CommentDTO comment);
 
-    void updatePost(PostDTO post);
+    void updatePost(@EqualEachPasswd({"passwd", "confirmPasswd"}) PostDTO post);
 
     void deletePost(long postId);
 }

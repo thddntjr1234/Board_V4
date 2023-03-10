@@ -60,6 +60,7 @@ public class PostServiceUtil {
         return pagingValues;
     }
 
+    // TODO: Convert 관련 기능 제외(뷰로 책임을 넘기기)
     /**
      * getPostList()시 날짜 변환과 수정일이 공란일 시 "-"을 추가하고 각 포스트마다 파일 보유 여부를 추가하는 메소드
      *
@@ -67,8 +68,6 @@ public class PostServiceUtil {
      * @return 수정된 파라미터값(게시글 리스트)을 반환
      */
     public PostDTO convertToListFormat(PostDTO post) {
-            // TODO: 3/4. 포맷은 보여지는 것 비즈니스 로직에서는 raw data를 보내주는게 더 나을 수 있다.
-            // TODO: 3/4. 보여주는 형식의 데이터들은 프론트(뷰)에서 처리하게 하는게 좋다.
             post = convertPostDataFormat(post);
 
             // 제목 길이 수정
@@ -146,35 +145,14 @@ public class PostServiceUtil {
 //        return true;
 //    }
 
-    // TODO: 기존 유효성 검증과 동일한 로직이므로 메소드 분리 필요
-    public boolean checkUpdateValidation(PostDTO post, String originPasswd) {
 
-        if (post.getCategoryId() == null) {
-            return false;
-        }
-
-        int authorLength = post.getAuthor().length();
-//        authorLength += 100; // error유도
-        if (authorLength < 3 || authorLength >= 5) {
-            return false;
-        }
-
-        if (!post.getPasswd().equals(originPasswd)) {
-            return false;
-        }
-
-        int titleLength = post.getTitle().length();
-        if (titleLength < 4 || titleLength >= 100) {
-            return false;
-        }
-
-        int contentLength = post.getContent().length();
-        if (contentLength < 4 || contentLength >= 2000) {
-            return false;
-        }
-
-        return true;
-    }
+    // EqualEachPasswd를 Mapper 인터페이스에 사용하기 전에는 이런 방식으로 할까 고민했지만 해결했음
+//    public boolean isSamePasswd(String requestPasswd, String originPasswd) {
+//        if (requestPasswd.equals(originPasswd)) {
+//            return true;
+//        }
+//        return false;
+//    }
 
     // TODO: 스프링부트에서 보편적으로 사용하는 암호화 방식으로 리팩토링
     /**

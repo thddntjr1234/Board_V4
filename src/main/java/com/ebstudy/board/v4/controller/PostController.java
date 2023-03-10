@@ -11,6 +11,7 @@ import com.ebstudy.board.v4.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,15 +22,13 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@Validated // TODO: 3/11(질문) Custom Validation을 사용할 때 @Validated를 적용해야 Custom Validation이 적용되었음.
+@Validated
 @RequestMapping(value = "/boards/free")
 public class PostController {
 
     private final PostService postService;
     private final FileService fileService;
     private final CommentService commentService;
-
-    // TODO: 전역 에러 핸들러 쓸 필요가 있다.(exception을 최종적으로 서버에서 뱉을 때 그 에러를 그대로 페이지에 표시하지 않고 이를 캐치해서 처리해서 뱉을 수 있도록 하는거)
 
     /**
      * 게시글 리스트를 로딩
@@ -109,6 +108,7 @@ public class PostController {
      */
     @PostMapping("/post")
     // ResponseEntity 로 리턴하면 raw type 경고가 나타나므로 와일드카드 ?를 선언해서 raw type의 불안정성을 제거
+    // TODO: 유효성 검증 실패시 Erros 조회해서 CustomException 던지기
     public CommonApiResponseDTO<?> savePost(@ModelAttribute @Valid @EqualEachPasswd({"passwd", "confirmPasswd"}) PostDTO post) throws IOException {
 
         log.info("post: " + post);
@@ -128,7 +128,7 @@ public class PostController {
      * @return
      */
     @PutMapping("/post/{postId}")
-    public CommonApiResponseDTO<?> updatePost(@ModelAttribute PostDTO post) {
+    public CommonApiResponseDTO<?> updatePost(@ModelAttribute @Valid PostDTO post, Errors errors) {
 
         postService.updatePost(post);
         //TODO: file update 메소드 추가
@@ -145,7 +145,7 @@ public class PostController {
      * @return
      */
     @DeleteMapping("/post/{postId}")
-    public CommonApiResponseDTO<?> deletePost(@Validated @EqualEachPasswd({"passwd", "confirmPasswd"}) @PathVariable(required = false) Long postId) {
+    public CommonApiResponseDTO<?> deletePost(@PathVariable(required = false) Long postId) {
 
         postService.deletePost(postId);
 
