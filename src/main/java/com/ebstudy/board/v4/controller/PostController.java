@@ -54,7 +54,6 @@ public class PostController {
 
         return CommonApiResponseDTO.builder()
                 .success(true)
-                .status(HttpStatus.OK.value())
                 .data(postListResponseDTO)
                 .build();
     }
@@ -98,7 +97,6 @@ public class PostController {
 
         return CommonApiResponseDTO.builder()
                 .success(true)
-                .status(HttpStatus.OK.value())
                 .data(categoryList)
                 .build();
     }
@@ -120,7 +118,6 @@ public class PostController {
 
         return CommonApiResponseDTO.builder()
                 .success(true)
-                .status(HttpStatus.OK.value())
                 .build();
     }
 
@@ -138,7 +135,6 @@ public class PostController {
 
         return CommonApiResponseDTO.builder()
                 .success(true)
-                .status(HttpStatus.OK.value())
                 .build();
     }
 
@@ -155,7 +151,6 @@ public class PostController {
 
         return CommonApiResponseDTO.builder()
                 .success(true)
-                .status(HttpStatus.OK.value())
                 .build();
     }
 }

@@ -6,8 +6,6 @@ import com.ebstudy.board.v4.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +26,6 @@ public class CommentController {
 
         return CommonApiResponseDTO.builder()
                 .success(true)
-                .status(HttpStatus.OK.value())
                 .build();
     }
 }
