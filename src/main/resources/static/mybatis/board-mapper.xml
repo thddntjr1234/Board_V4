@@ -55,7 +55,7 @@
         SELECT *
         FROM posts A
                  LEFT JOIN categorys B ON A.category_id = B.category_id
-        WHERE post_id = #{postId}, delete_flag = false;
+        WHERE post_id = #{postId} AND delete_flag = false;
     </select>
     <!--카테고리 리스트를 반환-->
     <select id="getCategoryList" resultType="com.ebstudy.board.v4.dto.CategoryDTO"
