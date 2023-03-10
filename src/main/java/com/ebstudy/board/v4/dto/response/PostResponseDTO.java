@@ -13,8 +13,8 @@ import java.util.List;
 @Setter
 @Builder
 public class PostResponseDTO {
-    private PostDTO post;
-    private List<FileDTO> fileList;
-    private List<CommentDTO> commentList;
+    private PostDTO post; // 요청한 게시글 데이터
+    private List<FileDTO> fileList; // 게시글에 종속된 파일 리스트
+    private List<CommentDTO> commentList; // 게시글에 종속된 댓글 리스트
 
 }

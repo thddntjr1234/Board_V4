@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Builder
 public class PostListResponseDTO {
-    List<CategoryDTO> categoryList;
-    PaginationDTO pagingValues;
-    List<PostDTO> postList;
+    List<CategoryDTO> categoryList; // 카테고리 리스트
+    PaginationDTO pagingValues; // 검색어로 검색된 페이징 값
+    List<PostDTO> postList; // 검색어로 검색된 게시글 리스트
 }
