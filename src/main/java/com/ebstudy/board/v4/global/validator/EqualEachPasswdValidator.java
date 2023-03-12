@@ -48,12 +48,12 @@ public class EqualEachPasswdValidator implements ConstraintValidator<EqualEachPa
         // TODO: 현재는 패스워드 일치 여부만 검사하지만 switch문으로 fields의 키 값이 매칭되는 조건문에서 유효성 검사를 수행하도록 하면
         //  @ValidationPost({"검사할 필드1", "검사할 필드2"}) PostDTO post 이런 방식으로 적용할 수 있게 된다.
         // 패스워드 일치여부 검사
-        if (parameters.get("passwd").equals(parameters.get("confirmPasswd"))) {
-            log.info("두 패스워드 값이 같음, 유효성 통과");
-            return true;
+        if (!parameters.get("passwd").equals(parameters.get("confirmPasswd"))) {
+            log.info("패스워드 유효성 검증 실패");
+            return false;
         }
 
-        throw new CustomException(ErrorCode.INVALID_REQUEST);
+        return true;
     }
 
 }

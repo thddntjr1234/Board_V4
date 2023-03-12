@@ -18,8 +18,7 @@ public @interface EqualEachPasswd {
 
     // 데이터 필드
     String[] value();
-
-    String message() default "{EqualEachPasswd.message}"; // log로 출력되는 메세지
+    String message() default "Validation Failed: 입력한 비밀번호와 실제 비밀번호가 일치하지 않습니다."; // log로 출력되는 메세지
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

@@ -105,6 +105,7 @@
         INSERT INTO files(file_name, file_realname, post_id, extension, size)
         VALUES (#{fileName}, #{fileRealName}, #{postId}, #{extension}, ${size});
     </insert>
+
     <!--postId값에 해당하는 파일의 목록을 반환-->
     <select id="getFileList" parameterType="long" resultType="com.ebstudy.board.v4.dto.FileDTO"
             resultMap="mapFileDTO">
@@ -112,6 +113,7 @@
         FROM files
         WHERE post_id = #{postId};
     </select>
+
     <!--해당 postId을 가진 파일이 하나라도 존재하는지 여부를 반환-->
     <select id="checkFileExistence" parameterType="long" resultType="boolean">
         SELECT EXISTS
@@ -129,6 +131,7 @@
         WHERE post_id = #{postId}
         ORDER BY created_date DESC;
     </select>
+
     <!--댓글 대상의 postId를 가진 게시글을 저장-->
     <insert id="saveComment" parameterType="com.ebstudy.board.v4.dto.CommentDTO">
         INSERT INTO comments(comment, created_date, post_id)

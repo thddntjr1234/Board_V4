@@ -5,7 +5,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter @Setter @ToString @Builder
+@Getter
+@Setter
+@ToString
+@Builder
 public class PaginationDTO {
     // TODO: 3/4. DTO 필드에도 주석을 달아야 이 변수가 어떤 역할을 하는지 유추할 수 있다.
     int totalPostCount; // select * 로 검색된 전체 게시글 개수
