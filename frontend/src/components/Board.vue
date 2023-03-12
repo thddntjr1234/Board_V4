@@ -102,8 +102,12 @@ export default {
     };
   },
   mounted() {
-    this.getPostList(this.$route.params.page);
+    const list = this.getPostList(this.$route.params.page);
     console.log("route parameter page: " + this.$route.params.page);
+    // TODO: 3/4. 비동기를 사용할 때 앞의 메소드가 실행되기 전 밑의 라인이 실행될 수 있다 -> promise + await를 공부해 보자
+    console.dir(list);
+
+
   },
   methods: {
     getPostList(page) {
