@@ -30,6 +30,8 @@
     <!--List<PostDTO> 형식으로 startPostNumber 번째 게시글부터 10개를 뽑아 리스트를 반환-->
     <select id="getPostList" parameterType="int" resultType="com.ebstudy.board.v4.dto.PostDTO"
             resultMap="mapPostDTO">
+        <!--db 성능에 대해서는 성능이 실제로 문제가 될 때 고려-->
+        <!--TODO: 3/11 리뷰: View를 공부해서 사용해 보자, where delete_flag가 따라다니는걸 막기 위해서 쓰는 것(create view v-board, user와 admin의 경우에 delete_flag-->
         SELECT A.*,
                B.category,
                EXISTS(
@@ -41,13 +43,15 @@
             LEFT JOIN categorys B
                 ON A.category_id = B.category_id
         ORDER BY post_id DESC LIMIT #{startPostNumber}, 10
-        WHERE delete_flag = false;
+        WHERE A.delete_flag = false;
     </select>
+
     <!--현재 데이터베이스에 존재하는 게시글의 총 개수를 반환-->
     <select id="getPostCount" resultType="int">
         SELECT COUNT(post_id)
         FROM posts;
     </select>
+
     <!--CDATA를 쓰면 sql 안에서 < >같은 문자를 써도 xml코드로 인식하지 않는다-->
     <!--요청한 postId에 해당하는 게시글을 반환-->
     <select id="getPost" parameterType="long" resultType="com.ebstudy.board.v4.dto.PostDTO"
@@ -57,6 +61,7 @@
                  LEFT JOIN categorys B ON A.category_id = B.category_id
         WHERE post_id = #{postId} AND delete_flag = false;
     </select>
+    
     <!--카테고리 리스트를 반환-->
     <select id="getCategoryList" resultType="com.ebstudy.board.v4.dto.CategoryDTO"
             resultMap="mapCategoryDTO">

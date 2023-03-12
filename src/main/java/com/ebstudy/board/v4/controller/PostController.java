@@ -32,6 +32,7 @@ public class PostController {
 
     /**
      * 게시글 리스트를 로딩
+     * /boards/free?keyword=ss&page=3&......
      *
      * @param pageNumber 로딩할 페이지 번호
      * @return 페이지 번호별로 로딩한 게시글 리스트
@@ -59,7 +60,7 @@ public class PostController {
 
     /**
      * 게시글 로딩
-     *
+     * /boards/free/3
      * @param postId 가져올 게시글 번호
      * @return 가져온 게시글 데이터
      */
@@ -86,7 +87,7 @@ public class PostController {
 
     /**
      * 게시글 작성 폼으로 이동
-     *
+     * /boards/free/new
      * @return 게시글 폼 viewName과 카테고리 리스트를 가진 ModelAndView 객체
      */
     @GetMapping("/post/form")
@@ -102,7 +103,7 @@ public class PostController {
 
     /**
      * 게시글 저장
-     *
+     * /boards/free POST
      * @param post 저장할 게시글
      * @return HttpStatus를 가진 ResponseEntity<> 객체
      */
@@ -123,7 +124,7 @@ public class PostController {
 
     /**
      * 게시글 수정
-     *
+     * /boards/free/3 PUT
      * @param post 수정할 내용이 담긴 게시글 DTO
      * @return
      */
@@ -140,7 +141,7 @@ public class PostController {
 
     /**
      * 게시글 삭제, cascade로 db에서 자체 삭제하므로 부모인 게시글만 삭제하면 된다.
-     *
+     * /boards/free/3 DELTE
      * @param postId 삭제할 게시글 id
      * @return
      */
