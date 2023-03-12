@@ -42,8 +42,8 @@
         FROM posts A
             LEFT JOIN categorys B
                 ON A.category_id = B.category_id
-        ORDER BY post_id DESC LIMIT #{startPostNumber}, 10
-        WHERE A.delete_flag = false;
+        WHERE A.delete_flag = false
+        ORDER BY post_id DESC LIMIT #{startPostNumber}, 10;
     </select>
 
     <!--현재 데이터베이스에 존재하는 게시글의 총 개수를 반환-->
