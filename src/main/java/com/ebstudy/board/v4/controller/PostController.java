@@ -37,14 +37,24 @@ public class PostController {
      * @param pageNumber 로딩할 페이지 번호
      * @return 페이지 번호별로 로딩한 게시글 리스트
      */
-    // TODO: 3/11 리뷰: {} pathvarialbe은 query parameter로, RequestMapping 빼고 하위경로 붙이기, boards/free까지만 사용
-    // TODO: 2023/03/12 리뷰: path를 post/free까지
+
     @GetMapping("/boards/free")
-    public CommonApiResponseDTO<?> getPostList(Integer pageNumber, String searchKeyword) {
+    public CommonApiResponseDTO<?> getPostList(Integer pageNumber, Integer categoryId, String keyword,
+                                               String startDate, String endDate) {
 
         List<CategoryDTO> categoryList = postService.getCategoryList();
         PaginationDTO pagingValues = postService.getPaginationValues(pageNumber);
+
+        // 일일히 파라미터를 선언해준 것은 PaginationDTO에 페이징을 위한 필드가 있기 때문에
+        // 다른 역할을 하는 필드가 섞인 DTO에서 어느 값이 들어가는지 확실하게 알 수 있기 위함임
+        pagingValues.setCategoryId(categoryId);
+        pagingValues.setKeyword(keyword);
+        pagingValues.setStartDate(startDate);
+        pagingValues.setEndDate(endDate);
+
         List<PostDTO> postList = postService.getPostList(pagingValues);
+
+
 
         log.info("getPostList 정상 수행에 따른 게시글 리스트 로드 완료");
 

@@ -31,13 +31,14 @@ public class PostService {
     //TODO: 각 메소드별로 unchecked exception 발생할 수 있는지 여부 찾아서 customexception 던지기
     /**
      * 요구 데이터 포맷에 맞게 변환된 게시글 리스트를 가져오는 메소드
-     * @param startPostNumber 예외처리 없이 입력된 페이지 값
-     * @return viewName과 데이터를 포함안 ModelAndView 객체
+     * @param pagingValue 검색조건과 페이징 값 PaginationDTO 객체
+     * @return 게시글 리스트
      */
-    public List<PostDTO> getPostList(int startPostNumber) {
+    public List<PostDTO> getPostList(PaginationDTO pagingValue) {
 
         List<PostDTO> postList = new LinkedList<>();
-        List<PostDTO> sourcePostList = boardMapper.getPostList(startPostNumber);
+        //TODO: Pagination Values 계산
+        List<PostDTO> sourcePostList = boardMapper.getPostList(pagingValue);
 
         for (PostDTO post : sourcePostList) {
             PostDTO convertedPost = postServiceUtil.convertToListFormat(post);
