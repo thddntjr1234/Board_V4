@@ -14,12 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping(value = "/boards/free")
 public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("/comment")
+    @PostMapping("/boards/comment")
     public CommonApiResponseDTO<?> saveComment(@ModelAttribute CommentDTO comment) {
 
         commentService.saveComment(comment);
