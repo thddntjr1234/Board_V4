@@ -54,8 +54,6 @@ public class PostController {
 
         List<PostDTO> postList = postService.getPostList(pagingValues);
 
-
-
         log.info("getPostList 정상 수행에 따른 게시글 리스트 로드 완료");
 
         PostListResponseDTO postListResponseDTO = PostListResponseDTO.builder()
@@ -133,14 +131,17 @@ public class PostController {
                 .build();
     }
 
+    // TODO: 3/11 리뷰에서 받았던 유효성 검증은 가급적 컨트롤러에서 하기를 어떻게 지킬 수 있을까?
+    //  Update, Delete는 post에서 패스워드를 애초에 받아서 가지고 있게 하는 방식으로 하면 된다고 쳐도 수정, 삭제 버튼시 한번 체크하고 넘어가는 부분에서는 어쩔 수 없이 DAO에서 체크할 수 밖에 없다.
+
     /**
      * 게시글 수정
      * /boards/free/3 PUT
      * @param post 수정할 내용이 담긴 게시글 DTO
-     * @return
+     * @return 공통 반환타입 CommonApiResponseDTO 객체
      */
     @PutMapping("/boards/free/{postId}")
-    public CommonApiResponseDTO<?> updatePost(@ModelAttribute @Valid PostDTO post, Errors errors) {
+    public CommonApiResponseDTO<?> updatePost(@ModelAttribute @Valid PostDTO post) {
 
         postService.updatePost(post);
         //TODO: file update 메소드 추가

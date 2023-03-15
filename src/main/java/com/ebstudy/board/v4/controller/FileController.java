@@ -19,7 +19,6 @@ public class FileController {
 
     private final FileService fileService;
 
-    // TODO: view단 작성할 때 uri에 쿼리 파라미터 방식으로 전송하도록 변경사항 적용할 것
     /**
      * fileName 파라미터를 통해 경로를 노출하지 않고 파일을 다운로드
      * @param fileName 서버상에 저장된 파일명

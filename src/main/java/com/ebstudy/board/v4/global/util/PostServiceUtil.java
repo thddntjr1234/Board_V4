@@ -24,7 +24,6 @@ public class PostServiceUtil {
      * @return 페이징에 필요한 시작페이지와 끝 페이지 값과 보정된 요청 페이지 값, 총 페이지 값(끝으로 이동 시 사용), DB LIMIT 시작값
      */
     public PaginationDTO calPagingValues(int totalPostCount, Integer pageNumber) {
-        // TODO: 2/25 검색조건 추가시 pagination 로직 안에 검색조건 포함해서 넣기
 
         int totalPage = totalPostCount / 10;
         if (totalPostCount % 10 > 0) {
@@ -72,7 +71,7 @@ public class PostServiceUtil {
 
             // 제목 길이 수정
             if (post.getTitle().length() > 80) {
-                //TODO: 2/25. (Q)byte단위로 잘라야 할 때 post.getTitle().getBytes()로 하면 한글은 잘려버릴 텐데 어떻게 해야 할까?
+                // (Q)byte단위로 잘라야 할 때 post.getTitle().getBytes()로 하면 한글은 잘려버릴 텐데 어떻게 해야 할까?
                 post.setTitle(post.getTitle().substring(0, 80) + "...");
             }
 
