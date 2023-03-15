@@ -154,13 +154,13 @@ public class PostController {
     /**
      * 게시글 삭제, cascade로 db에서 자체 삭제하므로 부모인 게시글만 삭제하면 된다.
      * /boards/free/3 DELTE
-     * @param postId 삭제할 게시글 id
-     * @return
+     * @param post postId, passwd 값 전달
+     * @return 공통 반환타입 CommonApiResponseDTO 객체
      */
-    @DeleteMapping("/boards/free/{postId}")
-    public CommonApiResponseDTO<?> deletePost(@PathVariable Long postId) {
+    @DeleteMapping("/boards/free")
+    public CommonApiResponseDTO<?> deletePost(@ModelAttribute PostDTO post) {
 
-        postService.deletePost(postId);
+        postService.deletePost(post);
 
         return CommonApiResponseDTO.builder()
                 .success(true)

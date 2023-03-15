@@ -127,10 +127,17 @@ public class PostService {
 
     /**
      * 게시글 삭제
-     * @param postId 삭제할 게시글 id
+     * @param post 삭제할 게시글 id 및 게시글 비밀번호
      */
-    public void deletePost(Long postId) {
-        boardMapper.deletePost(postId);
+    public void deletePost(PostDTO post) {
+
+        PostDTO originPost = getPost(post.getPostId());
+
+        // 형식에 맞게 데이터 set 및 유효성 검증
+        post.setPasswd(postServiceUtil.getSHA512(post.getPasswd()));
+        post.setConfirmPasswd(originPost.getPasswd());
+
+        boardMapper.deletePost(post);
     }
 
 }

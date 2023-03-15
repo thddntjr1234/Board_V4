@@ -40,5 +40,8 @@ public interface BoardMapper {
 
     void updatePost(@EqualEachPasswd({"passwd", "confirmPasswd"}) PostDTO post);
 
-    void deletePost(long postId);
+    /**
+     * post는 postId, passwd, confirmPasswd 값만을 보유함
+     */
+    void deletePost(@EqualEachPasswd({"passwd", "confirmPasswd"}) PostDTO post);
 }
