@@ -14,7 +14,7 @@ public interface BoardMapper {
 
     List<PostDTO> getPostList(PaginationDTO paginationValues);
 
-    int getPostCount();
+    int getPostCount(SearchDTO searchValues);
 
     PostDTO getPost(Long postId);
 
@@ -25,8 +25,6 @@ public interface BoardMapper {
     void increaseHits(long postId);
 
     List<FileDTO> getFileList(long postId);
-
-    boolean checkFileExistence(long postId);
 
     void saveFile(FileDTO file);
 

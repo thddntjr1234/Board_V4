@@ -2,6 +2,7 @@ package com.ebstudy.board.v4.global.util;
 
 import com.ebstudy.board.v4.dto.PaginationDTO;
 import com.ebstudy.board.v4.dto.PostDTO;
+import com.ebstudy.board.v4.dto.SearchDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -20,17 +21,17 @@ public class PostServiceUtil {
      * 페이징에 필요한 변수값과 현재 페이지에 잘못된 값이 입력된 경우 이를 보정하는 메소드
      *
      * @param totalPostCount 전체 게시글 개수
-     * @param pageNumber     입력받은 요청 페이지 번호
+     * @param searchValues 검색조건
      * @return 페이징에 필요한 시작페이지와 끝 페이지 값과 보정된 요청 페이지 값, 총 페이지 값(끝으로 이동 시 사용), DB LIMIT 시작값
      */
-    public PaginationDTO calPagingValues(int totalPostCount, Integer pageNumber) {
+    public PaginationDTO calPagingValues(int totalPostCount, SearchDTO searchValues) {
 
         int totalPage = totalPostCount / 10;
         if (totalPostCount % 10 > 0) {
             totalPage++;
         }
 
-        Integer currentPage = pageNumber;
+        Integer currentPage = searchValues.getPageNumber();
         // 유효 페이지 이외의 값을 파라미터로 받게 되는 경우의 예외처리
         // 꼭 이렇게 이상한 값을 넣는 걸 감지하고 예외 처리해야 할까? 그냥 예외를 냅두고 전역으로 처리하는게 어떨까
         if (currentPage == null || currentPage > totalPage || currentPage <= 0) {
@@ -47,16 +48,18 @@ public class PostServiceUtil {
             endPage = totalPage;
         }
 
-        PaginationDTO pagingValues = PaginationDTO.builder()
+        return PaginationDTO.builder()
                 .startPage(startPage)
                 .endPage(endPage)
                 .currentPage(currentPage)
                 .totalPage(totalPage)
                 .startPostNumber(startPostNumber)
                 .totalPostCount(totalPostCount)
+                .categoryId(searchValues.getCategoryId())
+                .keyword(searchValues.getKeyword())
+                .startDate(searchValues.getStartDate())
+                .endDate(searchValues.getEndDate())
                 .build();
-
-        return pagingValues;
     }
 
     // TODO: Convert 관련 기능 제외(뷰로 책임을 넘기기)
@@ -106,52 +109,6 @@ public class PostServiceUtil {
 
         return post;
     }
-
-    /**
-     * 서버 사이드 유효성 검사
-     *
-     * @param post 유효성 검사를 수행할 게시글
-     * @return 검사 결과(true, false)
-     */
-//    public boolean checkValidation(PostDTO post) {
-//
-//        if (post.getCategoryId() == null) {
-//            return false;
-//        }
-//
-//        int authorLength = post.getAuthor().length();
-////        authorLength += 100; // error유도
-//        if (authorLength < 3 || authorLength >= 5) {
-//            return false;
-//        }
-//
-//        if (!post.getPasswd().matches("^.*(?=^.{4,15}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$")) {
-//            return false;
-//        } else if (!post.getPasswd().equals(post.getConfirmPasswd())) {
-//            return false;
-//        }
-//
-//        int titleLength = post.getTitle().length();
-//        if (titleLength < 4 || titleLength >= 100) {
-//            return false;
-//        }
-//
-//        int contentLength = post.getContent().length();
-//        if (contentLength < 4 || contentLength >= 2000) {
-//            return false;
-//        }
-//
-//        return true;
-//    }
-
-
-    // EqualEachPasswd를 Mapper 인터페이스에 사용하기 전에는 이런 방식으로 할까 고민했지만 해결했음
-//    public boolean isSamePasswd(String requestPasswd, String originPasswd) {
-//        if (requestPasswd.equals(originPasswd)) {
-//            return true;
-//        }
-//        return false;
-//    }
 
     // TODO: 스프링부트에서 보편적으로 사용하는 암호화 방식으로 리팩토링
     /**

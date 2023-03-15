@@ -3,6 +3,7 @@ package com.ebstudy.board.v4.service;
 import com.ebstudy.board.v4.dto.CategoryDTO;
 import com.ebstudy.board.v4.dto.PaginationDTO;
 import com.ebstudy.board.v4.dto.PostDTO;
+import com.ebstudy.board.v4.dto.SearchDTO;
 import com.ebstudy.board.v4.global.exception.CustomException;
 import com.ebstudy.board.v4.global.exception.ErrorCode;
 import com.ebstudy.board.v4.global.validator.EqualEachPasswd;
@@ -53,13 +54,14 @@ public class PostService {
 
     /**
      * Pagination에 사용되는 변수들을 반환하는 메소드
-     * @param pageNumber uri로 입력된 요청 페이지 값
-     * @return 페이징 값 및 SELECT LIMIT
+     * @param searchValues 검색 조건
+     * @return 검색 조건을 포함한 페이징 값
      */
-    public PaginationDTO getPaginationValues(Integer pageNumber) {
+    public PaginationDTO getPaginationValues(SearchDTO searchValues) {
 
-        int totalPostCount = boardMapper.getPostCount();
-        return postServiceUtil.calPagingValues(totalPostCount, pageNumber);
+        // 검색 조건에 해당하는 게시글의 총 개수를 카운트
+        int totalPostCount = boardMapper.getPostCount(searchValues);
+        return postServiceUtil.calPagingValues(totalPostCount, searchValues);
     }
 
     /**

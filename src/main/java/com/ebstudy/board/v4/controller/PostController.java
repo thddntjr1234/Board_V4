@@ -33,24 +33,15 @@ public class PostController {
     /**
      * 게시글 리스트를 로딩
      * /boards/free?keyword=ss&page=3&......
-     *
-     * @param pageNumber 로딩할 페이지 번호
+     * @param searchValues 검색조건
      * @return 페이지 번호별로 로딩한 게시글 리스트
      */
-
     @GetMapping("/boards/free")
-    public CommonApiResponseDTO<?> getPostList(Integer pageNumber, Integer categoryId, String keyword,
-                                               String startDate, String endDate) {
+    public CommonApiResponseDTO<?> getPostList(@ModelAttribute SearchDTO searchValues) {
 
         List<CategoryDTO> categoryList = postService.getCategoryList();
-        PaginationDTO pagingValues = postService.getPaginationValues(pageNumber);
-
-        // 일일히 파라미터를 선언해준 것은 PaginationDTO에 페이징을 위한 필드가 있기 때문에
-        // 다른 역할을 하는 필드가 섞인 DTO에서 어느 값이 들어가는지 확실하게 알 수 있기 위함임
-        pagingValues.setCategoryId(categoryId);
-        pagingValues.setKeyword(keyword);
-        pagingValues.setStartDate(startDate);
-        pagingValues.setEndDate(endDate);
+        // 받아온 검색조건을 입력해 pagingValues를 가져옴
+        PaginationDTO pagingValues = postService.getPaginationValues(searchValues);
 
         List<PostDTO> postList = postService.getPostList(pagingValues);
 
@@ -121,7 +112,6 @@ public class PostController {
     // ResponseEntity 로 리턴하면 raw type 경고가 나타나므로 와일드카드 ?를 선언해서 raw type의 불안정성을 제거
     public CommonApiResponseDTO<?> savePost(@ModelAttribute @Valid @EqualEachPasswd({"passwd", "confirmPasswd"}) PostDTO post) throws IOException {
 
-        log.info("post: " + post);
         postService.savePost(post);
         log.info("savePost 수행 완료");
         fileService.saveFile(post.getPostId(), post.getFile());
@@ -165,5 +155,16 @@ public class PostController {
         return CommonApiResponseDTO.builder()
                 .success(true)
                 .build();
+    }
+
+    /**
+     * 테스트용
+     */
+    @GetMapping("/post/test")
+    public void errorThrower() throws RuntimeException {
+        int[] test = new int[5];
+
+        int o = test[7];
+
     }
 }
