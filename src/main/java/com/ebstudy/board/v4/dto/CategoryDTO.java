@@ -8,6 +8,10 @@ import lombok.ToString;
 @Setter
 @ToString
 public class CategoryDTO {
-    private Long categoryId; // 카테고리 pk값
-    private String category; // 카테고리명
+
+    // 카테고리 pk값
+    private Long categoryId;
+
+    // 카테고리명
+    private String category;
 }

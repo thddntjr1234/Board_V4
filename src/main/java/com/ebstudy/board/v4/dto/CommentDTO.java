@@ -8,7 +8,13 @@ import lombok.ToString;
 @Setter
 @ToString
 public class CommentDTO {
-    private Long postId; // 소속된 게시글의 pk값
-    private String createdDate; // 생성일
-    private String comment; // 댓글 내용
+
+    // 소속된 게시글의 pk값
+    private Long postId;
+
+    // 생성일
+    private String createdDate;
+
+    // 댓글 내용
+    private String comment;
 }
