@@ -36,7 +36,7 @@ public class PostController {
      * @param searchValues 검색조건
      * @return 페이지 번호별로 로딩한 게시글 리스트
      */
-    @GetMapping("/boards/free")
+    @GetMapping("/api/boards/free")
     public CommonApiResponseDTO<?> getPostList(@ModelAttribute SearchDTO searchValues) {
 
         List<CategoryDTO> categoryList = postService.getCategoryList();
@@ -65,7 +65,7 @@ public class PostController {
      * @param postId 가져올 게시글 번호
      * @return 가져온 게시글 데이터
      */
-    @GetMapping("/boards/free/{postId}")
+    @GetMapping("/api/boards/free/{postId}")
     public CommonApiResponseDTO<?> getPost(@PathVariable Long postId) {
 
         PostDTO post = postService.getPost(postId);
@@ -91,7 +91,7 @@ public class PostController {
      * /boards/free/new
      * @return 게시글 폼 viewName과 카테고리 리스트를 가진 ModelAndView 객체
      */
-    @GetMapping("/boards/free/new")
+    @GetMapping("/api/boards/free/new")
     public CommonApiResponseDTO<?> getWriteForm() {
 
         List<CategoryDTO> categoryList = postService.getCategoryList();
@@ -108,7 +108,7 @@ public class PostController {
      * @param post 저장할 게시글
      * @return HttpStatus를 가진 ResponseEntity<> 객체
      */
-    @PostMapping("/boards/free")
+    @PostMapping("/api/boards/free")
     // ResponseEntity 로 리턴하면 raw type 경고가 나타나므로 와일드카드 ?를 선언해서 raw type의 불안정성을 제거
     public CommonApiResponseDTO<?> savePost(@ModelAttribute @Valid @EqualEachPasswd({"passwd", "confirmPasswd"}) PostDTO post) throws IOException {
 
@@ -130,7 +130,7 @@ public class PostController {
      * @param post 수정할 내용이 담긴 게시글 DTO
      * @return 공통 반환타입 CommonApiResponseDTO 객체
      */
-    @PutMapping("/boards/free/{postId}")
+    @PutMapping("/api/boards/free/{postId}")
     public CommonApiResponseDTO<?> updatePost(@ModelAttribute @Valid PostDTO post,
                                               @RequestPart(required = false) List<FileDTO> existingFiles) throws IOException {
         // Multipart/Form-Data 방식과 json타입의 객체를 같이 사용하려면 json파트에 대해 @RequestPart 어노테이션을 적용해 주면 된다.
@@ -150,7 +150,7 @@ public class PostController {
      * @param post postId, passwd 값 전달
      * @return 공통 반환타입 CommonApiResponseDTO 객체
      */
-    @DeleteMapping("/boards/free")
+    @DeleteMapping("/api/boards/free")
     public CommonApiResponseDTO<?> deletePost(@ModelAttribute PostDTO post) {
 
         postService.deletePost(post);

@@ -25,7 +25,7 @@ public class FileController {
      * @param fileRealName 사용자가 입력한 실제 파일명
      * @return 사용자가 입력한 실제 파일명의 파일을 담은 ResponseEntity<Resource> 객체
      */
-    @GetMapping("/boards/file")
+    @GetMapping("/api/boards/file")
     public ResponseEntity<?> downloadFile(@RequestParam String fileName, @RequestParam String fileRealName) throws IOException {
 
         HashMap<String, Object> headerAndResourece = fileService.downloadFile(fileName, fileRealName);

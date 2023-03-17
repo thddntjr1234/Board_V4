@@ -18,7 +18,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("/boards/comment")
+    @PostMapping("/api/boards/comment")
     public CommonApiResponseDTO<?> saveComment(@ModelAttribute CommentDTO comment) {
 
         commentService.saveComment(comment);
