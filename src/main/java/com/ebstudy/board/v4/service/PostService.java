@@ -32,24 +32,14 @@ public class PostService {
     private final BoardMapper boardMapper;
     private final PostServiceUtil postServiceUtil;
 
-    //TODO: 각 메소드별로 unchecked exception 발생할 수 있는지 여부 찾아서 customexception 던지기
+    // TODO: exception이 발생하게 될 때 반드시 핸들링해야 하는 경우만 처리하고 이외에는 알아서 throw되도록 처리한다.
     /**
      * 요구 데이터 포맷에 맞게 변환된 게시글 리스트를 가져오는 메소드
-     * @param pagingValue 검색조건과 페이징 값 PaginationDTO 객체
+     * @param pagingValue 검색조건과 페이징 값
      * @return 게시글 리스트
      */
     public List<PostDTO> getPostList(PaginationDTO pagingValue) {
-
-        List<PostDTO> postList = new LinkedList<>();
-        //TODO: Pagination Values 계산
-        List<PostDTO> sourcePostList = boardMapper.getPostList(pagingValue);
-
-        for (PostDTO post : sourcePostList) {
-            PostDTO convertedPost = postServiceUtil.convertToListFormat(post);
-            postList.add(convertedPost);
-        }
-
-        return postList;
+        return boardMapper.getPostList(pagingValue);
     }
 
     /**
@@ -79,8 +69,7 @@ public class PostService {
 
         increaseHits(postId);
 
-        PostDTO post = postServiceUtil.convertPostDataFormat(boardMapper.getPost(postId));
-        return post;
+        return boardMapper.getPost(postId);
     }
 
     /**

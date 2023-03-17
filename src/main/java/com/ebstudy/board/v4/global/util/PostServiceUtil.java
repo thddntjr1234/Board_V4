@@ -62,54 +62,6 @@ public class PostServiceUtil {
                 .build();
     }
 
-    // TODO: Convert 관련 기능 제외(뷰로 책임을 넘기기)
-    /**
-     * getPostList()시 날짜 변환과 수정일이 공란일 시 "-"을 추가하고 각 포스트마다 파일 보유 여부를 추가하는 메소드
-     *
-     * @param post 게시글
-     * @return 수정된 파라미터값(게시글 리스트)을 반환
-     */
-    public PostDTO convertToListFormat(PostDTO post) {
-            post = convertPostDataFormat(post);
-
-            // 제목 길이 수정
-            if (post.getTitle().length() > 80) {
-                // (Q)byte단위로 잘라야 할 때 post.getTitle().getBytes()로 하면 한글은 잘려버릴 텐데 어떻게 해야 할까?
-                post.setTitle(post.getTitle().substring(0, 80) + "...");
-            }
-
-        return post;
-    }
-
-    /**
-     * getPost()시 필요한 DB에서 가져온 게시글 데이터를 요구 형식에 맞게 변환하는 메소드
-     *
-     * @param post 변환할 게시글
-     * @return 변환된 게시글
-     */
-    public PostDTO convertPostDataFormat(PostDTO post) {
-
-        String createdDate = post.getCreatedDate();
-        // 날짜 포맷 변경
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime ldt = LocalDateTime.parse(createdDate, format);
-
-        post.setCreatedDate(ldt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-
-        if (post.getModifiedDate() == null) {
-            post.setModifiedDate("-");
-        } else {
-            String modifiedDate = post.getModifiedDate();
-            ldt = LocalDateTime.parse(modifiedDate, format);
-            post.setModifiedDate(ldt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-        }
-
-        // 줄 띄어쓰기 적용
-        post.setContent(post.getContent().replaceAll("\r\n", "<br>"));
-
-        return post;
-    }
-
     // TODO: 스프링부트에서 보편적으로 사용하는 암호화 방식으로 리팩토링
     /**
      * jsp/servlet 게시판에서 사용하던 단방향 암호화 메소드
