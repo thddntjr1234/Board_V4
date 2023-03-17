@@ -24,22 +24,8 @@ public interface BoardMapper {
 
     void increaseHits(long postId);
 
-    List<FileDTO> getFileList(long postId);
-
-    void saveFile(FileDTO file);
-
-    void deleteFile(Long fileId);
-
-    List<CommentDTO> getCommentList(long postId);
-
-    void saveComment(CommentDTO comment);
-
-    void updateComment(CommentDTO comment);
-
     void updatePost(@EqualEachPasswd({"passwd", "confirmPasswd"}) PostDTO post);
 
-    /**
-     * post는 postId, passwd, confirmPasswd 값만을 보유함
-     */
+     // post는 postId, passwd, confirmPasswd 값만을 보유함
     void deletePost(@EqualEachPasswd({"passwd", "confirmPasswd"}) PostDTO post);
 }

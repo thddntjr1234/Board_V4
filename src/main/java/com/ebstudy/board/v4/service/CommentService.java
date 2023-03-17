@@ -2,6 +2,7 @@ package com.ebstudy.board.v4.service;
 
 import com.ebstudy.board.v4.dto.CommentDTO;
 import com.ebstudy.board.v4.repository.BoardMapper;
+import com.ebstudy.board.v4.repository.CommentMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommentService {
 
-    private final BoardMapper boardMapper;
+    private final CommentMapper commentMapper;
 
     /**
      * 게시글 id에 해당하는 댓글 리스트를 가져오는 메소드
@@ -24,7 +25,7 @@ public class CommentService {
      * @return 댓글 리스트
      */
     public List<CommentDTO> getCommentList(Long postId) {
-        List<CommentDTO> commentList = convertCommentListData(boardMapper.getCommentList(postId));
+        List<CommentDTO> commentList = convertCommentListData(commentMapper.getCommentList(postId));
         return commentList;
     }
 
@@ -58,6 +59,6 @@ public class CommentService {
      */
     public void saveComment( CommentDTO comment) {
         comment.setCreatedDate(String.valueOf(LocalDateTime.now()));
-        boardMapper.saveComment(comment);
+        commentMapper.saveComment(comment);
     }
 }

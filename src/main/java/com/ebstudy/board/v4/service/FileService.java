@@ -1,9 +1,7 @@
 package com.ebstudy.board.v4.service;
 
 import com.ebstudy.board.v4.dto.FileDTO;
-import com.ebstudy.board.v4.global.exception.CustomException;
-import com.ebstudy.board.v4.global.exception.ErrorCode;
-import com.ebstudy.board.v4.repository.BoardMapper;
+import com.ebstudy.board.v4.repository.FileMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,7 +27,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FileService {
 
-    private final BoardMapper boardMapper;
+    private final FileMapper fileMapper;
 
     @Value("${spring.servlet.multipart.location}")
     String basicPath;
@@ -41,7 +39,7 @@ public class FileService {
      * @return 파일 리스트
      */
     public List<FileDTO> getFileList(Long postId) {
-        List<FileDTO> fileList = boardMapper.getFileList(postId);
+        List<FileDTO> fileList = fileMapper.getFileList(postId);
         return fileList;
     }
 
@@ -71,7 +69,7 @@ public class FileService {
 
             multipartFile.transferTo(fileName);
 
-            boardMapper.saveFile(file);
+            fileMapper.saveFile(file);
         }
     }
 
@@ -91,7 +89,7 @@ public class FileService {
          */
 
         // 기존 파일리스트 로딩
-        List<FileDTO> originFiles = boardMapper.getFileList(postId);
+        List<FileDTO> originFiles = fileMapper.getFileList(postId);
 
         // 수정 시 입력으로 전송된 FileDTO 리스트에 해당하지 않는 파일들을 DB 및 파일 저장소에서 제거
         // TODO: depth가 너무 깊은데 이걸 어떻게 해야 줄일 수 있을까.. -> Optional 적용
@@ -123,7 +121,7 @@ public class FileService {
             targetFile.delete();
         }
 
-        boardMapper.deleteFile(file.getFileId());
+        fileMapper.deleteFile(file.getFileId());
     }
 
     /**

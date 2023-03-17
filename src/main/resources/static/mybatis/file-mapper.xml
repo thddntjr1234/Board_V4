@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace : package + classname -->
+<mapper namespace="FileMapper">
+    <resultMap id="mapFileDTO" type="FileDTO">
+        <result property="postId" column="post_id"/>
+        <result property="fileId" column="file_id"/>
+        <result property="fileName" column="file_name"/>
+        <result property="fileRealName" column="file_realname"/>
+    </resultMap>
+
+    <!--    FileDAO가 사용하는 부분-->
+    <!--게시글 저장 시 첨부한 파일의 정보를 저장-->
+    <insert id="saveFile" parameterType="com.ebstudy.board.v4.dto.FileDTO">
+        INSERT INTO files(file_name, file_realname, post_id, extension, size)
+
+        VALUES (#{fileName}, #{fileRealName}, #{postId}, #{extension}, ${size})
+    </insert>
+
+    <!--postId값에 해당하는 파일의 목록을 반환-->
+    <select id="getFileList" parameterType="long" resultType="com.ebstudy.board.v4.dto.FileDTO"
+            resultMap="mapFileDTO">
+        SELECT *
+
+        FROM files
+
+        WHERE post_id = #{postId}
+
+        ORDER BY file_id
+    </select>
+
+    <delete id="deleteFile" parameterType="long">
+        DELETE
+
+        FROM files
+
+        WHERE file_id = #{fileId}
+    </delete>
+</mapper>
+
