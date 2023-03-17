@@ -75,29 +75,55 @@ public class FileService {
         }
     }
 
-    public void updateFiles(Long postId, List<MultipartFile> multipartFileList) throws IOException {
-        // TODO: 기존 파일과 동일 여부를 검사한 뒤 다른 경우 파일을 삭제하고 새로 추가해야 함
-        // TODO: DB 내용은 UPDATE 쿼리로 충분
-        for (MultipartFile multipartFile : multipartFileList) {
-            if (!(multipartFile.getSize() > 0)) {
-                continue;
+    /**
+     * 입력된 파일 리스트를 참조하여 현재 DB와 파일 저장소의 파일을 수정
+     *
+     * @param postId            수정할 파일들의 부모 게시글 id
+     * @param deliveryFiles     입력된 기존 파일
+     * @param multipartFileList 새로 입력할 파일(수정됨, 혹은 추가)
+     * @throws IOException
+     */
+    public void updateFile(Long postId, List<FileDTO> deliveryFiles, List<MultipartFile> multipartFileList) throws IOException {
+
+        /*
+        db에서 원본 가져와서 existingFiles랑 대조해서 없는애들 대상으로 실제 저장소에 있는 파일까지 포함해서 삭제
+         나머지 파일에 대해 multipartFilesList에서 파일 저장
+         */
+
+        // 기존 파일리스트 로딩
+        List<FileDTO> originFiles = boardMapper.getFileList(postId);
+
+        // 수정 시 입력으로 전송된 FileDTO 리스트에 해당하지 않는 파일들을 DB 및 파일 저장소에서 제거
+        // TODO: depth가 너무 깊은데 이걸 어떻게 해야 줄일 수 있을까.. -> Optional 적용
+
+        if (originFiles != null) { // DB에 애초에 파일이 없으면 전부 저장만 하면 됨
+            outerLoop:
+            for (FileDTO originFile : originFiles) {
+                if (deliveryFiles != null) { // 전달된 기존 파일 리스트가 없다면 대조하지 않고 전부 삭제후 다시 저장하면 됨
+                    for (FileDTO deliveryFile : deliveryFiles) {
+                        if (originFile.getFileName().equals(deliveryFile.getFileName())) {
+                            continue outerLoop;
+                        }
+                    }
+                }
+                deletFile(originFile);
             }
-            System.out.println();
-
-            FileDTO file = new FileDTO();
-
-            file.setPostId(postId);
-            file.setFileName(UUID.randomUUID() + "_" + multipartFile.getOriginalFilename());
-            file.setFileRealName(multipartFile.getOriginalFilename());
-            file.setExtension(multipartFile.getContentType());
-            file.setSize(multipartFile.getSize());
-
-            File fileName = new File(file.getFileName());
-
-            multipartFile.transferTo(fileName);
-//            boardMapper.updateFile(file);
         }
 
+        // 기존 파일 외 신규 입력되는 파일에 대해 저장
+        saveFile(postId, multipartFileList);
+    }
+
+    public void deletFile(FileDTO file) {
+
+        String filePath = basicPath + file.getFileName();
+        File targetFile = new File(filePath);
+
+        if (targetFile.exists()) {
+            targetFile.delete();
+        }
+
+        boardMapper.deleteFile(file.getFileId());
     }
 
     /**

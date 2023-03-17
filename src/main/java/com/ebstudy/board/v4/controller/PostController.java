@@ -131,10 +131,13 @@ public class PostController {
      * @return 공통 반환타입 CommonApiResponseDTO 객체
      */
     @PutMapping("/boards/free/{postId}")
-    public CommonApiResponseDTO<?> updatePost(@ModelAttribute @Valid PostDTO post) {
+    public CommonApiResponseDTO<?> updatePost(@ModelAttribute @Valid PostDTO post,
+                                              @RequestPart(required = false) List<FileDTO> existingFiles) throws IOException {
+        // Multipart/Form-Data 방식과 json타입의 객체를 같이 사용하려면 json파트에 대해 @RequestPart 어노테이션을 적용해 주면 된다.
 
+        // 게시글 먼저 수정
         postService.updatePost(post);
-        //TODO: file update 메소드 추가
+        fileService.updateFile(post.getPostId(), existingFiles ,post.getFile());
 
         return CommonApiResponseDTO.builder()
                 .success(true)
