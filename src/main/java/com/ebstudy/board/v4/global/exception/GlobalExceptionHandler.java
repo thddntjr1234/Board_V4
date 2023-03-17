@@ -2,70 +2,122 @@ package com.ebstudy.board.v4.global.exception;
 
 import com.ebstudy.board.v4.dto.response.CommonApiResponseDTO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.ConversionNotSupportedException;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.converter.HttpMessageNotWritableException;
+import org.springframework.validation.BindException;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingPathVariableException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.context.request.async.AsyncRequestTimeoutException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
+import java.util.Arrays;
 
 @Slf4j
-@Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
 
     /**
      * 전역에서 throw하는 CustomException을 처리
-     *
-     * @param e: ErrorCode Enum Name에 따른 HttpStatus, msg
-     * @return 에러 처리된 ComonApiResponseDTO
      */
-
-    // TODO: 3/11(질문) GlobalExceptionHandler는 결국 에러가 발생할 수 있는 지점에서 커스텀 에러를 발생시키도록 직접 설정해야 하고, 모든 경우의
-    //  수를 가정하여 이렇게 에러를 핸들링 할 수는 없음. 결국 CustomException을 던지지 않아도 Exception이 알아서 핸들링되어야 할텐데 어떻게 해결할 수 있을까?
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<Object> handleCustomException(CustomException e, WebRequest request) {
 
+        // TODO: 2023/03/12 모든 핸들러가 구체적인 에러 메세지를 반환하도록 리팩토링
         ErrorCode errorCode = e.getErrorCode();
+        e.printStackTrace();
         log.error("handleCustomException throws CustomException e: " + e);
 
         CommonApiResponseDTO<ErrorCode> commonApiResponse = new CommonApiResponseDTO<>(false, errorCode);
         return new ResponseEntity<>(commonApiResponse, e.getErrorCode().getHttpStatus());
     }
 
-    @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<Object> handleValidationException(Exception e) {
 
+    /**
+     * 전역에서 throw되는 ValidationException에 대해서 에러 처리
+     */
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<Object> handleValidationException(Exception e, WebRequest request) {
+
+        log.info(String.valueOf(e.getCause()));
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
+        e.printStackTrace();
         ErrorData errorData = new ErrorData(status.value(), e.getMessage());
         CommonApiResponseDTO<ErrorData> commonApiResponse = new CommonApiResponseDTO<>(false, errorData);
 
         return new ResponseEntity<>(commonApiResponse, status);
     }
 
-    // TODO: e.getCause()에서 원인 메세지만 분리한 후 enum이름으로 사용해서 throw CustomException("~~")가 되게 한다면 되지 않을까?
-    //  -> 발생할 수 있는 Exception에 대해서 Enum을 만들어야 하는데 이게 가능한지 모르겠다. ResponseEntityExceptionHandlerd에선 instanceOf로 체크한다.
 
-    //  TODO: validation, global, custom으로 대부분의 exception은 걸러지겠지만 global은 ResponseEntityExceptionHandler의 handleException을 사용하기 때문에
-    //   선언된 클래스에 해당하는 오류만 실제로 처리되게 된다. 이마저도 거르고 싶으면 Exception.class에서 해당 범위만큼 선언해 주고
-    //   그 밑에 Exception.class를 둔 뒤 별도로 처리하도록 하는 방식으로 모든 예외를 처리할 수 있게 된다.
+    /**
+     * 전역으로 throw되는 CustomException, ValidationException을 제외한 모든 Exception을 핸들링하는 메소드
+     */
     @ExceptionHandler(Exception.class)
-    public void handleGlobalException(Exception e, WebRequest request) throws Exception {
+    public void handleGlobalException(Exception e, WebRequest request) {
 
-        log.info("handleGlobalExceptiond에서 전역으로 에러를 캐치함");
-        log.info("ResponseEntityExceptionHanlder에서 handleException을 불러서 해당하는 status 부여");
+        // TODO: 기타 오류들은 해당 핸들러가 처리하므로 에러 내용들을 뽑아서 요구되는 포맷으로 변환해 반환
 
-        handleException(e, request);
-//        log.info(String.valueOf(e.getCause()));
+        log.info("Exception e는: " + e.toString());
+        log.info("Exception e Stacktrace[0] 내용: " + e.getStackTrace()[0]);
+        e.printStackTrace();
+        log.info("Exception e Cause 내용: " + e.getCause());
+        log.info("exception simplenname: " + e.getClass().getSimpleName());
+        log.info("Exceptin getMethod: " + Arrays.toString(e.getClass().getMethods()));
+        log.info("Exception Method Name: " + e.getStackTrace()[0].getMethodName());
+        log.info("Exception e " + e.getMessage());
+        log.info("WebRequest request 내용" + request.getDescription(true));
+
     }
 
+    /**
+     * handleGLobalException에 존재하던 handleException을 GlobalExceptionHandlerd에서 분리시킨 메소드
+     * 전역에서 발생하는 스프링 관련 예외들을 처리
+     * @param e
+     */
+    @ExceptionHandler({
+            HttpRequestMethodNotSupportedException.class,
+            HttpMediaTypeNotSupportedException.class,
+            HttpMediaTypeNotAcceptableException.class,
+            MissingPathVariableException.class,
+            MissingServletRequestParameterException.class,
+            ServletRequestBindingException.class,
+            ConversionNotSupportedException.class,
+            TypeMismatchException.class,
+            HttpMessageNotReadableException.class,
+            HttpMessageNotWritableException.class,
+            MethodArgumentNotValidException.class,
+            MissingServletRequestPartException.class,
+            BindException.class,
+            NoHandlerFoundException.class,
+            AsyncRequestTimeoutException.class
+    })
+    public void handleResponseEntityException(Exception e, WebRequest request) throws Exception {
+        handleException(e, request);
+    }
+
+    /**
+     * handleException에서 처리하는 Spring 관련 예외를 최종적으로 반환하는 메소드, 오버라이딩하여 원하는 메세지 형식으로 변환한다.
+     * @return
+     */
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception e, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
@@ -79,4 +131,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
 
         return new ResponseEntity<>(commonApiResponse, status);
     }
+
+
 }
