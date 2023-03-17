@@ -61,7 +61,7 @@
         WHERE A.delete_flag = false
         <include refid="search"/>
 
-        ORDER BY A.post_id DESC LIMIT #{startPostNumber}, 10;
+        ORDER BY A.post_id DESC LIMIT #{startPostNumber}, 10
     </select>
 
     <!--현재 데이터베이스에 존재하는 게시글의 총 개수를 반환-->
@@ -84,14 +84,14 @@
                  LEFT JOIN categorys B
                      ON A.category_id = B.category_id
 
-        WHERE post_id = #{postId} AND delete_flag = false;
+        WHERE post_id = #{postId} AND delete_flag = false
     </select>
     
     <!--카테고리 리스트를 반환-->
     <select id="getCategoryList" resultType="CategoryDTO"
             resultMap="mapCategoryDTO">
         SELECT *
-        FROM categorys;
+        FROM categorys
     </select>
 
     <!--  useGeneratedKeys의 keyProperty는 dto에 담겨 반환되므로 db PK에 해당하는 dto의 필드명을 써야 한다.   -->
@@ -102,7 +102,7 @@
                           created_date, modified_date)
 
         VALUES (#{title}, #{categoryId}, #{author}, #{content}, #{passwd},
-                #{createdDate}, #{modifiedDate});
+                #{createdDate}, #{modifiedDate})
     </insert>
 
     <!--postId값의 게시글을 수정-->
@@ -115,7 +115,7 @@
             content       = #{content},
             modified_date = #{modifiedDate}
 
-        WHERE post_id = #{postId};
+        WHERE post_id = #{postId}
     </update>
 
     <!--해당 postId값의 게시글을 삭제-->
@@ -124,7 +124,7 @@
 
         SET delete_flag = true
 
-        WHERE post_id = #{postId};
+        WHERE post_id = #{postId}
     </update>
 
     <!--postId값을 가진 열의 조회수를 증가-->
@@ -133,7 +133,7 @@
 
         SET hits = hits + 1
 
-        WHERE post_id = #{postId};
+        WHERE post_id = #{postId}
     </update>
 
     <!--    FileDAO가 사용하는 부분-->
@@ -141,7 +141,7 @@
     <insert id="saveFile" parameterType="com.ebstudy.board.v4.dto.FileDTO">
         INSERT INTO files(file_name, file_realname, post_id, extension, size)
 
-        VALUES (#{fileName}, #{fileRealName}, #{postId}, #{extension}, ${size});
+        VALUES (#{fileName}, #{fileRealName}, #{postId}, #{extension}, ${size})
     </insert>
 
     <!--postId값에 해당하는 파일의 목록을 반환-->
@@ -151,8 +151,18 @@
 
         FROM files
 
-        WHERE post_id = #{postId};
+        WHERE post_id = #{postId}
+
+        ORDER BY file_id
     </select>
+
+    <delete id="deleteFile" parameterType="long">
+        DELETE
+
+        FROM files
+
+        WHERE file_id = #{fileId}
+    </delete>
 
     <!--    CommentDAO가 사용하는 부분-->
     <!--postId값에 해당하는 게시글의 목록을 반환-->
@@ -164,14 +174,14 @@
 
         WHERE post_id = #{postId}
 
-        ORDER BY created_date DESC;
+        ORDER BY created_date DESC
     </select>
 
     <!--댓글 대상의 postId를 가진 게시글을 저장-->
     <insert id="saveComment" parameterType="com.ebstudy.board.v4.dto.CommentDTO">
         INSERT INTO comments(comment, created_date, post_id)
 
-        VALUES (#{comment}, #{createdDate}, #{postId});
+        VALUES (#{comment}, #{createdDate}, #{postId})
     </insert>
 </mapper>
 

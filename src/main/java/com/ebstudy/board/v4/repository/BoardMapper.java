@@ -28,7 +28,7 @@ public interface BoardMapper {
 
     void saveFile(FileDTO file);
 
-    void updateFile(FileDTO file);
+    void deleteFile(Long fileId);
 
     List<CommentDTO> getCommentList(long postId);
 

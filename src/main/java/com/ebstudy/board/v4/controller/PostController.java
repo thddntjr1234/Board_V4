@@ -40,9 +40,9 @@ public class PostController {
     public CommonApiResponseDTO<?> getPostList(@ModelAttribute SearchDTO searchValues) {
 
         List<CategoryDTO> categoryList = postService.getCategoryList();
-        // 받아온 검색조건을 입력해 pagingValues를 가져옴
+        // 받아온 검색조건을 입력해 pagingValues를 가져온다
         PaginationDTO pagingValues = postService.getPaginationValues(searchValues);
-
+        // 받아온 페지네이션 값을 사용하여 게시글 리스트를 불러온다
         List<PostDTO> postList = postService.getPostList(pagingValues);
 
         log.info("getPostList 정상 수행에 따른 게시글 리스트 로드 완료");
@@ -145,7 +145,7 @@ public class PostController {
     }
 
     /**
-     * 게시글 삭제, cascade로 db에서 자체 삭제하므로 부모인 게시글만 삭제하면 된다.
+     * 게시글 삭제, flag 설정으로 숨김 처리
      * /boards/free/3 DELTE
      * @param post postId, passwd 값 전달
      * @return 공통 반환타입 CommonApiResponseDTO 객체
