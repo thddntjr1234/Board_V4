@@ -67,14 +67,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
         return new ResponseEntity<>(commonApiResponse, status);
     }
 
-
     /**
      * 전역으로 throw되는 CustomException, ValidationException을 제외한 모든 Exception을 핸들링하는 메소드
      */
     @ExceptionHandler(Exception.class)
     public void handleGlobalException(Exception e, WebRequest request) {
 
-        // TODO: 기타 오류들은 해당 핸들러가 처리하므로 에러 내용들을 뽑아서 요구되는 포맷으로 변환해 반환
+        // TODO: 기타 오류들은 해당 핸들러가 처리하므로 에러 내용들을 뽑아서 요구되는 포맷으로 변환해 반환(메소드화)
 
         log.info("Exception e는: " + e.toString());
         log.info("Exception e Stacktrace[0] 내용: " + e.getStackTrace()[0]);
@@ -86,32 +85,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
         log.info("Exception e " + e.getMessage());
         log.info("WebRequest request 내용" + request.getDescription(true));
 
-    }
+        try {
+            handleException(e, request);
 
-    /**
-     * handleGLobalException에 존재하던 handleException을 GlobalExceptionHandlerd에서 분리시킨 메소드
-     * 전역에서 발생하는 스프링 관련 예외들을 처리
-     * @param e
-     */
-    @ExceptionHandler({
-            HttpRequestMethodNotSupportedException.class,
-            HttpMediaTypeNotSupportedException.class,
-            HttpMediaTypeNotAcceptableException.class,
-            MissingPathVariableException.class,
-            MissingServletRequestParameterException.class,
-            ServletRequestBindingException.class,
-            ConversionNotSupportedException.class,
-            TypeMismatchException.class,
-            HttpMessageNotReadableException.class,
-            HttpMessageNotWritableException.class,
-            MethodArgumentNotValidException.class,
-            MissingServletRequestPartException.class,
-            BindException.class,
-            NoHandlerFoundException.class,
-            AsyncRequestTimeoutException.class
-    })
-    public void handleResponseEntityException(Exception e, WebRequest request) throws Exception {
-        handleException(e, request);
+        } catch (Exception ex) {
+            // Spring MVC 예외가 아닌 것들은 다시 throw되는데 이걸 캐치해서 기존의 핸들러가 동작하지 못하게 한다.
+
+            log.info("handleException에서 뱉은 에러를 다시 캐치");
+        }
     }
 
     /**
