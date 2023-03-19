@@ -112,11 +112,16 @@ public class FileService {
         saveFile(postId, multipartFileList);
     }
 
+    /**
+     * 요청한 파일을 DB와 실제 파일 저장소에서 모두 삭제한다.
+     * @param file 전달한 파일의 정보
+     */
     public void deletFile(FileDTO file) {
 
         String filePath = basicPath + file.getFileName();
         File targetFile = new File(filePath);
 
+        // TODO: 2023/03/18 파일 삭제 과정 중 오류가 발생할 때의 상황을 고려해야 한다. 
         if (targetFile.exists()) {
             targetFile.delete();
         }

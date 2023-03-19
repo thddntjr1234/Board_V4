@@ -40,6 +40,7 @@ public class PostController {
     public CommonApiResponseDTO<?> getPostList(@ModelAttribute SearchDTO searchValues) {
 
         List<CategoryDTO> categoryList = postService.getCategoryList();
+
         // 받아온 검색조건을 입력해 pagingValues를 가져온다
         PaginationDTO pagingValues = postService.getPaginationValues(searchValues);
         // 받아온 페지네이션 값을 사용하여 게시글 리스트를 불러온다
@@ -47,6 +48,7 @@ public class PostController {
 
         log.info("getPostList 정상 수행에 따른 게시글 리스트 로드 완료");
 
+        // TODO: 2023/03/18 DTO에 담지 말고 Map에 담아서 반환
         PostListResponseDTO postListResponseDTO = PostListResponseDTO.builder()
                 .categoryList(categoryList)
                 .pagingValues(pagingValues)
@@ -154,7 +156,7 @@ public class PostController {
     public CommonApiResponseDTO<?> deletePost(@ModelAttribute PostDTO post) {
 
         postService.deletePost(post);
-
+        
         return CommonApiResponseDTO.builder()
                 .success(true)
                 .build();

@@ -107,7 +107,7 @@ public class PostService {
     public void updatePost(PostDTO post) {
 
         PostDTO originPost = getPost(post.getPostId());
-
+        // TODO: 2023/03/18 비밀번호 검증은 유효성 검증이 아니다. 별도의 service를 추가해야 함
         // 형식에 맞게 데이터 set 및 유효성 검증
         post.setPasswd(postServiceUtil.getSHA512(post.getPasswd()));
         post.setConfirmPasswd(originPost.getPasswd());

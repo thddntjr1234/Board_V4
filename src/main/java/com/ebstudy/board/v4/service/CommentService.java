@@ -25,8 +25,7 @@ public class CommentService {
      * @return 댓글 리스트
      */
     public List<CommentDTO> getCommentList(Long postId) {
-        List<CommentDTO> commentList = convertCommentListData(commentMapper.getCommentList(postId));
-        return commentList;
+        return convertCommentListData(commentMapper.getCommentList(postId));
     }
 
     /**
