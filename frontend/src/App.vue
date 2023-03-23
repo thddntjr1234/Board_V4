@@ -1,13 +1,11 @@
 <template>
   <main>
-    <router-view v-bind:key="$route.fullPath"/>
+    <router-view :key="$route.fullPath"/>
   </main>
 </template>
 
 <script>
-import MainPage from './components/MainPage.vue'
-
-
+import MainPage from "@/components/MainPage.vue";
 export default {
   name: 'App',
   components: {
