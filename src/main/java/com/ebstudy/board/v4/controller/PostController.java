@@ -46,8 +46,6 @@ public class PostController {
         // 받아온 페지네이션 값을 사용하여 게시글 리스트를 불러온다
         List<PostDTO> postList = postService.getPostList(pagingValues);
 
-        log.info("getPostList 정상 수행에 따른 게시글 리스트 로드 완료");
-
         // TODO: 2023/03/18 DTO에 담지 말고 Map에 담아서 반환
         PostListResponseDTO postListResponseDTO = PostListResponseDTO.builder()
                 .categoryList(categoryList)

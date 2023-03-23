@@ -19,8 +19,8 @@
         <if test="startDate != null and endDate != null">
             AND created_date BETWEEN #{startDate} AND #{endDate}
         </if>
-        <if test="categoryId != null and categoryId != 0">
-            AND category_id = #{categoryId}
+        <if test="categoryId != null">
+            AND ${categoryIdField} = #{categoryId}
         </if>
         <if test="keyword != null">
             AND (title LIKE CONCAT('%', #{keyword}, '%')
@@ -34,7 +34,8 @@
             resultMap="mapPostDTO">
         <!--db 성능에 대해서는 성능이 실제로 문제가 될 때 고려-->
         <!--TODO: 3/11 리뷰: View를 공부해서 사용해 보자, where delete_flag가 따라다니는걸 막기 위해서 쓰는 것(create view v-board, user와 admin의 경우에 delete_flag-->
-        SELECT A.*,
+        SELECT A.post_id, A.created_date, A.modified_date, A.author,
+               A.content, A.hits, A.passwd, A.title, A.delete_flag,
                B.category,
                EXISTS(
                    SELECT 1
@@ -47,7 +48,7 @@
                 ON A.category_id = B.category_id
 
         WHERE A.delete_flag = false
-        <include refid="search"/>
+        <include refid="search"><property name="categoryIdField" value="A.category_id"/></include>
 
         ORDER BY A.post_id DESC LIMIT #{startPostNumber}, 10
     </select>
@@ -59,7 +60,7 @@
         FROM posts
 
         WHERE delete_flag = false
-        <include refid="search"/>
+        <include refid="search"><property name="categoryIdField" value="category_id"/></include>
     </select>
 
     <!--CDATA를 쓰면 sql 안에서 < >같은 문자를 써도 xml코드로 인식하지 않는다-->
