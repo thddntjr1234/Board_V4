@@ -93,7 +93,15 @@ public class FileService {
 
         // 수정 시 입력으로 전송된 FileDTO 리스트에 해당하지 않는 파일들을 DB 및 파일 저장소에서 제거
         // TODO: depth가 너무 깊은데 이걸 어떻게 해야 줄일 수 있을까.. -> Optional 적용
+        // TODO: 2023/03/18 이 부분을 메소드로 분리하고 리팩토링
 
+        deleteFileNotExistsDatabase(deliveryFiles, originFiles);
+
+        // 기존 파일 외 신규 입력되는 파일에 대해 저장
+        saveFile(postId, multipartFileList);
+    }
+
+    private void deleteFileNotExistsDatabase(List<FileDTO> deliveryFiles, List<FileDTO> originFiles) {
         if (originFiles != null) { // DB에 애초에 파일이 없으면 전부 저장만 하면 됨
             outerLoop:
             for (FileDTO originFile : originFiles) {
@@ -107,9 +115,6 @@ public class FileService {
                 deletFile(originFile);
             }
         }
-
-        // 기존 파일 외 신규 입력되는 파일에 대해 저장
-        saveFile(postId, multipartFileList);
     }
 
     /**
