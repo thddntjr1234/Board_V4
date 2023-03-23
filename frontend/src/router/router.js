@@ -1,8 +1,8 @@
 import {createWebHistory, createRouter} from "vue-router";
-import ErrorPage from "@/components/ErrorPage.vue";
-import Board from "@/components/Board.vue";
+import ErrorPage from "@/views/ErrorView.vue";
+import Board from "@/views/BoardView.vue";
 import MainPage from "@/components/MainPage.vue";
-import View from "@/components/View.vue";
+import PostWriteFormView from "@/views/PostWriteFormView.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -13,14 +13,14 @@ const router = createRouter({
             component: MainPage
         },
         {
-            path: "/boards/list/:page?",
+            path: "/boards/free",
             name: "board",
             component: Board
         },
         {
-            path: "/boards/view/:postId",
-            name: "view",
-            component: View
+            path: "/boards/free/new",
+            name: "newForm",
+            component: PostWriteFormView
         },
         {
             path: "/:pathMatch(.*)",
