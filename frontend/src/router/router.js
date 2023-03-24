@@ -1,7 +1,7 @@
 import {createWebHistory, createRouter} from "vue-router";
 import ErrorPage from "@/views/ErrorView.vue";
 import Board from "@/views/BoardView.vue";
-import MainPage from "@/components/MainPage.vue";
+import MainPage from "@/views/MainPage.vue";
 import PostWriteFormView from "@/views/PostWriteFormView.vue";
 
 const router = createRouter({

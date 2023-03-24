@@ -13,7 +13,7 @@
         <input name="endDate" class="form-control-sm" type="date" :value="this.$route.query.endDate" />
 
         <select class="form-select-sm" name="categoryId" v-model="selectedCategory">
-          <option value="">all</option>
+          <option value="">전체 카테고리</option>
           <option v-for="category in categoryList" :key="category" :value="category.categoryId">
             {{ category.category }}
           </option>
@@ -77,7 +77,7 @@ export default {
   components: {PostList, Pagination},
   data() {
     return {
-      keyword: this.$route.query.keyword ? this.$route.query.keyword : '',
+      // 검색버튼 클릭 시 담기는 검색조건 변수
       pageRange: [],
       pagingValues: {},
       categoryList: [],
@@ -91,6 +91,10 @@ export default {
   },
 
   methods: {
+
+    /**
+     * api 서버로 게시글 리스트를 전송받아 관련 데이터를 설정하는 메소드
+     */
     async getPostList() {
       console.log(this.$route.query);
       const response = await axios.get('/api/boards/free', {
@@ -113,26 +117,28 @@ export default {
         this.pageRange.push(i);
       }
 
-      // data
+      // get 데이터 입력
       this.postList = response.data.data.postList
       this.categoryList = response.data.data.categoryList
 
+      // 입력받은 categoryId 쿼리 파라미터에 맞는 카테고리를 설정
       this.selectedCategory = this.getCategoryById()
-      console.log("수행 후 selectedCategory: " + this.selectedCategory)
+      console.log("selectedCategory is: " + this.selectedCategory)
     },
 
-    // categoryList.find가 동작하지 않는 것 같은데
+    /**
+     * 카테고리 Id값에 해당하는 카테고리 이름을 data()의 categoryList에서 찾아 반환하는 메소드
+     * @returns 카테고리명
+     */
     getCategoryById() {
-      console.log("method의 getCategoryById()")
-      console.log("categoryId: " + this.$route.query.categoryId)
-
       const queryCategoryIdParam = parseInt(this.$route.query.categoryId)
-      if (!queryCategoryIdParam || String(queryCategoryIdParam) === "") {
-        console.log("all 카테고리 반환")
-        return "all"
+
+      // all 카테고리 선택시 빈 값을 전송하므로 별도로 all을 반환
+      if (!queryCategoryIdParam) {
+        console.log("all 카테고리 value 반환")
+        return ""
       }
 
-      console.log("categoryList: "  + JSON.stringify(this.categoryList))
       return this.categoryList.find((category) => category.categoryId === queryCategoryIdParam).categoryId
     },
   },
