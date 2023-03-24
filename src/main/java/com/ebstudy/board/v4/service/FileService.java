@@ -83,17 +83,8 @@ public class FileService {
      */
     public void updateFile(Long postId, List<FileDTO> deliveryFiles, List<MultipartFile> multipartFileList) throws IOException {
 
-        /*
-        db에서 원본 가져와서 existingFiles랑 대조해서 없는애들 대상으로 실제 저장소에 있는 파일까지 포함해서 삭제
-         나머지 파일에 대해 multipartFilesList에서 파일 저장
-         */
-
-        // 기존 파일리스트 로딩
+        // 기존 파일 리스트 로딩
         List<FileDTO> originFiles = fileMapper.getFileList(postId);
-
-        // 수정 시 입력으로 전송된 FileDTO 리스트에 해당하지 않는 파일들을 DB 및 파일 저장소에서 제거
-        // TODO: depth가 너무 깊은데 이걸 어떻게 해야 줄일 수 있을까.. -> Optional 적용
-        // TODO: 2023/03/18 이 부분을 메소드로 분리하고 리팩토링
 
         deleteFileNotExistsDatabase(deliveryFiles, originFiles);
 
@@ -101,7 +92,14 @@ public class FileService {
         saveFile(postId, multipartFileList);
     }
 
+    /**
+     * 수정 시 입력으로 전송된 FileDTO 리스트에 해당하지 않는 파일들을 DB 및 파일 저장소에서 제거
+     * @param deliveryFiles 게시글에서 보낸 기존 파일 리스트
+     * @param originFiles DB상의 기존 파일 리스트
+     */
     private void deleteFileNotExistsDatabase(List<FileDTO> deliveryFiles, List<FileDTO> originFiles) {
+
+        // TODO: Depth를 줄일 수 있을지 고민해 보자.
         if (originFiles != null) { // DB에 애초에 파일이 없으면 전부 저장만 하면 됨
             outerLoop:
             for (FileDTO originFile : originFiles) {

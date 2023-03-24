@@ -2,22 +2,18 @@ package com.ebstudy.board.v4.controller;
 
 import com.ebstudy.board.v4.dto.*;
 import com.ebstudy.board.v4.dto.response.CommonApiResponseDTO;
-import com.ebstudy.board.v4.dto.response.PostListResponseDTO;
-import com.ebstudy.board.v4.dto.response.PostResponseDTO;
 import com.ebstudy.board.v4.global.validator.EqualEachPasswd;
 import com.ebstudy.board.v4.service.CommentService;
 import com.ebstudy.board.v4.service.FileService;
 import com.ebstudy.board.v4.service.PostService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -46,16 +42,14 @@ public class PostController {
         // 받아온 페지네이션 값을 사용하여 게시글 리스트를 불러온다
         List<PostDTO> postList = postService.getPostList(pagingValues);
 
-        // TODO: 2023/03/18 DTO에 담지 말고 Map에 담아서 반환
-        PostListResponseDTO postListResponseDTO = PostListResponseDTO.builder()
-                .categoryList(categoryList)
-                .pagingValues(pagingValues)
-                .postList(postList)
-                .build();
+        HashMap<String, Object> postListResponse = new HashMap<>();
+        postListResponse.put("categoryList", categoryList);
+        postListResponse.put("pagingValues", pagingValues);
+        postListResponse.put("postList", postList);
 
         return CommonApiResponseDTO.builder()
                 .success(true)
-                .data(postListResponseDTO)
+                .data(postListResponse)
                 .build();
     }
 
@@ -74,15 +68,14 @@ public class PostController {
 
         log.info("getPost 정상 수행에 따른 게시글 로드 완료");
 
-        PostResponseDTO postResponseDTO = PostResponseDTO.builder()
-                .post(post)
-                .commentList(commentList)
-                .fileList(fileList)
-                .build();
+        HashMap<String, Object> postResponse = new HashMap<>();
+        postResponse.put("post", post);
+        postResponse.put("commentList", commentList);
+        postResponse.put("fileList", fileList);
 
         return CommonApiResponseDTO.builder()
                 .success(true)
-                .data(postResponseDTO)
+                .data(postResponse)
                 .build();
     }
 
@@ -123,7 +116,8 @@ public class PostController {
 
     // TODO: 3/11 리뷰에서 받았던 유효성 검증은 가급적 컨트롤러에서 하기를 어떻게 지킬 수 있을까?
     //  Update, Delete는 post에서 패스워드를 애초에 받아서 가지고 있게 하는 방식으로 하면 된다고 쳐도 수정, 삭제 버튼시 한번 체크하고 넘어가는 부분에서는 어쩔 수 없이 DAO에서 체크할 수 밖에 없다.
-
+    // -> 위와 같은 부분에서는 애초에 패스워드 비교가 유효성 검증이 아니라 하나의 서비스 로직인 셈이다. 당연히 서비스 로직에서 처리해야 하는 것으로
+    //  맞지 맞는 옷에 억지로 몸을 낑겨넣는 것과 같다.
     /**
      * 게시글 수정
      * /boards/free/3 PUT
