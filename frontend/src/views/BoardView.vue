@@ -9,9 +9,10 @@
       <div class="input-group-sm">
         등록일
 
-        <input name="startDate" class="form-control-sm" type="date" :value="this.$route.query.startDate" />
-        <input name="endDate" class="form-control-sm" type="date" :value="this.$route.query.endDate" />
+        <input name="startDate" class="form-control-sm" type="date" :value="this.$route.query.startDate"/>
+        <input name="endDate" class="form-control-sm" type="date" :value="this.$route.query.endDate"/>
 
+        <!--        카테고리는 store을 사용해서 저장-->
         <select class="form-select-sm" name="categoryId" v-model="selectedCategory">
           <option value="">전체 카테고리</option>
           <option v-for="category in categoryList" :key="category" :value="category.categoryId">
@@ -20,7 +21,7 @@
         </select>
         <input type="search" name="keyword" :value="this.$route.query.keyword">
         <input type="submit" value="검색">
-        {{selectedCategory}}
+        {{ selectedCategory }}
       </div>
     </form>
   </div>
@@ -61,8 +62,12 @@
     </table>
   </div>
   <div class="d-flex justify-content-between">
-    <Pagination :paging-values="pagingValues" :page-range="pageRange" />
-    <router-link :to="{name: 'newForm'}"><button class="btn btn-secondary">등록</button></router-link>
+    <!--   내부의 데이터가 어떤 필드들로 구성되어 있는지 알 수 없으니 풀어서 일일히 선언해주는 것이 좋겟다.-->
+    <!--    이벤트 수신은 여기서-->
+    <Pagination :paging-values="pagingValues" :page-range="pageRange"/>
+    <router-link :to="{name: 'newForm'}">
+      <button class="btn btn-secondary">등록</button>
+    </router-link>
   </div>
 </template>
 
@@ -101,15 +106,18 @@ export default {
         params: {
           pageNumber: this.$route.query.pageNumber,
           categoryId: this.$route.query.categoryId,
+          // TODO: 잘못된 값이 들어가도 서버에서 걸러낼 수 있어야 한다.
           // spread를 사용하지 않으면 String 타입이라 ""값이 전송돼서 mybatis if문에서 제대로 걸러지지 않는다.
           // 반면 spread를 사용하면 쿼리 파라미터가 존재하지 않을 때 null값을 반환시킨다.
-          ...(this.$route.query.keyword && { keyword: this.$route.query.keyword }),
-          ...(this.$route.query.startDate && { startDate: this.$route.query.startDate }),
-          ...(this.$route.query.endDate && { endDate: this.$route.query.endDate }),
+
+          // 댓글 등 있으면 삭제 불가능 에러 띄우기
+          ...(this.$route.query.keyword && {keyword: this.$route.query.keyword}),
+          ...(this.$route.query.startDate && {startDate: this.$route.query.startDate}),
+          ...(this.$route.query.endDate && {endDate: this.$route.query.endDate}),
         }
       })
 
-      console.log('response data: ' + JSON.stringify(response.data));
+      // console.log('response data: ' + JSON.stringify(response.data));
       this.pagingValues = response.data.data.pagingValues;
 
       // pageRange 값 설정

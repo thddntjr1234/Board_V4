@@ -11,7 +11,7 @@
         <li class="page-item">
           <!--
           이 코드가 왜 router를 타지 못했는지 설명
-          <router-link :key="$route.fullPath" :to="{path: '/boards/free?pageNumber=3' + i}">{{ i }}</router-link>
+
           -->
           <router-link class="page-link" :to="getPage(i)">{{ i }}</router-link>
         </li>
@@ -19,6 +19,7 @@
       <li class="page-item" v-if="pagingValues.currentPage < pagingValues.totalPage">
         <router-link class="page-link" :to="getPage(pagingValues.currentPage + 1)">다음</router-link>
       </li>
+      <!--      페이지네이션의 재활용도를 높이기 위해 이벤트를 발생시키는 방식으로 처리, 현재는 직접 이동시킬 뿐임-->
       <li class="page-item" v-if="pagingValues.endPage < pagingValues.totalPage">
         <router-link class="page-link" :to="getPage(pagingValues.totalPage)">끝</router-link>
       </li>
@@ -27,12 +28,13 @@
 </template>
 
 <script>
-import { computed } from 'vue';
-import { useRoute } from 'vue-router';
+import {computed} from 'vue';
+import {useRoute} from 'vue-router';
 
 export default {
   name: 'Pagination',
   props: {
+    // list 내부에 어떤 필드가 있는지 예측할 수 있어야 함
     pagingValues: [],
     pageRange: []
   },
@@ -41,7 +43,7 @@ export default {
     const route = useRoute();
 
     const queryParams = computed(() => {
-      const { keyword, categoryId, startDate, endDate } = route.query;
+      const {keyword, categoryId, startDate, endDate} = route.query;
       return {
         keyword,
         categoryId,
