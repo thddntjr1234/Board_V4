@@ -42,9 +42,9 @@
       <tr>
         <td colspan="2" rowspan="3">파일 첨부</td>
         <td>
-          <div class="form-control"><input type="file" @change="addFile(0, $event)" name="file"></div>
-          <div class="form-control"><input type="file" @change="addFile(1, $event)" name="file"></div>
-          <div class="form-control"><input type="file" @change="addFile(2, $event)" name="file"></div>
+          <div class="form-control"><input type="file" @change="addFile(0, $event)"></div>
+          <div class="form-control"><input type="file" @change="addFile(1, $event)"></div>
+          <div class="form-control"><input type="file" @change="addFile(2, $event)"></div>
         </td>
       </tr>
       <tr>
@@ -70,7 +70,6 @@ import {useRouter} from "vue-router";
 
 export default {
   name: "PostWriteForm",
-
 
   setup() {
     const router = useRouter()
@@ -102,15 +101,11 @@ export default {
       formData.append("passwd", passwd.value)
       formData.append("confirmPasswd", confirmPasswd.value)
 
-      //  타임리프에선 빈 MultipartFile List를 보내줬기 때문에 비슷하게 해 봤는데 이건 버그를 피하기 위한 꼼수 같다는 생각..
-      if (file.value.length === 0) {
-        const emptyFile = new File([], 'emptyFile.txt', { type: 'text/plain' });
-      }
-
       // 파일이 있다면 이를 일일히 append해야 리스트 단위로 들어가지 않는다.
       for (let i = 0; i < file.value.length; i++) {
-        console.log()
-        formData.append("file", file.value[i])
+        if(file.value[i]) {
+          formData.append("file", file.value[i])
+        }
       }
 
       try {
@@ -135,33 +130,11 @@ export default {
     }
 
     // 파일 추가 시 file 리스트에 추가
-    // 파일 등록후 다시 등록 버튼을 누른 뒤 취소하면 파일이 지워지는데, 반영되지 않는 오류가 있다.
     const addFile = (number, event) => {
       const files = event.target.files
 
-      // file.value[number] = files[0] || null
-      // 위와 같이 한다면 등록했다 취소한 파일 리스트는 null값으로 대체된다. 이는 스프링에서 java.util.List.typeMismatch 에러를 유발
-
-      // 때문에 다음과 같이 빈 더미 파일을 null 대신 추가
-      const emptyFile = new File([], 'emptyFile.txt', { type: 'text/plain' });
-      file.value[number] = files[0] || emptyFile
-
-      /* 여기부터 아래는 로그용 코드
-      // console.log("file value[number]: " + file.value[number])
-      // console.log("number: " + number + ", files: " + files)
-      // console.log("반복문으로 파일 리스트 출력 file.length: " + file.value.length)
-
-      // 등록한 파일의 로그를 표시
-      for (let i = 0; i < file.value.length; i++) {
-        if (file.value[i]) {
-          console.log("file.value[i]: " + file.value[i])
-          console.log("name: " + file.value[i].name + ", size" + file.value[i].size)
-        }
-        else {
-          console.log("file 내용이 없음.")
-        }
-      }
-      */
+      file.value[number] = files[0] || null
+      // TODO: 더미 파일을 올리는 방식이 아니라 null값을 전송하더라도 서버에서 이를 처리할 수 있어야 한다.
     }
 
     onMounted(() => {
