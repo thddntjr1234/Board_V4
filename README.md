@@ -2,7 +2,11 @@
 Vue.js, Spring Boot 2.7.8, Java 11, Mybatis, MariaDB, Gradle을 사용한 간단한 REST API 게시판 프로젝트
 
 ### 주요 기능 설명
-
+- 게시글 작성, 수정, 삭제, 조회
+- 파일 업로드, 수정, 삭제
+- 댓글 작성
+- 검색 조건별 게시글 조회 및 페이징
+- 공통 API Response 포맷 적용
 
 ## 2023-03-04 코드 피드백
 - DTO 필드에도 주석을 달아줘야 이 변수가 어떤 역할을 하는지 유추할 수 있다.
@@ -33,3 +37,112 @@ ex) 200, 400, 404시 데이터의 포맷은 어떻게?
   2. fetch할 데이터를 넘겨주기
 - 컴포넌트와 뷰의 구분 라우터에 노출되는지, 노출되지 않는지로 구분지을 수 있다.
   
+### 파일 관련 트러블슈팅
+<details>
+<summary> 접기/펼치기 </summary>
+
+## 파일 등록 에러
+
+에러 메세지:
+
+Failed to convert property value of type 'java.lang.String' to required type 'java.util.List' for property 'file'; nested exception is java.lang.IllegalStateException: Cannot convert value of type 'java.lang.String' to required type 'org.springframework.web.multipart.MultipartFile' for property 'file[0]': no matching editors or conversion strategy found]
+
+자꾸 Vue.js 에서 파일을 FormData에 담고 Content-Type도 multipart/form-data로 설정해서 전송해도
+서버의 List<MultipartFile> 필드에 매칭되지 않는다.
+
+원인을 분석해 보니
+
+const files = event.target.files
+
+file.value.push(files[i])
+
+다음과 같은 코드로 작성했을 때, file.value에 대해 로그를 찍어보면
+
+[Object FileList]가 나오게 된다. 즉 file 변수 내에 FileList가 또 존재한다는 말이다.
+
+백엔드 코드는 리스트를 받도록 되어 있지 객체 내에 리스트를 받도록 작성하지 않았기 때문에 매칭되지 않아 오류가 발생하게 된다.
+
+따라서  formData.append(”file”, file.value) 로 전송하는 것이 아니라
+
+```jsx
+for ( i = 0 to formData.value.length ) { 
+	formData.append(”file”, file.value[i]) 
+}
+```
+
+와 같이 각각 파일을 append 해 주어야 List<MultipartFile> 형태로 전송된다.
+
+---
+
+## 파일 등록 후 취소 관련 에러
+
+에러 메세지:
+
+2023-03-31 17:28:36.276 DEBUG 59783 --- [nio-8081-exec-2] o.s.web.method.HandlerMethod : Could not resolve parameter [0] in public com.ebstudy.board.v4.dto.response.CommonApiResponseDTO<?> com.ebstudy.board.v4.controller.PostController.savePost(com.ebstudy.board.v4.dto.PostDTO) throws java.io.IOException: org.springframework.validation.BeanPropertyBindingResult: 1 errors
+
+Field error in object 'postDTO' on field 'file': rejected value [null]; codes [typeMismatch.postDTO.file,typeMismatch.file,typeMismatch.java.util.List,typeMismatch]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [postDTO.file,file]; arguments []; default message [file]]; default message [Failed to convert property value of type 'java.lang.String' to required type 'java.util.List' for property 'file'; nested exception is java.lang.IllegalStateException: Cannot convert value of type 'java.lang.String' to required type 'org.springframework.web.multipart.MultipartFile' for property 'file[0]': no matching editors or conversion strategy found]
+
+`BeanPropertyBindingResult` 에러가 발생했다.
+
+자세한 예외를 찾아보니 postDTO 객체의 List<MultipartFile> file 필드가 String 타입의 데이터를 받아서 `typeMismatch` 에러로 인해 유발되었다. 왜 멀쩡한 필드에 String 타입이 들어갔을까?
+
+### 원인
+
+vue.js 페이지에서 등록하는 부분 html코드는 다음과 같다.
+
+```html
+<input type="file" @change="addFile(0, *$event*)" name="file">
+```
+
+현재 코드에서는 파일을 취소하게 되면 change 이벤트가 발생하여 addFile 메서드를 수행하게 되는데.
+
+파일 등록 취소의 경우를 처리하기 위해 이 때 들어온 값이 존재하지 않으면 null값을 입력해 주도록 작성되어 있다.
+
+때문에 만약 모든 파일을 등록했다 취소한 뒤 게시글을 등록하게 되면 null 값이 들어간 리스트가 보내지게 되고, 이걸 vue.js에서 String으로 처리해서 보내버리기 때문에 오류가 발생하는 것으로 보인다.
+
+### 첫 번째 시도
+
+기존 Thymeleaf는 input태그의 name 속성을 모두 같게 설정하고 아무것도 입력하지 않은 채 전송하면 null값으로 리스트가 전달되는 것을 생각해
+
+```jsx
+const emptyFile = new File([], 'emptyFile.txt', { type: 'text/plain' });
+```
+
+이와 같이 더미 파일을 null값 대신 추가하는 방식으로 했었지만! **이는 매우 잘못된 행동이다!**
+
+더미 파일이란 것 자체가 서버를 속이기 위한 용도이고, 올바르지 않은 파일을 전달하는 행위이다.
+
+때문에 더미 파일과 같은 방식은 사용해서는 안 된다.
+
+### **그럼** **어떻게 해결해야 하는가?**
+
+내 생각엔 String[] null값을 서버에서 처리할 수 있는 방법이 존재하지 않는다. String[] 타입으로 들어오는 것을 필드에 바인딩되기 전에 가로채서 처리하는 방식과 같은 것은 오버 엔지니어링이라고 생각하기 때문에 프론트에서 애초에 null list를 보내지 않도록 하는 수 밖에는 없겠다.
+
+팀장님께서는 null을 보내도 서버에서 처리할 수 있어야 한다고 하셨는데, 아마 이런 null이 아니라 List<MultipartFile> file 자체가 아무 값도 없는 이런 상황을 가정하셔서 말씀하신게 아닐까 싶다.
+
+### 두 번째 시도
+
+splice()를 사용해서 잘라내는 방법은, 배열의 Length가 지속적으로 줄어들기 때문에 고정된 인덱스를 사용하는 내 코드에서는 사용하기 껄끄럽다.
+
+때문에 null값을 추가는 하되, 이 것을 savePost() 메소드에서 FormData 객체에 추가하는 로직에서 null값을 걸러서 추가하는 방식으로 시도할 것이다.
+
+```jsx
+const addFile = (number, event) => {  
+	const files = event.target.files
+	file.value[number] = files[0] || null 
+}
+```
+
+savePost() 메소드 내부 로직
+
+```jsx
+
+for (let i = 0; i < file.value.length; i++) {  
+	if(file.value[i]) {    
+		formData.append("file", file.value[i])  
+	}
+}
+```
+
+위와 같이 null 여부를 체크해서 정상 파일이 있을 때만 append하도록 하고, 이외 경우에는 append하지 않도록 함으로써 일부 취소한 케이스를 포함해 모든 파일을 등록했다 취소한 경우에도 정상적으로 빈 값이 전달되도록 하는 데 성공했다.
+</details>
