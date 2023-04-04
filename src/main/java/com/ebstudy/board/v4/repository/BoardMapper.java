@@ -1,11 +1,10 @@
 package com.ebstudy.board.v4.repository;
 
 import com.ebstudy.board.v4.dto.*;
-import com.ebstudy.board.v4.global.validator.EqualEachPasswd;
+import com.ebstudy.board.v4.global.validator.CustomValidation;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @Validated
@@ -45,10 +44,10 @@ public interface BoardMapper {
     /**
      * 요청받은 게시글을 수정
      */
-    void updatePost(@EqualEachPasswd({"passwd", "confirmPasswd"}) PostDTO post);
+    void updatePost(PostDTO post);
 
     /**
      * 해당 postId 게시글을 삭제 처리(flag 설정)
      */
-    void deletePost(@EqualEachPasswd({"passwd", "confirmPasswd"}) PostDTO post);
+    void deletePost(PostDTO post);
 }

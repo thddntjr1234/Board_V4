@@ -13,12 +13,12 @@ import static java.lang.annotation.ElementType.*;
  */
 @Target({PARAMETER})
 @Retention(RetentionPolicy.RUNTIME) // 어노테이션은 실행시간동안 유지하기 위해 RUNTIME 설정
-@Constraint(validatedBy = EqualEachPasswdValidator.class)
-public @interface EqualEachPasswd {
+@Constraint(validatedBy = CustomValidator.class)
+public @interface CustomValidation {
 
-    // 데이터 필드
+    // 어노테이션에 선언한 필드 리스트
     String[] value();
-    String message() default "Validation Failed: 입력한 비밀번호와 실제 비밀번호가 일치하지 않습니다."; // log로 출력되는 메세지
+    String message() default "유효성 검증 실패"; // log로 출력되는 메세지
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
