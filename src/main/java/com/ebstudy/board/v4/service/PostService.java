@@ -5,23 +5,16 @@ import com.ebstudy.board.v4.dto.PaginationDTO;
 import com.ebstudy.board.v4.dto.PostDTO;
 import com.ebstudy.board.v4.dto.SearchDTO;
 import com.ebstudy.board.v4.global.exception.CustomException;
-import com.ebstudy.board.v4.global.exception.ErrorCode;
-import com.ebstudy.board.v4.global.validator.EqualEachPasswd;
-import com.ebstudy.board.v4.global.validator.EqualEachPasswdValidator;
+import com.ebstudy.board.v4.global.exception.CustomErrorCode;
 import com.ebstudy.board.v4.repository.BoardMapper;
 import com.ebstudy.board.v4.global.util.PostServiceUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.Valid;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Slf4j
@@ -64,7 +57,7 @@ public class PostService {
 
         if (postId == null || postId <= 0) {
             log.info("파라미터 postId값이 유효하지 않음");
-            throw new CustomException(ErrorCode.INVALID_REQUEST);
+            throw new CustomException(CustomErrorCode.INVALID_REQUEST);
         }
 
         increaseHits(postId);

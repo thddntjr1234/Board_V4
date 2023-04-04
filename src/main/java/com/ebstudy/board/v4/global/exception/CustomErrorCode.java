@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 /**
  * 커스텀 에러 코드를 관리하는 Enum 클래스
  */
-public enum ErrorCode {
+public enum CustomErrorCode {
 
     /**
      * 400 BAD_REQUEST: 잘못된 요청

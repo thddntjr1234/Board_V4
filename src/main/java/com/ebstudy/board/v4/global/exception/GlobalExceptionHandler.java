@@ -2,32 +2,14 @@ package com.ebstudy.board.v4.global.exception;
 
 import com.ebstudy.board.v4.dto.response.CommonApiResponseDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.ConversionNotSupportedException;
-import org.springframework.beans.TypeMismatchException;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.http.converter.HttpMessageNotWritableException;
-import org.springframework.validation.BindException;
-import org.springframework.web.HttpMediaTypeNotAcceptableException;
-import org.springframework.web.HttpMediaTypeNotSupportedException;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.MissingPathVariableException;
-import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.context.request.async.AsyncRequestTimeoutException;
-import org.springframework.web.multipart.support.MissingServletRequestPartException;
-import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import java.util.Arrays;
 
@@ -42,12 +24,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
     public ResponseEntity<Object> handleCustomException(CustomException e, WebRequest request) {
 
         // TODO: 2023/03/12 모든 핸들러가 구체적인 에러 메세지를 반환하도록 리팩토링
-        ErrorCode errorCode = e.getErrorCode();
+        CustomErrorCode customErrorCode = e.getCustomErrorCode();
         e.printStackTrace();
         log.error("handleCustomException throws CustomException e: " + e);
 
-        CommonApiResponseDTO<ErrorCode> commonApiResponse = new CommonApiResponseDTO<>(false, errorCode);
-        return new ResponseEntity<>(commonApiResponse, e.getErrorCode().getHttpStatus());
+        CommonApiResponseDTO<CustomErrorCode> commonApiResponse = new CommonApiResponseDTO<>(false, customErrorCode);
+        return new ResponseEntity<>(commonApiResponse, e.getCustomErrorCode().getHttpStatus());
     }
 
 
