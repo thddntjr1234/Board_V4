@@ -43,7 +43,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
         e.printStackTrace();
-        ErrorData errorData = new ErrorData(status.value(), e.getMessage());
+        ErrorData errorData = new ErrorData(status.value(), e.getCause().getMessage());
         CommonApiResponseDTO<ErrorData> commonApiResponse = new CommonApiResponseDTO<>(false, errorData);
 
         return new ResponseEntity<>(commonApiResponse, status);
