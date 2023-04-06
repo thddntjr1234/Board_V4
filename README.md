@@ -1,16 +1,17 @@
-# 포트폴리오 스터디
-Vue.js, Spring Boot 2.7.8, Java 11, Mybatis, MariaDB, Gradle을 사용한 간단한 REST API 게시판 프로젝트
+# RESTful 게시판 프로젝트
+Vue.js 3.2.47, Spring Boot 2.7.8, Java 11, Mybatis 2.3, MariaDB, Gradle을 사용한 간단한 RESTful 게시판 프로젝트
 
 ## 주요 기능 설명
-- 게시글 작성, 수정, 삭제, 조회
+- 게시글 작성, 수정, 삭제, 조회(조회수 증가)
 - 파일 업로드, 수정, 삭제
 - 댓글 작성
 - 검색 조건별 게시글 조회 및 페이징
-- 공통 API Response 포맷 적용
+- 반환 데이터에 대한 공통 API Response 포맷
+- Spring AOP를 이용한 전역 예외 처리 핸들러, 어노테이션 필드 선언식의 사용자 지정 유효성 검증
 
-<br>
 
-## ERD
+## 데이터베이스 ERD
+![스크린샷 2023-04-06 오후 3 46 18](https://user-images.githubusercontent.com/29126159/230293561-4f4dd289-3f0f-4888-97a2-0b432f8b0da1.jpeg)
 
 
 ## 코드 피드백
@@ -32,7 +33,7 @@ Vue.js, Spring Boot 2.7.8, Java 11, Mybatis, MariaDB, Gradle을 사용한 간단
 - 유효성 검증은 가급적 컨트롤러 혹은 서비스에서 진행하기, Mapper는 별도의 로직을 가져서는 안 됨.
 - SQL에서 where delete_flag문이 항상 따라붙는 것을 치우기 위해 View를 사용해보기
 - 값이 자주 변하지 않는 데이터의 경우 캐시로 저장할 수 있도록 하기
-- 메서드를 작성할 때는
+- 메서드를 작성할 때는 먼저 주석으로 수행할 기능에 대해 작성하고 시작하면 좋다.
 
 ### 2023-03-18 코드 피드백
 - 현재 에러 처리나 데이터 반환 등 공통 포맷을 적용해서 사용할 때는 어떤 규격에 대해 먼저 시뮬레이션 해 본 뒤 코드를 작성하는 것이 좋다.
