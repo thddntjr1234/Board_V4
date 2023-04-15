@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace : package + classname -->
+<mapper namespace="com.ebstudy.board.v4.repository.UserMapper">
+    <resultMap id="mapUserDTO" type="UserDTO">
+        <result property="userId" column="user_id"/>
+        <result property="loginId" column="login_id"/>
+        <result property="name" column="username"/>
+        <result property="nickName" column="nickname"/>
+    </resultMap>
+
+<!--    <select id="findUserByUserId" parameterType="com.ebstudy.board.v4.dto.UserDTO">-->
+
+<!--    </select>-->
+</mapper>
+

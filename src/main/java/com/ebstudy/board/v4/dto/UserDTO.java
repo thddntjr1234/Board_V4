@@ -8,23 +8,22 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class MemberDTO {
+public class UserDTO {
 
+    // 회원 PK값
+    private Long userId;
     // 회원 아이디
-    private String userId;
-
+    private String loginId;
     // 회원 이름
     private String name;
-
     // 회원 닉네임
     private String nickName;
-
     // 회원 이메일
     private String email;
-
     // 회원 비밀번호
     private String passwd;
-
+    // 계정 활성화 여부
+    private Boolean activated;
     // 회원 권한
     private Role role;
 }
