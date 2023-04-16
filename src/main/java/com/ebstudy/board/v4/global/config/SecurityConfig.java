@@ -19,6 +19,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
 
+@Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true) // @PreAuthorize 어노테이션을 마ㅔ소드 단위로 사용하기 위해 적용
@@ -38,13 +39,19 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/h2-console/**"
-                , "/favicon.ico"
-                , "/error");
-    }
+    /**
+     * h2 데이터베이스를 사용할 때 쓰기 위한 설정
+     */
+    //@Bean
+    //public WebSecurityCustomizer webSecurityCustomizer() {
+    //    return (web) -> web.ignoring().antMatchers("/h2-console/**"
+    //            , "/favicon.ico"
+    //            , "/error");
+    //}
 
+    /**
+     * Spring Security 설정
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
@@ -58,7 +65,7 @@ public class SecurityConfig {
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler)
 
-                // h2-console을 사용할 때 설정하는 옵션
+                // h2-console을 위한 설정
                 //.and()
                 //.headers()
                 //.frameOptions()
