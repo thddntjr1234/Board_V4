@@ -28,6 +28,11 @@ public class JwtTokenProvider implements InitializingBean {
     private final long tokenValidityInMilliseconds;
     private Key key;
 
+    /**
+     * application.properties에 설정된 값을 인자로 생성자 주입
+     * @param secret 64Byte길이의 HS512 알고리즘으로 암호화된 비밀키
+     * @param tokenValidityInSeconds 토큰 유효기간(24시간)
+     */
     public JwtTokenProvider(
             @Value("${jwt.secret}") String secret,
             @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds) {
@@ -35,12 +40,20 @@ public class JwtTokenProvider implements InitializingBean {
         this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
     }
 
+    /**
+     * 생성자 주입 이후 추가적으로 값 선언
+     */
     @Override
     public void afterPropertiesSet() {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
+    /**
+     * Authentication 객체를 전달받아 해당 정보를 기반으로 새 JWT토큰을 생성
+     * @param authentication 인증 정보를 가진 Authentication 객체
+     * @return JWT 토큰
+     */
     public String createToken(Authentication authentication) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -57,6 +70,11 @@ public class JwtTokenProvider implements InitializingBean {
                 .compact();
     }
 
+    /**
+     * 토큰으로부터 인증 정보를 가져오는 메소드
+     * @param token
+     * @return
+     */
     public Authentication getAuthentication(String token) {
         Claims claims = Jwts
                 .parserBuilder()
@@ -75,7 +93,13 @@ public class JwtTokenProvider implements InitializingBean {
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
+    /**
+     * 토큰의 유효성 검증을 수행
+     * @param token 유효성 검증을 수행할 토큰
+     * @return
+     */
     public boolean validateToken(String token) {
+        // TODO: 2023/04/16 해당 유효성 검증에서 예외를 처리하는 것을 전역에서 진행할 수 있는가?
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
