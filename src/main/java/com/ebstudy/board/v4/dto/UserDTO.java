@@ -16,8 +16,6 @@ public class UserDTO {
     private String loginId;
     // 회원 이름
     private String name;
-    // 회원 닉네임
-    private String nickName;
     // 회원 이메일
     private String email;
     // 회원 비밀번호
