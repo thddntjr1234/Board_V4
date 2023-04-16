@@ -7,11 +7,12 @@
         <result property="userId" column="user_id"/>
         <result property="loginId" column="login_id"/>
         <result property="name" column="username"/>
-        <result property="nickName" column="nickname"/>
     </resultMap>
 
-<!--    <select id="findUserByUserId" parameterType="com.ebstudy.board.v4.dto.UserDTO">-->
-
-<!--    </select>-->
+    <select id="findUserByUserId" parameterType="string" resultMap="mapUserDTO">
+        SELECT *
+        FROM users
+        WHERE login_id = #{value}
+    </select>
 </mapper>
 
