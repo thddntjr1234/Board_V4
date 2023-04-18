@@ -1,12 +1,13 @@
 package com.ebstudy.board.v4.dto;
 
 import com.ebstudy.board.v4.global.authority.Role;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @ToString
 public class UserDTO {
 
