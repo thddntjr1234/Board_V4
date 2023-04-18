@@ -79,7 +79,7 @@ public class SecurityConfig {
                 // 지정한 URI Path에 대해 화이트리스트 등록, 이외 요청은 블랙리스트 처리
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/**").permitAll()
+                .antMatchers("/api/signin").permitAll()
                 .anyRequest().authenticated()
 
                 // JwtFilter를 등록했던 JwtSecurityConfig 클래스 등록
