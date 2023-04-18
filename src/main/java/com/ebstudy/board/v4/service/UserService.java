@@ -53,14 +53,14 @@ public class UserService {
 
         // 기존 강의 코드: SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername
         Optional<String> loginId = SecurityUtil.getCurrentUsername();
-        UserDTO queryResult = userMapper.findUserByUserId(String.valueOf(loginId));
+        UserDTO queryResult = userMapper.findUserByUserId(loginId.get());
         UserDTO user = UserDTO
                 .builder()
                 .loginId(queryResult.getLoginId())
+                .name(queryResult.getName())
                 .role(queryResult.getRole())
                 .build();
 
-        log.info(user.toString());
         return Optional.ofNullable(user);
     }
 }
