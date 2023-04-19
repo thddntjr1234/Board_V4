@@ -8,6 +8,7 @@ import com.ebstudy.board.v4.service.FileService;
 import com.ebstudy.board.v4.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -85,6 +86,7 @@ public class PostController {
      * @return 게시글 폼 viewName과 카테고리 리스트를 가진 ModelAndView 객체
      */
     @GetMapping("/api/boards/free/new")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public CommonApiResponseDTO<?> getWriteForm() {
 
         List<CategoryDTO> categoryList = postService.getCategoryList();
@@ -102,6 +104,7 @@ public class PostController {
      * @return HttpStatus를 가진 ResponseEntity<> 객체
      */
     @PostMapping("/api/boards/free")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     // ResponseEntity 로 리턴하면 raw type 경고가 나타나므로 와일드카드 ?를 선언해서 raw type의 불안정성을 제거
     public CommonApiResponseDTO<?> savePost(@CustomValidation(value = {"categoryId", "title", "content", "author", "passwd", "confirmPasswd"})
                                                 @ModelAttribute PostDTO post) throws IOException {
@@ -126,6 +129,7 @@ public class PostController {
      * @return 공통 반환타입 CommonApiResponseDTO 객체
      */
     @PutMapping("/api/boards/free/{postId}")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public CommonApiResponseDTO<?> updatePost(@CustomValidation(value = {"title", "content", "author"}) @ModelAttribute  PostDTO post,
                                               @RequestPart(required = false) List<FileDTO> existingFiles) throws IOException {
         // Multipart/Form-Data 방식과 json타입의 객체를 같이 사용하려면 json파트에 대해 @RequestPart 어노테이션을 적용해 주면 된다.
@@ -146,6 +150,7 @@ public class PostController {
      * @return 공통 반환타입 CommonApiResponseDTO 객체
      */
     @DeleteMapping("/api/boards/free")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public CommonApiResponseDTO<?> deletePost(@ModelAttribute PostDTO post) {
 
         postService.deletePost(post);
@@ -159,6 +164,7 @@ public class PostController {
      * 테스트용
      */
     @GetMapping("/post/test")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public void errorThrower(@CustomValidation(value = {"passwd", "confirmPasswd"}) PostDTO postDTO) throws RuntimeException {
         int[] test = new int[5];
 

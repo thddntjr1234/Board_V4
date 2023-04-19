@@ -36,6 +36,7 @@ public class AuthController {
     @PostMapping("/api/signin")
     public ResponseEntity<TokenDTO> authorize(@Valid @RequestBody LoginDTO loginDto) {
 
+        // Controller에 비즈니스 로직이 들어갔기는 한데 지금은 단일 메소드만 가지고 있으니 일단 이대로 사용
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginDto.getLoginId(), loginDto.getPassword());
 
