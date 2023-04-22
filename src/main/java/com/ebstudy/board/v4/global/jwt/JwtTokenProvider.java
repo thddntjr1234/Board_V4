@@ -18,6 +18,7 @@ import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -55,15 +56,23 @@ public class JwtTokenProvider implements InitializingBean {
      * @return JWT 토큰
      */
     public String createToken(Authentication authentication) {
+
+        // List<GrantedAuthority> 권한 리스트를 풀어서 한 줄의 문자열로 반환
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
+        // 만료일 = 발급 시간 + 토큰 유효기간
         long now = (new Date()).getTime();
         Date validity = new Date(now + this.tokenValidityInMilliseconds);
 
+        // 인증 객체로부터 CustomUserDetails를 가져온다.(CustomUserDetailsService 에서 객체 생성 시 넣은 객체임)
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+
         return Jwts.builder()
-                .setSubject(authentication.getName())
+                .claim("userId", customUserDetails.getUserId())
+                .claim("loginId", customUserDetails.getLoginId())
+                .claim("username", customUserDetails.getUsername())
                 .claim(AUTHORITIES_KEY, authorities)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(validity)
@@ -88,7 +97,15 @@ public class JwtTokenProvider implements InitializingBean {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        User principal = new User(claims.getSubject(), "", authorities);
+        //User principal = new User(claims.getSubject(), "", authorities);
+        CustomUserDetails principal = CustomUserDetails
+                .builder()
+                .userId(claims.get("userId", Long.class))
+                .loginId(claims.get("loginId", String.class))
+                .username(claims.get("username", String.class))
+                .authorities((List<GrantedAuthority>) authorities)
+                .activated(true)
+                .build();
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
