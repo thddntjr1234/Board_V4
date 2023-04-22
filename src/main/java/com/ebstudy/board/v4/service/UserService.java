@@ -3,6 +3,8 @@ package com.ebstudy.board.v4.service;
 
 import com.ebstudy.board.v4.dto.UserDTO;
 import com.ebstudy.board.v4.global.authority.Role;
+import com.ebstudy.board.v4.global.exception.CustomErrorCode;
+import com.ebstudy.board.v4.global.exception.CustomException;
 import com.ebstudy.board.v4.global.util.SecurityUtil;
 import com.ebstudy.board.v4.repository.UserMapper;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ public class UserService {
 
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final SecurityUtil securityUtil;
 
     /**
      * 회원가입을 수행하는 메소드, 구현만 한 상태
@@ -48,7 +51,11 @@ public class UserService {
         return user;
     }
 
-
+    /**
+     * 관리자가 유저 정보를 조회하기 위해 사용하는 메소드.
+     * @param loginId 조회할 유저 로그인 아이디
+     * @return 조회한 유저 정보
+     */
     @Transactional(readOnly = true)
     public Optional<UserDTO> getUserWithAuthorities(String loginId) {
 
@@ -65,10 +72,13 @@ public class UserService {
         return Optional.ofNullable(user);
     }
 
+    /**
+     * 자신의 유저 정보를 조회하기 위해 사용하는 메소드
+     * @return 자신의 유저 정보
+     */
     @Transactional(readOnly = true)
     public Optional<UserDTO> getMyUserWithAuthorities() {
 
-        // 기존 강의 코드: SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername
         Optional<String> loginId = SecurityUtil.getCurrentUsername();
         UserDTO queryResult = userMapper.findUserByUserId(loginId.get());
         UserDTO user = UserDTO
@@ -80,5 +90,31 @@ public class UserService {
                 .build();
 
         return Optional.ofNullable(user);
+    }
+
+    /**
+     * 현재 유저 정보를 가져오는 메소드
+     * @return Security Context의 유저 정보(userId, loginId, name, role)
+     */
+    public UserDTO getUserFromContext() {
+        Optional<UserDTO> user = securityUtil.getCurrentUserInfo();
+
+        if (user.isEmpty()) {
+            throw new CustomException(CustomErrorCode.INVALID_USERS_REQUEST);
+        }
+
+        return user.orElse(null);
+    }
+
+    /**
+     * 게시글의 작성자와 요청자가 일치하는지 확인하는 메소드
+     * @param authorId 게시글 작성자 id
+     */
+    public void verifySameUser(Long authorId) {
+        UserDTO user = getUserFromContext();
+
+        if (!user.getUserId().equals(authorId)) {
+            throw new CustomException(CustomErrorCode.UNAUTHORIZED_REQUEST);
+        }
     }
 }
