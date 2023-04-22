@@ -26,7 +26,9 @@ public class UserController {
 
     @GetMapping("/api/user/{loginId}")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<UserDTO> getUserInfo(@PathVariable String loginId) {
-        return ResponseEntity.ok(userService.getUserWithAuthorities(loginId).get());
+    public ResponseEntity<Optional<UserDTO>> getUserInfo(@PathVariable String loginId) {
+        Optional<UserDTO> user = userService.getUserWithAuthorities(loginId);
+
+        return ResponseEntity.ok(user);
     }
 }
