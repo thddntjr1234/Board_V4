@@ -3,6 +3,7 @@ package com.ebstudy.board.v4.controller;
 import com.ebstudy.board.v4.dto.UserDTO;
 import com.ebstudy.board.v4.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class UserController {
@@ -18,15 +20,15 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/api/user")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<Optional<UserDTO>> getMyUserInfo() {
+        log.info("getMyUserInfo 수행");
         Optional<UserDTO> user = userService.getMyUserWithAuthorities();
         return ResponseEntity.ok(user);
     }
 
     @GetMapping("/api/user/{loginId}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<Optional<UserDTO>> getUserInfo(@PathVariable String loginId) {
+        log.info("getUserInfo 수행");
         Optional<UserDTO> user = userService.getUserWithAuthorities(loginId);
 
         return ResponseEntity.ok(user);
