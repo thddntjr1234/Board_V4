@@ -25,7 +25,7 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true) // @PreAuthorize 어노테이션을 마ㅔ소드 단위로 사용하기 위해 적용
 public class SecurityConfig {
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtProvider jwtProvider;
     private final CorsFilter corsFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
@@ -92,7 +92,7 @@ public class SecurityConfig {
 
                 // JwtFilter를 등록했던 JwtSecurityConfig 클래스 등록
                 .and()
-                .apply(new JwtSecurityConfig(jwtTokenProvider));
+                .apply(new JwtSecurityConfig(jwtProvider));
 
         return httpSecurity.build();
     }
