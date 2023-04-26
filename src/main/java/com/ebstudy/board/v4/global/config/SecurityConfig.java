@@ -1,17 +1,18 @@
 package com.ebstudy.board.v4.global.config;
 
-import com.ebstudy.board.v4.global.jwt.JwtAccessDeniedHandler;
-import com.ebstudy.board.v4.global.jwt.JwtAuthenticationEntryPoint;
+import com.ebstudy.board.v4.global.exception.GlobalExceptionHandler;
+import com.ebstudy.board.v4.global.exception.JwtAccessDeniedHandler;
+import com.ebstudy.board.v4.global.exception.JwtAuthenticationEntryPoint;
 import com.ebstudy.board.v4.global.jwt.JwtSecurityConfig;
-import com.ebstudy.board.v4.global.jwt.JwtTokenProvider;
+import com.ebstudy.board.v4.global.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,7 +25,7 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true) // @PreAuthorize 어노테이션을 마ㅔ소드 단위로 사용하기 위해 적용
 public class SecurityConfig {
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtProvider jwtProvider;
     private final CorsFilter corsFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
@@ -76,15 +77,22 @@ public class SecurityConfig {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-                // 지정한 URI Path에 대해 화이트리스트 등록, 이외 요청은 블랙리스트 처리
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/signin").permitAll()
-                .anyRequest().authenticated()
+                 //Comment
+                .antMatchers("/api/boards/comment").authenticated()
+                 //Post
+                .antMatchers(HttpMethod.POST, "/api/board/free").authenticated()
+                .antMatchers(HttpMethod.PUT, "/api/board/free/**").authenticated()
+                .antMatchers(HttpMethod.DELETE, "/api/board/free/**").authenticated()
+                 //User
+                .antMatchers("/api/user/{userId}").access("isAuthenticated() and hasAnyRole('ADMIN')")
+                .antMatchers("/api/user").access("isAuthenticated() and hasAnyRole('USER', 'ADMIN')")
+                .anyRequest().permitAll()
 
                 // JwtFilter를 등록했던 JwtSecurityConfig 클래스 등록
                 .and()
-                .apply(new JwtSecurityConfig(jwtTokenProvider));
+                .apply(new JwtSecurityConfig(jwtProvider));
 
         return httpSecurity.build();
     }

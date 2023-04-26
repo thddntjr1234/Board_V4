@@ -11,7 +11,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -22,8 +21,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class JwtTokenProvider implements InitializingBean {
-    private final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
+public class JwtProvider implements InitializingBean {
+    private final Logger logger = LoggerFactory.getLogger(JwtProvider.class);
     private static final String AUTHORITIES_KEY = "auth";
     private final String secret;
     private final long tokenValidityInMilliseconds;
@@ -34,7 +33,7 @@ public class JwtTokenProvider implements InitializingBean {
      * @param secret 64Byte길이의 HS512 알고리즘으로 암호화된 비밀키
      * @param tokenValidityInSeconds 토큰 유효기간(24시간)
      */
-    public JwtTokenProvider(
+    public JwtProvider(
             @Value("${jwt.secret}") String secret,
             @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds) {
         this.secret = secret;
