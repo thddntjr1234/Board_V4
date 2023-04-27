@@ -15,11 +15,13 @@ public enum CustomErrorCode {
      * 400 BAD_REQUEST: 잘못된 요청
      */
     INVALID_REQUEST(HttpStatus.BAD_REQUEST, "Invalid parameter values"),
+    INVALID_POST_REQUEST(HttpStatus.BAD_REQUEST, "유효하지 않은 게시글을 요청했습니다."),
 
     /**
      * 401 UNAUTHORIZED: 인증되지 않은 사용자의 요청
      */
     UNAUTHORIZED_REQUEST(HttpStatus.UNAUTHORIZED, "Unauthorized reqeust"),
+    INVALID_USERS_REQUEST(HttpStatus.UNAUTHORIZED, "게시글 작성자의 요청이 아닙니다."),
 
     /**
      * 404 NOT_FOUND: 리소스를 찾을 수 없음

@@ -60,13 +60,6 @@ public class CustomValidator implements ConstraintValidator<CustomValidation, Ob
                 case "content":
                     validateLength((String) value, 4, 2000, "내용은 4글자 이상 2000글자 미만이어야 합니다");
                     break;
-                case "author":
-                    validateLength((String) value, 3, 5, "작성자명은 3글자 이상 5글자 미만이어야 합니다");
-                    break;
-                case "passwd":
-                case "confirmPasswd":
-                    validatePassword((String) value);
-                    break;
             }
         }
         return true;

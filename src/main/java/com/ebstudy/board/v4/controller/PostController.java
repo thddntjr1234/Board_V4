@@ -2,17 +2,17 @@ package com.ebstudy.board.v4.controller;
 
 import com.ebstudy.board.v4.dto.*;
 import com.ebstudy.board.v4.dto.response.CommonApiResponseDTO;
+import com.ebstudy.board.v4.global.util.SecurityUtil;
 import com.ebstudy.board.v4.global.validator.CustomValidation;
 import com.ebstudy.board.v4.service.CommentService;
 import com.ebstudy.board.v4.service.FileService;
 import com.ebstudy.board.v4.service.PostService;
+import com.ebstudy.board.v4.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +24,7 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
+    private final UserService userService;
     private final FileService fileService;
     private final CommentService commentService;
 
@@ -86,14 +87,18 @@ public class PostController {
      * @return 게시글 폼 viewName과 카테고리 리스트를 가진 ModelAndView 객체
      */
     @GetMapping("/api/boards/free/new")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public CommonApiResponseDTO<?> getWriteForm() {
 
+        UserDTO user = userService.getUserFromContext();
         List<CategoryDTO> categoryList = postService.getCategoryList();
+
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("user", user);
+        data.put("categoryList", categoryList);
 
         return CommonApiResponseDTO.builder()
                 .success(true)
-                .data(categoryList)
+                .data(data)
                 .build();
     }
 
@@ -104,10 +109,13 @@ public class PostController {
      * @return HttpStatus를 가진 ResponseEntity<> 객체
      */
     @PostMapping("/api/boards/free")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     // ResponseEntity 로 리턴하면 raw type 경고가 나타나므로 와일드카드 ?를 선언해서 raw type의 불안정성을 제거
-    public CommonApiResponseDTO<?> savePost(@CustomValidation(value = {"categoryId", "title", "content", "author", "passwd", "confirmPasswd"})
+    public CommonApiResponseDTO<?> savePost(@CustomValidation(value = {"categoryId", "title", "content"})
                                                 @ModelAttribute PostDTO post) throws IOException {
+
+        // Post정보에 담긴 authorId값과 jwt내의 authorId(
+        Long authorId = post.getAuthorId();
+        userService.verifySameUser(authorId);
 
         postService.savePost(post);
         log.info("savePost 수행 완료");
@@ -118,10 +126,6 @@ public class PostController {
                 .build();
     }
 
-    // TODO: 3/11 리뷰에서 받았던 유효성 검증은 가급적 컨트롤러에서 하기를 어떻게 지킬 수 있을까?
-    //  Update, Delete는 post에서 패스워드를 애초에 받아서 가지고 있게 하는 방식으로 하면 된다고 쳐도 수정, 삭제 버튼시 한번 체크하고 넘어가는 부분에서는 어쩔 수 없이 DAO에서 체크할 수 밖에 없다.
-    // -> 위와 같은 부분에서는 애초에 패스워드 비교가 유효성 검증이 아니라 하나의 서비스 로직인 셈이다. 당연히 서비스 로직에서 처리해야 하는 것으로
-    //  맞지 맞는 옷에 억지로 몸을 낑겨넣는 것과 같다.
     /**
      * 게시글 수정
      * /boards/free/3 PUT
@@ -129,10 +133,13 @@ public class PostController {
      * @return 공통 반환타입 CommonApiResponseDTO 객체
      */
     @PutMapping("/api/boards/free/{postId}")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public CommonApiResponseDTO<?> updatePost(@CustomValidation(value = {"title", "content", "author"}) @ModelAttribute  PostDTO post,
+    public CommonApiResponseDTO<?> updatePost(@CustomValidation(value = {"title", "content"}) @ModelAttribute  PostDTO post,
                                               @RequestPart(required = false) List<FileDTO> existingFiles) throws IOException {
         // Multipart/Form-Data 방식과 json타입의 객체를 같이 사용하려면 json파트에 대해 @RequestPart 어노테이션을 적용해 주면 된다.
+
+        // 수정 요청한 게시글 데이터를 DB에서 가져와서 해당 정보 기준으로 비교한다(postId를 다르게 하고 authorId를 일치시키는 방식으로 위조할 수 있기 때문에)
+        PostDTO originPost = postService.getPost(post.getPostId());
+        userService.verifySameUser(originPost.getAuthorId());
 
         // 게시글 먼저 수정
         postService.updatePost(post);
@@ -149,9 +156,12 @@ public class PostController {
      * @param post postId, passwd 값 전달
      * @return 공통 반환타입 CommonApiResponseDTO 객체
      */
-    @DeleteMapping("/api/boards/free")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @DeleteMapping("/api/boards/free/{postId}")
     public CommonApiResponseDTO<?> deletePost(@ModelAttribute PostDTO post) {
+
+        // 수정 요청한 게시글의 작성자와 JWT안의 요청자 정보가 일치하는지 확인
+        PostDTO originPost = postService.getPost(post.getPostId());
+        userService.verifySameUser(originPost.getAuthorId());
 
         postService.deletePost(post);
         
@@ -164,7 +174,6 @@ public class PostController {
      * 테스트용
      */
     @GetMapping("/post/test")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public void errorThrower(@CustomValidation(value = {"passwd", "confirmPasswd"}) PostDTO postDTO) throws RuntimeException {
         int[] test = new int[5];
 

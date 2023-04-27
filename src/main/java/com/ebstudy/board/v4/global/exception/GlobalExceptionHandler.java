@@ -12,6 +12,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import javax.validation.ValidationException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @RestControllerAdvice
@@ -24,11 +26,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
     public ResponseEntity<Object> handleCustomException(CustomException e, WebRequest request) {
 
         // TODO: 2023/03/12 모든 핸들러가 구체적인 에러 메세지를 반환하도록 리팩토링
-        CustomErrorCode customErrorCode = e.getCustomErrorCode();
         e.printStackTrace();
-        log.error("handleCustomException throws CustomException e: " + e);
+        log.error("handleCustomException 이 CustomException을 처리 ");
 
-        CommonApiResponseDTO<CustomErrorCode> commonApiResponse = new CommonApiResponseDTO<>(false, customErrorCode);
+        HashMap<String, String> errorCode = new HashMap<>();
+        errorCode.put("errorMessage", e.getCustomErrorCode().getErrorMessage());
+
+        CommonApiResponseDTO<Map> commonApiResponse = new CommonApiResponseDTO<>(false, errorCode);
         return new ResponseEntity<>(commonApiResponse, e.getCustomErrorCode().getHttpStatus());
     }
 
@@ -43,8 +47,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
         e.printStackTrace();
-        ErrorData errorData = new ErrorData(status.value(), e.getCause().getMessage());
-        CommonApiResponseDTO<ErrorData> commonApiResponse = new CommonApiResponseDTO<>(false, errorData);
+        //ErrorData errorData = new ErrorData(status.value(), e.getCause().getMessage());
+        HashMap<String, String> errorCode = new HashMap<>();
+        errorCode.put("errorMessage", e.getCause().getMessage());
+
+        CommonApiResponseDTO<Map> commonApiResponse = new CommonApiResponseDTO<>(false, errorCode);
 
         return new ResponseEntity<>(commonApiResponse, status);
     }
@@ -75,6 +82,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
 
             log.info("handleException에서 뱉은 에러를 다시 캐치");
         }
+
     }
 
     /**
