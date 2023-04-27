@@ -8,6 +8,7 @@
         <result property="categoryId" column="category_id"/>
         <result property="createdDate" column="created_date"/>
         <result property="modifiedDate" column="modified_date"/>
+        <result property="authorId" column="author_id"/>
         <result property="fileFlag" column="file_flag"/>
     </resultMap>
 
@@ -25,7 +26,7 @@
         <if test="keyword != null">
             AND (title LIKE CONCAT('%', #{keyword}, '%')
             OR content LIKE CONCAT('%', #{keyword}, '%')
-            OR author LIKE CONCAT('%', #{keyword}, '%'))
+            OR ${author} LIKE CONCAT('%', #{keyword}, '%'))
         </if>
     </sql>
 
@@ -34,9 +35,10 @@
             resultMap="mapPostDTO">
         <!--db 성능에 대해서는 성능이 실제로 문제가 될 때 고려-->
         <!--TODO: 3/11 리뷰: View를 공부해서 사용해 보자, where delete_flag가 따라다니는걸 막기 위해서 쓰는 것(create view v-board, user와 admin의 경우에 delete_flag-->
-        SELECT A.post_id, A.created_date, A.modified_date, A.author,
+        SELECT A.post_id, A.created_date, A.modified_date, A.author_id,
                A.content, A.hits, A.passwd, A.title, A.delete_flag,
                B.category,
+               C.username AS author,
                EXISTS(
                    SELECT 1
                    FROM files
@@ -46,9 +48,14 @@
         FROM posts A
             LEFT JOIN categorys B
                 ON A.category_id = B.category_id
+            LEFT JOIN users C
+                ON A.author_id = C.user_id
 
         WHERE A.delete_flag = false
-        <include refid="search"><property name="categoryIdField" value="A.category_id"/></include>
+        <include refid="search">
+            <property name="categoryIdField" value="A.category_id"/>
+            <property name="author" value="username"/>
+        </include>
 
         ORDER BY A.post_id DESC LIMIT #{startPostNumber}, 10
     </select>
@@ -57,10 +64,15 @@
     <select id="getPostCount" parameterType="SearchDTO" resultType="int">
         SELECT COUNT(post_id)
 
-        FROM posts
+        FROM posts A
+            LEFT JOIN users B
+                ON A.author_id = B.user_id
 
-        WHERE delete_flag = false
-        <include refid="search"><property name="categoryIdField" value="category_id"/></include>
+        WHERE A.delete_flag = false
+        <include refid="search">
+            <property name="categoryIdField" value="category_id"/>
+            <property name="author" value="username"/>
+        </include>
     </select>
 
     <!--CDATA를 쓰면 sql 안에서 < >같은 문자를 써도 xml코드로 인식하지 않는다-->
@@ -75,7 +87,7 @@
 
         WHERE post_id = #{postId} AND delete_flag = false
     </select>
-    
+
     <!--카테고리 리스트를 반환-->
     <select id="getCategoryList" resultType="CategoryDTO"
             resultMap="mapCategoryDTO">
@@ -87,10 +99,10 @@
     <!--PostDTO 객체에 담긴 게시글 값을 저장-->
     <insert id="savePost" parameterType="PostDTO" useGeneratedKeys="true"
             keyProperty="postId">
-        INSERT INTO posts(title, category_id, author, content, passwd,
+        INSERT INTO posts(title, category_id, author_id, content, passwd,
                           created_date, modified_date)
 
-        VALUES (#{title}, #{categoryId}, #{author}, #{content}, #{passwd},
+        VALUES (#{title}, #{categoryId}, #{authorId}, #{content}, #{passwd},
                 #{createdDate}, #{modifiedDate})
     </insert>
 
@@ -98,7 +110,7 @@
     <update id="updatePost" parameterType="PostDTO">
         UPDATE posts
 
-        SET author        = #{author},
+        SET author_id        = #{authorId},
             passwd        = #{passwd},
             title         = #{title},
             content       = #{content},

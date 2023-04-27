@@ -53,8 +53,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().name()));
 
-        // TODO: 2023/04/20 3. CustomUserDetails로 교체
-        CustomUserDetails customUser = CustomUserDetails
+        return CustomUserDetails
                 .builder()
                 .userId(user.getUserId())
                 .loginId(user.getLoginId())
@@ -63,7 +62,5 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .authorities(grantedAuthorities)
                 .activated(user.getActivated())
                 .build();
-
-        return customUser;
     }
 }

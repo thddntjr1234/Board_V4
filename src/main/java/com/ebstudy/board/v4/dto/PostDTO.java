@@ -36,7 +36,9 @@ public class PostDTO {
     // 내용
     private String content;
 
-    // 작성자
+    // 작성자 ID
+    private Long authorId;
+
     private String author;
 
     // 카테고리 이름
