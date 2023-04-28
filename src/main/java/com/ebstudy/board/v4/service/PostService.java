@@ -84,6 +84,7 @@ public class PostService {
      * @param post 저장할 게시글
      */
     public void savePost(PostDTO post) {
+        post.setCreatedDate(String.valueOf(LocalDateTime.now()));
         boardMapper.savePost(post);
     }
 
