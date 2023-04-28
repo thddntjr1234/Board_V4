@@ -107,7 +107,7 @@ public class PostService {
         //// 형식에 맞게 데이터 set 및 유효성 검증
         //post.setPasswd(postServiceUtil.getSHA512(post.getPasswd()));
         //post.setConfirmPasswd(originPost.getPasswd());
-        //post.setModifiedDate(String.valueOf(LocalDateTime.now()));
+        post.setModifiedDate(String.valueOf(LocalDateTime.now()));
 
         boardMapper.updatePost(post);
     }
