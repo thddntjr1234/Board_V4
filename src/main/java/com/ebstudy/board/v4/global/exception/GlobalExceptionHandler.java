@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -40,18 +41,22 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
     /**
      * 전역에서 throw되는 ValidationException에 대해서 에러 처리
      */
-    @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<Object> handleValidationException(Exception e, WebRequest request) {
+    @ExceptionHandler({ValidationException.class, AuthenticationException.class})
+    public ResponseEntity<Object> handleValidationAndSecurityException(Exception e, WebRequest request) {
 
         log.info(String.valueOf(e.getCause()));
-        HttpStatus status = HttpStatus.BAD_REQUEST;
+        HttpStatus status;
 
-        e.printStackTrace();
-        //ErrorData errorData = new ErrorData(status.value(), e.getCause().getMessage());
+        if (e instanceof ValidationException) {
+            status = HttpStatus.BAD_REQUEST;
+        } else {
+            status = HttpStatus.UNAUTHORIZED;
+        }
+
         HashMap<String, String> errorCode = new HashMap<>();
-        errorCode.put("errorMessage", e.getCause().getMessage());
+        errorCode.put("errorMessage", e.getMessage());
 
-        CommonApiResponseDTO<Map> commonApiResponse = new CommonApiResponseDTO<>(false, errorCode);
+        CommonApiResponseDTO<Map<String, String>> commonApiResponse = new CommonApiResponseDTO<>(false, errorCode);
 
         return new ResponseEntity<>(commonApiResponse, status);
     }
@@ -60,7 +65,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
      * 전역으로 throw되는 CustomException, ValidationException을 제외한 모든 Exception을 핸들링하는 메소드
      */
     @ExceptionHandler(Exception.class)
-    public void handleGlobalException(Exception e, WebRequest request) {
+    public ResponseEntity<Object> handleGlobalException(Exception e, WebRequest request) {
 
         // TODO: 기타 오류들은 해당 핸들러가 처리하므로 에러 내용들을 뽑아서 요구되는 포맷으로 변환해 반환(메소드화)
 
@@ -74,15 +79,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
         log.info("Exception e " + e.getMessage());
         log.info("WebRequest request 내용" + request.getDescription(true));
 
+        HashMap<String, String> errorData = new HashMap<>();
+
         try {
             handleException(e, request);
-
         } catch (Exception ex) {
             // Spring MVC 예외가 아닌 것들은 다시 throw되는데 이걸 캐치해서 기존의 핸들러가 동작하지 못하게 한다.
-
-            log.info("handleException에서 뱉은 에러를 다시 캐치");
+            errorData.put("errorMessage", ex.getMessage());
         }
 
+        CommonApiResponseDTO<Object> commonApiResponse = new CommonApiResponseDTO<>(false, errorData);
+        log.info("handleException에서 뱉은 에러를 다시 캐치");
+        return new ResponseEntity<>(commonApiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**
