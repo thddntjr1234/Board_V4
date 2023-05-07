@@ -1,6 +1,8 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <a class="navbar-brand" href="#">메인 페이지</a>
+  <nav class="nav me-5 navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <span class="d-inline-block text-truncate">
+      <router-link class="nav-link text-white" to="/">메인 페이지</router-link>
+    </span>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>

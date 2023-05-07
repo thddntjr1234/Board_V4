@@ -1,5 +1,8 @@
 <template>
   <div class="container">
+    <NavBar></NavBar>
+  </div>
+  <div class="container">
     <h1>게시판 - 목록(page : {{ pagingValues.currentPage }} )</h1><br>
   </div>
   <div class="container">
@@ -35,7 +38,7 @@
       <tr>
         <th class="w-auto" style="text-align: center;">카테고리</th>
         <th class="w-auto" style="text-align: center;">&nbsp;</th>
-        <th class="w-auto" style="text-align: center;">제목</th>
+        <th class="w-50" style="text-align: center">제목</th>
         <th class="w-auto" style="text-align: center;">작성자</th>
         <th class="w-auto" style="text-align: center;">조회수</th>
         <th class="w-auto" style="text-align: center;">등록 일시</th>
@@ -51,7 +54,7 @@
         <td v-else>&nbsp;</td>
 
         <td class="d-flex justify-content-start">
-          <router-link :to="{path: '/api/boards/free/' + post.postId}">{{ post.title }}</router-link>
+          <router-link :to="{path: '/boards/free/' + post.postId}">{{ post.title }}</router-link>
         </td>
         <td>{{ post.author }}</td>
         <td>{{ post.hits }}</td>
@@ -64,7 +67,7 @@
   <div class="d-flex justify-content-between">
     <!--   내부의 데이터가 어떤 필드들로 구성되어 있는지 알 수 없으니 풀어서 일일히 선언해주는 것이 좋겟다.-->
     <!--    이벤트 수신은 여기서-->
-    <Pagination :paging-values="pagingValues" :page-range="pageRange"/>
+    <Pagination :paging-values="pagingValues" :page-range="pageRange" @get-page="getPage"/>
     <router-link :to="{name: 'newForm'}">
       <button class="btn btn-secondary">등록</button>
     </router-link>
@@ -76,10 +79,12 @@
 import axios from 'axios';
 import PostList from "@/components/PostList.vue";
 import Pagination from "@/components/Pagination.vue";
+import NavBar from "@/components/NavBar.vue";
 
+// Options API
 export default {
-  name: 'Board',
-  components: {PostList, Pagination},
+  name: 'freeBoardView',
+  components: {NavBar, PostList, Pagination},
   data() {
     return {
       // 검색버튼 클릭 시 담기는 검색조건 변수
@@ -96,6 +101,23 @@ export default {
   },
 
   methods: {
+
+    /**
+     * Pagination 컴포넌트에서 페이지 변경 시 getPostList메소드를 호출하여 페이지를 갱신하기 위한 메소드
+     * 기존의 router query를 사용하는 방식으로 검색 조건을 유지하게 한다면 이 방법을 사용할 수 있다.
+     * 이외에 vuex를 사용하여 상태 저장소에 쿼리를 넣는 방법도 있음.
+     **/
+    async getPage(pageNumber, queryParams) {
+      console.log("FreeBoardView getPage() 파라미터: " + pageNumber + ", " + JSON.stringify(queryParams))
+      this.$route.query.pageNumber = pageNumber
+      this.$route.query.keyword = queryParams.keyword
+      this.$route.query.startDate = queryParams.startDate
+      this.$route.query.endDate = queryParams.endDate
+
+      console.log("Pagination 컴포넌트 이벤트에 의해 부모 컴포넌트의 getPostList()가 실행됨")
+      await this.getPostList()
+      // this.$route.query.
+    },
 
     /**
      * api 서버로 게시글 리스트를 전송받아 관련 데이터를 설정하는 메소드
@@ -119,6 +141,9 @@ export default {
 
       // console.log('response data: ' + JSON.stringify(response.data));
       this.pagingValues = response.data.data.pagingValues;
+
+      // 배열 초기화
+      this.pageRange.length = 0
 
       // pageRange 값 설정
       for (let i = this.pagingValues.startPage; i <= this.pagingValues.endPage; i++) {

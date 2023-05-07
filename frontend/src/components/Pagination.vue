@@ -1,42 +1,39 @@
 <template>
   <div class="container d-flex !important justify-content-center">
     <ul class="pagination">
-      <li class="page-item" v-if="pagingValues.startPage > 1">
-        <router-link class="page-link" :to="getPage(1)">처음</router-link>
+      <li class="page-item" v-if="pagingValues.startPage > 1" @click="getPage(1)">
+        <button class="page-link">처음</button>
       </li>
-      <li class="page-item" v-if="pagingValues.currentPage > 1">
-        <router-link class="page-link" :to="getPage(pagingValues.currentPage - 1)">이전</router-link>
+      <li class="page-item" v-if="pagingValues.currentPage > 1" @click="getPage(pagingValues.currentPage - 1)">
+            <button class="page-link">이전</button>
       </li>
       <template v-for="i in pageRange" v-bind:key="i">
-        <li class="page-item">
-          <!--
-          이 코드가 왜 router를 타지 못했는지 설명
-
-          -->
-          <router-link class="page-link" :to="getPage(i)">{{ i }}</router-link>
+        <li class="page-item" @click="$emit('get-page', i, queryParams)">
+          <button class="page-link">{{ i }}</button>
         </li>
       </template>
-      <li class="page-item" v-if="pagingValues.currentPage < pagingValues.totalPage">
-        <router-link class="page-link" :to="getPage(pagingValues.currentPage + 1)">다음</router-link>
+      <li class="page-item" v-if="pagingValues.currentPage < pagingValues.totalPage" @click="getPage(pagingValues.currentPage + 1)">
+        <button class="page-link">다음</button>
       </li>
       <!--      페이지네이션의 재활용도를 높이기 위해 이벤트를 발생시키는 방식으로 처리, 현재는 직접 이동시킬 뿐임-->
-      <li class="page-item" v-if="pagingValues.endPage < pagingValues.totalPage">
-        <router-link class="page-link" :to="getPage(pagingValues.totalPage)">끝</router-link>
+      <li class="page-item" v-if="pagingValues.endPage < pagingValues.totalPage" @click="getPage(pagingValues.totalPage)">
+        <button class="page-link">끝</button>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-import {computed} from 'vue';
+import {computed, getCurrentInstance} from 'vue';
 import {useRoute} from 'vue-router';
 
 export default {
   name: 'Pagination',
   props: {
-    // list 내부에 어떤 필드가 있는지 예측할 수 있어야 함
+    // totalPostCount, start&end&current&total Page, startPostNumber
     pagingValues: [],
-    pageRange: []
+    // 페이지 범위에 대한 숫자 리스트
+    pageRange: [],
   },
 
   setup() {
@@ -52,18 +49,16 @@ export default {
       };
     });
 
+    // caught TypeError: Cannot read properties of undefined (reading '$emit')
+    // 까먹었는데 컴포지션 API에선 this 사용이 금지된다.
+    const instance = getCurrentInstance()
     const getPage = (pageNumber) => {
-      return {
-        name: 'board',
-        query: {
-          pageNumber,
-          ...queryParams.value,
-        },
-      };
-    };
+      instance.emit("get-page", pageNumber, queryParams)
+    }
 
     return {
-      getPage
+      getPage,
+      queryParams
     }
   }
 }
