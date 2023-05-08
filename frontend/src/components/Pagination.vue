@@ -1,10 +1,10 @@
 <template>
   <div class="container d-flex !important justify-content-center">
     <ul class="pagination">
-      <li class="page-item" v-if="pagingValues.startPage > 1" @click="getPage(1)">
+      <li class="page-item" v-if="pagingValues.startPage > 1" @click="$emit('get-page', 1, queryParams)">
         <button class="page-link">처음</button>
       </li>
-      <li class="page-item" v-if="pagingValues.currentPage > 1" @click="getPage(pagingValues.currentPage - 1)">
+      <li class="page-item" v-if="pagingValues.currentPage > 1" @click="$emit('get-page', pagingValues.currentPage - 1, queryParams)">
             <button class="page-link">이전</button>
       </li>
       <template v-for="i in pageRange" v-bind:key="i">
@@ -12,11 +12,11 @@
           <button class="page-link">{{ i }}</button>
         </li>
       </template>
-      <li class="page-item" v-if="pagingValues.currentPage < pagingValues.totalPage" @click="getPage(pagingValues.currentPage + 1)">
+      <li class="page-item" v-if="pagingValues.currentPage < pagingValues.totalPage" @click="$emit('get-page', pagingValues.currentPage + 1, queryParams)">
         <button class="page-link">다음</button>
       </li>
       <!--      페이지네이션의 재활용도를 높이기 위해 이벤트를 발생시키는 방식으로 처리, 현재는 직접 이동시킬 뿐임-->
-      <li class="page-item" v-if="pagingValues.endPage < pagingValues.totalPage" @click="getPage(pagingValues.totalPage)">
+      <li class="page-item" v-if="pagingValues.endPage < pagingValues.totalPage" @click="$emit('get-page', pagingValues.totalPage, queryParams)">
         <button class="page-link">끝</button>
       </li>
     </ul>
