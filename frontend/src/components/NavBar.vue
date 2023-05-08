@@ -1,5 +1,5 @@
 <template>
-  <nav class="nav me-5 navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <span class="d-inline-block text-truncate">
       <router-link class="nav-link text-white" to="/">메인 페이지</router-link>
     </span>
