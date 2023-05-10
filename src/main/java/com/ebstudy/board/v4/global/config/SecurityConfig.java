@@ -82,9 +82,10 @@ public class SecurityConfig {
                  //Comment
                 .antMatchers("/api/boards/comment").authenticated()
                  //Post
-                .antMatchers(HttpMethod.POST, "/api/board/free").authenticated()
-                .antMatchers(HttpMethod.PUT, "/api/board/free/**").authenticated()
-                .antMatchers(HttpMethod.DELETE, "/api/board/free/**").authenticated()
+                .antMatchers(HttpMethod.POST, "/api/boards/free").authenticated()
+                .antMatchers(HttpMethod.PUT, "/api/boards/free/**").authenticated()
+                .antMatchers(HttpMethod.DELETE, "/api/boards/free/**").authenticated()
+                .antMatchers("/api/boards/free/new").access("isAuthenticated()")
                  //User
                 .antMatchers("/api/user/{userId}").access("isAuthenticated() and hasAnyRole('ADMIN')")
                 .antMatchers("/api/user").access("isAuthenticated() and hasAnyRole('USER', 'ADMIN')")
