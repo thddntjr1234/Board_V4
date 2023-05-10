@@ -8,6 +8,9 @@ const store = createStore({
     getters : {
         isValidToken(state) {
             return state.token != null
+        },
+        getToken(state) {
+            return state.token
         }
     },
     mutations : { // commit으로 부를 수 있음
