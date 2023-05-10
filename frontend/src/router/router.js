@@ -1,31 +1,43 @@
 import {createWebHistory, createRouter} from "vue-router";
 import ErrorPage from "@/views/ErrorView.vue";
-import Board from "@/views/BoardView.vue";
+import CommunityBoardView from "@/views/CommunityBoardView.vue";
+import CommunityView from "@/views/CommunityView.vue";
+import CommunityWriteFormView from "@/views/CommunityWriteFormView.vue";
 import MainPage from "@/views/MainPage.vue";
-import PostWriteFormView from "@/views/PostWriteFormView.vue";
+import CommunityModifyView from "@/views/CommunityModifyView.vue";
 
 const router = createRouter({
     history: createWebHistory(),
     routes: [ // path별 component를 추가한다.
         {
             path: "/",
-            name: "mainPage",
+            name: "MainPage",
             component: MainPage
-        },
-        {
-            path: "/boards/free",
-            name: "board",
-            component: Board
-        },
-        {
-            path: "/boards/free/new",
-            name: "newForm",
-            component: PostWriteFormView
         },
         {
             path: "/:pathMatch(.*)",
             name: "not-found",
             component: ErrorPage
+        },
+        {
+            path: "/boards/free",
+            name: "CommunityBoardView",
+            component: CommunityBoardView
+        },
+        {
+            path: "/boards/free/new",
+            name: "CommunityWriteFormView",
+            component: CommunityWriteFormView
+        },
+        {
+            path: "/boards/free/:postId",
+            name: "CommunityView",
+            component: CommunityView
+        },
+        {
+            path: "/boards/free/:postId/edit",
+            name: "CommunityModifyView",
+            component: CommunityModifyView
         }
     ]
 });
