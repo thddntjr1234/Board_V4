@@ -23,9 +23,9 @@
 
     <!--댓글 대상의 postId를 가진 게시글을 저장-->
     <insert id="saveComment" parameterType="com.ebstudy.board.v4.dto.CommentDTO">
-        INSERT INTO comments(comment, created_date, post_id)
+        INSERT INTO comments(comment, created_date, post_id, user_id)
 
-        VALUES (#{comment}, #{createdDate}, #{postId})
+        VALUES (#{comment}, #{createdDate}, #{postId}, #{userId})
     </insert>
 </mapper>
 
