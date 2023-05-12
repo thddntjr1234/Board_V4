@@ -114,8 +114,8 @@ public class PostController {
                                                 @ModelAttribute PostDTO post) throws IOException {
 
         // Post정보에 담긴 authorId값과 jwt내의 authorId(
-        Long authorId = post.getAuthorId();
-        userService.verifySameUser(authorId);
+        //Long authorId = post.getAuthorId();
+        //userService.verifySameUser(authorId);
 
         postService.savePost(post);
         log.info("savePost 수행 완료");

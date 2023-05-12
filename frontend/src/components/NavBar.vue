@@ -105,7 +105,6 @@ export default {
         })
         console.log(response.data.token)
         await store.dispatch('setToken', response.data.token)
-        alert("store 내에 저장된 jwt: " + store.state.token)
         alert("로그인에 성공했습니다.")
 
         location.reload()

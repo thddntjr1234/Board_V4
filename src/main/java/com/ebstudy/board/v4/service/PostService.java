@@ -1,9 +1,6 @@
 package com.ebstudy.board.v4.service;
 
-import com.ebstudy.board.v4.dto.CategoryDTO;
-import com.ebstudy.board.v4.dto.PaginationDTO;
-import com.ebstudy.board.v4.dto.PostDTO;
-import com.ebstudy.board.v4.dto.SearchDTO;
+import com.ebstudy.board.v4.dto.*;
 import com.ebstudy.board.v4.global.exception.CustomException;
 import com.ebstudy.board.v4.global.exception.CustomErrorCode;
 import com.ebstudy.board.v4.repository.BoardMapper;
@@ -25,6 +22,7 @@ public class PostService {
 
     private final BoardMapper boardMapper;
     private final PostServiceUtil postServiceUtil;
+    private final UserService userService;
 
     /**
      * 요구 데이터 포맷에 맞게 변환된 게시글 리스트를 가져오는 메소드
@@ -84,7 +82,11 @@ public class PostService {
      * @param post 저장할 게시글
      */
     public void savePost(PostDTO post) {
+        UserDTO user = userService.getUserFromContext();
+
+        post.setAuthorId(user.getUserId());
         post.setCreatedDate(String.valueOf(LocalDateTime.now()));
+
         boardMapper.savePost(post);
     }
 

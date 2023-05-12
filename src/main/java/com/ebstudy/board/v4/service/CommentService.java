@@ -1,6 +1,7 @@
 package com.ebstudy.board.v4.service;
 
 import com.ebstudy.board.v4.dto.CommentDTO;
+import com.ebstudy.board.v4.dto.UserDTO;
 import com.ebstudy.board.v4.repository.BoardMapper;
 import com.ebstudy.board.v4.repository.CommentMapper;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.List;
 public class CommentService {
 
     private final CommentMapper commentMapper;
+    private final UserService userService;
 
     /**
      * 게시글 id에 해당하는 댓글 리스트를 가져오는 메소드
@@ -57,6 +59,9 @@ public class CommentService {
      * @param comment 저장할 댓글
      */
     public void saveComment( CommentDTO comment) {
+        UserDTO user = userService.getUserFromContext();
+
+        comment.setUserId(user.getUserId());
         comment.setCreatedDate(String.valueOf(LocalDateTime.now()));
         commentMapper.saveComment(comment);
     }

@@ -20,7 +20,6 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/api/boards/comment")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public CommonApiResponseDTO<?> saveComment(@ModelAttribute CommentDTO comment) {
 
         commentService.saveComment(comment);
@@ -29,4 +28,6 @@ public class CommentController {
                 .success(true)
                 .build();
     }
+    // TODO: 2023/05/11 게시글 삭제기능 추가
+
 }

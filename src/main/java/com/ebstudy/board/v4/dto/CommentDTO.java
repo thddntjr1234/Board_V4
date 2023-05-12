@@ -12,6 +12,11 @@ public class CommentDTO {
     // 소속된 게시글의 pk값
     private Long postId;
 
+    // 댓글 작성자
+    private Long userId;
+
+    private String username;
+
     // 생성일
     private String createdDate;
 
