@@ -33,7 +33,7 @@ public class UserService {
      */
     @Transactional
     public UserDTO signup(UserDTO userDTO) throws DuplicateMemberException {
-        if (userMapper.findUserByUserId(userDTO.getLoginId()) == null) {
+        if (userMapper.findUserByLoginId(userDTO.getLoginId()) == null) {
             throw new DuplicateMemberException("이미 가입되어 있는 유저입니다.");
         }
 
@@ -59,7 +59,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public Optional<UserDTO> getUserWithAuthorities(String loginId) {
 
-        UserDTO queryResult = userMapper.findUserByUserId(loginId);
+        UserDTO queryResult = userMapper.findUserByLoginId(loginId);
         UserDTO user = UserDTO
                 .builder()
                 .userId(queryResult.getUserId())
@@ -80,7 +80,7 @@ public class UserService {
     public Optional<UserDTO> getMyUserWithAuthorities() {
 
         Optional<String> loginId = SecurityUtil.getCurrentUsername();
-        UserDTO queryResult = userMapper.findUserByUserId(loginId.get());
+        UserDTO queryResult = userMapper.findUserByLoginId(loginId.get());
         UserDTO user = UserDTO
                 .builder()
                 .userId(queryResult.getUserId())

@@ -31,7 +31,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(final String loginId) {
-        UserDTO user = userMapper.findUserByUserId(loginId);
+        UserDTO user = userMapper.findUserByLoginId(loginId);
 
         return Optional
                 .ofNullable(user)
