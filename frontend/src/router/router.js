@@ -38,7 +38,7 @@ const router = createRouter({
             path: "/boards/free/:postId/edit",
             name: "CommunityModifyView",
             component: CommunityModifyView
-        }
+        },
     ]
 });
 
