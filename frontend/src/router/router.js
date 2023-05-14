@@ -6,6 +6,7 @@ import CommunityWriteFormView from "@/views/CommunityWriteFormView.vue";
 import MainPage from "@/views/MainPage.vue";
 import CommunityModifyView from "@/views/CommunityModifyView.vue";
 
+
 const router = createRouter({
     history: createWebHistory(),
     routes: [ // path별 component를 추가한다.
@@ -30,15 +31,15 @@ const router = createRouter({
             component: CommunityWriteFormView
         },
         {
+            path: "/boards/free/:postId/edit",
+            name: "CommunityModifyView",
+            component: CommunityModifyView
+        },
+        {
             path: "/boards/free/:postId",
             name: "CommunityView",
             component: CommunityView
         },
-        {
-            path: "/boards/free/:postId/edit",
-            name: "CommunityModifyView",
-            component: CommunityModifyView
-        }
     ]
 });
 
