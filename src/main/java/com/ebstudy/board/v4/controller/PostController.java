@@ -119,8 +119,9 @@ public class PostController {
 
         postService.savePost(post);
         log.info("savePost 수행 완료");
-        fileService.saveFile(post.getPostId(), post.getFile());
-
+        if (post.getFile() != null) {
+            fileService.saveFile(post.getPostId(), post.getFile());
+        }
         return CommonApiResponseDTO.builder()
                 .success(true)
                 .build();
