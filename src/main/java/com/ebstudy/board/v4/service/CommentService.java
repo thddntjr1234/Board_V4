@@ -65,4 +65,33 @@ public class CommentService {
         comment.setCreatedDate(String.valueOf(LocalDateTime.now()));
         commentMapper.saveComment(comment);
     }
+
+    /**
+     * 댓글 삭제 메소드
+     * @param commentId 삭제할 댓글의 Id
+     */
+    public void deleteComment(Long commentId) {
+        UserDTO user = userService.getUserFromContext();
+
+        CommentDTO originComment = commentMapper.findCommentByCommentId(commentId);
+
+        if (user.getUserId().equals(originComment.getUserId())) {
+            commentMapper.deleteComment(commentId);
+        }
+    }
+
+    /**
+     * 댓글 수정 메소드
+     * @param comment 수정할 댓글
+     */
+    public void updateComment(CommentDTO comment) {
+        UserDTO user = userService.getUserFromContext();
+
+        CommentDTO originComment = commentMapper.findCommentByCommentId(comment.getCommentId());
+
+        if (user.getUserId().equals(originComment.getUserId())) {
+            comment.setModifiedDate(String.valueOf(LocalDateTime.now()));
+            commentMapper.updateComment(comment);
+        }
+    }
 }

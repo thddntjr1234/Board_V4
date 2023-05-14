@@ -79,11 +79,13 @@
     <!--요청한 postId에 해당하는 게시글을 반환-->
     <select id="getPost" parameterType="long" resultType="PostDTO"
             resultMap="mapPostDTO">
-        SELECT *
+        SELECT post_id, created_date, modified_date, title, author_id,
+               content, hits, A.category_id, delete_flag, category, username AS author
 
         FROM posts A
                  LEFT JOIN categorys B
                      ON A.category_id = B.category_id
+                 LEFT JOIN users C ON A.author_id = C.user_id
 
         WHERE post_id = #{postId} AND delete_flag = false
     </select>
@@ -110,7 +112,7 @@
     <update id="updatePost" parameterType="PostDTO">
         UPDATE posts
 
-        SET author_id        = #{authorId},
+        SET author_id     = #{authorId},
             passwd        = #{passwd},
             title         = #{title},
             content       = #{content},
