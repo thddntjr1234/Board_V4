@@ -70,7 +70,6 @@ import {useStore} from "vuex";
 import router from "@/router/router";
 import NavBar from "@/components/NavBar.vue";
 import Comment from "@/components/Comment.vue"
-import CommunityModifyView from "@/views/CommunityModifyView.vue";
 
 export default {
   name: "CommunityView",
@@ -242,7 +241,8 @@ export default {
      * 게시글 수정 페이지로 이동
      */
     const modifyPost = () => {
-      router.push({name: CommunityModifyView})
+      console.log("route path: " + route.path + '/edit')
+      router.push(route.path + '/edit')
     }
 
     /**
