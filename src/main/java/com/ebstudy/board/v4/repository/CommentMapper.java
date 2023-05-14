@@ -20,5 +20,18 @@ public interface CommentMapper {
      */
     void saveComment(CommentDTO comment);
 
+    /**
+     * 요청받은 게시글을 삭제
+     */
+    void deleteComment(Long commentId);
+
+    /**
+     * 요청받은 게시글을 수정
+     */
     void updateComment(CommentDTO comment);
+
+    /**
+     * commentId값의 댓글을 반환
+     */
+    CommentDTO findCommentByCommentId(long commentId);
 }

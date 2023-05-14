@@ -9,6 +9,9 @@ import lombok.ToString;
 @ToString
 public class CommentDTO {
 
+    // 댓글 PK값
+    private Long commentId;
+
     // 소속된 게시글의 pk값
     private Long postId;
 
@@ -19,6 +22,9 @@ public class CommentDTO {
 
     // 생성일
     private String createdDate;
+
+    // 수정일
+    private String modifiedDate;
 
     // 댓글 내용
     private String comment;
