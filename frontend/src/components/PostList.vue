@@ -17,7 +17,7 @@
       <tr v-for="post in postList" v-bind:key="post">
         <td>{{ post.category }}</td>
 
-        <td v-if="post.fileFlag === true">F</td>
+        <td v-if="post.fileFlag === true">&#128193;</td>
         <td v-else>&nbsp;</td>
 
         <td class="d-flex justify-content-start">
