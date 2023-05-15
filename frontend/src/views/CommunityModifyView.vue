@@ -65,15 +65,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'CommunityModifyView',
-
-  setup() {
-
-  }
-}
-</script>
 <script setup>
 import NavBar from "@/components/NavBar.vue"
 import axios from "axios";

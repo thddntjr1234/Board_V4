@@ -100,14 +100,13 @@ export default {
       }
 
       try {
-        alert("formData: " + formData)
         const response = await axios.post("/api/boards/free", formData, {
           headers: {
             Authorization: 'Bearer ' + jwt,
             'Content-Type': 'multipart/form-data',
           }
         })
-        alert("게시글 저장 성공" + response.data.success)
+        alert("게시글 저장 성공")
 
       } catch (e) {
         alert("게시글 저장에 실패했습니다. 에러: " + e)
@@ -128,7 +127,6 @@ export default {
             Authorization: 'Bearer ' + jwt
           }
         })
-        console.log("받아온 카테고리 리스트 내용: " + JSON.stringify(response.data.data))
         categoryList.value = response.data.data.categoryList
 
       } catch (error) {

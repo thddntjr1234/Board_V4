@@ -56,7 +56,6 @@ export default {
      * 이외에 vuex를 사용하여 상태 저장소에 쿼리를 넣는 방법도 있음.
      **/
     async getPage(pageNumber, queryParams) {
-      console.log("FreeBoardView getPage() 파라미터: " + pageNumber + ", " + JSON.stringify(queryParams))
 
       const keyword = queryParams.keyword
       const startDate = queryParams.startDate
@@ -79,7 +78,6 @@ export default {
      * api 서버로 게시글 리스트를 전송받아 관련 데이터를 설정하는 메소드
      */
     async getPostList() {
-      console.log(this.$route.query);
       const response = await axios.get('/api/boards/free', {
         params: {
           pageNumber: this.$route.query.pageNumber,
@@ -110,7 +108,6 @@ export default {
 
       // 입력받은 categoryId 쿼리 파라미터에 맞는 카테고리를 설정
       this.selectedCategory = this.getCategoryById()
-      console.log("selectedCategory is: " + this.selectedCategory)
     },
 
     /**
