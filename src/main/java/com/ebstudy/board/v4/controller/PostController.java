@@ -119,9 +119,8 @@ public class PostController {
 
         postService.savePost(post);
         log.info("savePost 수행 완료");
-        if (post.getFile() != null) {
-            fileService.saveFile(post.getPostId(), post.getFile());
-        }
+        fileService.saveFile(post.getPostId(), post.getFile());
+
         return CommonApiResponseDTO.builder()
                 .success(true)
                 .build();
@@ -134,7 +133,7 @@ public class PostController {
      * @return 공통 반환타입 CommonApiResponseDTO 객체
      */
     @PutMapping("/api/boards/free/{postId}")
-    public CommonApiResponseDTO<?> updatePost(@CustomValidation(value = {"title", "content"}) @ModelAttribute  PostDTO post,
+    public CommonApiResponseDTO<?> updatePost(@CustomValidation(value = {"title", "content"}) @ModelAttribute PostDTO post,
                                               @RequestPart(required = false) List<FileDTO> existingFiles) throws IOException {
         // Multipart/Form-Data 방식과 json타입의 객체를 같이 사용하려면 json파트에 대해 @RequestPart 어노테이션을 적용해 주면 된다.
 
@@ -144,7 +143,7 @@ public class PostController {
 
         // 게시글 먼저 수정
         postService.updatePost(post);
-        fileService.updateFile(post.getPostId(), existingFiles ,post.getFile());
+        fileService.updateFile(post.getPostId(), existingFiles, post.getFile());
 
         return CommonApiResponseDTO.builder()
                 .success(true)
@@ -154,6 +153,7 @@ public class PostController {
     /**
      * 게시글 삭제, flag 설정으로 숨김 처리
      * /boards/free/3 DELTE
+     *
      * @param post postId, passwd 값 전달
      * @return 공통 반환타입 CommonApiResponseDTO 객체
      */
@@ -165,7 +165,7 @@ public class PostController {
         userService.verifySameUser(originPost.getAuthorId());
 
         postService.deletePost(post);
-        
+
         return CommonApiResponseDTO.builder()
                 .success(true)
                 .build();

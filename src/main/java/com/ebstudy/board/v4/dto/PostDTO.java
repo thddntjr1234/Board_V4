@@ -51,7 +51,7 @@ public class PostDTO {
     private String confirmPasswd;
 
     // file 존재 여부, checkExistence()로 파일 존재여부 확인 뒤 true로 변경
-    private boolean fileFlag = false;
+    private Boolean fileFlag;
 
     // 게시글 저장 시 전달할 용도로 사용하는 파일 리스트
     private List<MultipartFile> file;

@@ -52,6 +52,10 @@ public class FileService {
      */
     public void saveFile(Long postId, List<MultipartFile> multipartFileList) throws IOException {
 
+        if (multipartFileList == null) {
+            return;
+        }
+
         for (MultipartFile multipartFile : multipartFileList) {
             if (!(multipartFile.getSize() > 0)) {
                 continue;
