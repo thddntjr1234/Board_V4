@@ -1,13 +1,16 @@
 package com.ebstudy.board.v4.controller;
 
-import com.ebstudy.board.v4.service.FileService;
+import com.ebstudy.board.v4.service.CommunityFileService;
+import com.ebstudy.board.v4.service.QnAFileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -15,9 +18,8 @@ import java.util.HashMap;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-public class FileController {
-
-    private final FileService fileService;
+public class QnAFileController {
+    private final QnAFileService qnaFileService;
 
     /**
      * fileName 파라미터를 통해 경로를 노출하지 않고 파일을 다운로드
@@ -25,10 +27,10 @@ public class FileController {
      * @param fileRealName 사용자가 입력한 실제 파일명
      * @return 사용자가 입력한 실제 파일명의 파일을 담은 ResponseEntity<Resource> 객체
      */
-    @GetMapping("/api/boards/file")
+    @GetMapping("/api/boards/qna/file")
     public ResponseEntity<?> downloadFile(@RequestParam String fileName, @RequestParam String fileRealName) throws IOException {
 
-        HashMap<String, Object> headerAndResourece = fileService.downloadFile(fileName, fileRealName);
+        HashMap<String, Object> headerAndResourece = qnaFileService.downloadFile(fileName, fileRealName);
 
         Resource resource = (Resource) headerAndResourece.get("resource");
         HttpHeaders headers = (HttpHeaders) headerAndResourece.get("headers");

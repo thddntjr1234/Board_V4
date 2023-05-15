@@ -3,7 +3,7 @@ package com.ebstudy.board.v4.service;
 import com.ebstudy.board.v4.dto.*;
 import com.ebstudy.board.v4.global.exception.CustomException;
 import com.ebstudy.board.v4.global.exception.CustomErrorCode;
-import com.ebstudy.board.v4.repository.BoardMapper;
+import com.ebstudy.board.v4.repository.CommunityPostMapper;
 import com.ebstudy.board.v4.global.util.PostServiceUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,9 +18,9 @@ import java.util.Optional;
 @Slf4j
 @Validated
 @RequiredArgsConstructor
-public class PostService {
+public class CommunityPostService {
 
-    private final BoardMapper boardMapper;
+    private final CommunityPostMapper boardMapper;
     private final PostServiceUtil postServiceUtil;
     private final UserService userService;
 
@@ -103,14 +103,7 @@ public class PostService {
      * @param post 수정할 게시글 정보가 담긴 게시글 DTO
      */
     public void updatePost(PostDTO post) {
-
-        //PostDTO originPost = getPost(post.getPostId());
-        //
-        //// 형식에 맞게 데이터 set 및 유효성 검증
-        //post.setPasswd(postServiceUtil.getSHA512(post.getPasswd()));
-        //post.setConfirmPasswd(originPost.getPasswd());
         post.setModifiedDate(String.valueOf(LocalDateTime.now()));
-
         boardMapper.updatePost(post);
     }
 
@@ -119,13 +112,6 @@ public class PostService {
      * @param post 삭제할 게시글 id 및 게시글 비밀번호
      */
     public void deletePost(PostDTO post) {
-
-        //PostDTO originPost = getPost(post.getPostId());
-        //
-        //// 형식에 맞게 데이터 set 및 유효성 검증
-        //post.setPasswd(postServiceUtil.getSHA512(post.getPasswd()));
-        //post.setConfirmPasswd(originPost.getPasswd());
-
         boardMapper.deletePost(post);
     }
 

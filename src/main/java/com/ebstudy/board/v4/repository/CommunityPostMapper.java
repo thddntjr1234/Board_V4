@@ -1,7 +1,6 @@
 package com.ebstudy.board.v4.repository;
 
 import com.ebstudy.board.v4.dto.*;
-import com.ebstudy.board.v4.global.validator.CustomValidation;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.validation.annotation.Validated;
 
@@ -9,7 +8,7 @@ import java.util.List;
 
 @Validated
 @Mapper // SqlSession을 만들고 Mapper를 등록할 필요가 없이 이 어노테이션으로 해결 가능
-public interface BoardMapper {
+public interface CommunityPostMapper {
 
     /**
      * Pagination Value를 사용하여 게시글 리스트 조회

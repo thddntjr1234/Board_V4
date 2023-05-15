@@ -1,7 +1,7 @@
 package com.ebstudy.board.v4.service;
 
 import com.ebstudy.board.v4.dto.FileDTO;
-import com.ebstudy.board.v4.repository.FileMapper;
+import com.ebstudy.board.v4.repository.CommunityFileMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,9 +25,9 @@ import java.util.UUID;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class FileService {
+public class CommunityFileService {
 
-    private final FileMapper fileMapper;
+    private final CommunityFileMapper fileMapper;
 
     @Value("${spring.servlet.multipart.location}")
     String basicPath;

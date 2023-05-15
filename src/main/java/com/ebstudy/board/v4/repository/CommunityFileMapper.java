@@ -8,7 +8,7 @@ import java.util.List;
 
 @Validated
 @Mapper
-public interface FileMapper {
+public interface CommunityFileMapper {
 
     /**
      * 해당 postId값의 게시글에 종속된 파일의 리스트를 반환

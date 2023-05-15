@@ -8,7 +8,7 @@ import java.util.List;
 
 @Validated
 @Mapper
-public interface CommentMapper {
+public interface CommunityCommentMapper {
 
     /**
      * 해당 postId 게시글에 종속된 댓글 리스트를 조회

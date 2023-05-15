@@ -2,7 +2,7 @@ package com.ebstudy.board.v4.controller;
 
 import com.ebstudy.board.v4.dto.CommentDTO;
 import com.ebstudy.board.v4.dto.response.CommonApiResponseDTO;
-import com.ebstudy.board.v4.service.CommentService;
+import com.ebstudy.board.v4.service.CommunityCommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-public class CommentController {
+public class CommunityCommentController {
 
-    private final CommentService commentService;
+    private final CommunityCommentService commentService;
 
-    @PostMapping("/api/boards/comment")
+    @PostMapping("/api/boards/free/comment")
     public CommonApiResponseDTO<?> saveComment(@RequestBody CommentDTO comment) {
         commentService.saveComment(comment);
 
@@ -23,7 +23,7 @@ public class CommentController {
                 .build();
     }
 
-    @DeleteMapping("/api/boards/comment/{commentId}")
+    @DeleteMapping("/api/boards/free/comment/{commentId}")
     public CommonApiResponseDTO<?> deleteComment(@PathVariable Long commentId) {
         commentService.deleteComment(commentId);
 
@@ -32,7 +32,7 @@ public class CommentController {
                 .build();
     }
 
-    @PutMapping("/api/boards/comment")
+    @PutMapping("/api/boards/free/comment")
     public CommonApiResponseDTO<?> updateComment(@RequestBody CommentDTO comment) {
         commentService.updateComment(comment);
 

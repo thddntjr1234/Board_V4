@@ -2,8 +2,7 @@ package com.ebstudy.board.v4.service;
 
 import com.ebstudy.board.v4.dto.CommentDTO;
 import com.ebstudy.board.v4.dto.UserDTO;
-import com.ebstudy.board.v4.repository.BoardMapper;
-import com.ebstudy.board.v4.repository.CommentMapper;
+import com.ebstudy.board.v4.repository.CommunityCommentMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,9 +15,9 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class CommentService {
+public class CommunityCommentService {
 
-    private final CommentMapper commentMapper;
+    private final CommunityCommentMapper commentMapper;
     private final UserService userService;
 
     /**

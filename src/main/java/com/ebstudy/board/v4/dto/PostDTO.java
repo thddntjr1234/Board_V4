@@ -44,11 +44,8 @@ public class PostDTO {
     // 카테고리 이름
     private String category;
 
-    // 비밀번호
-    private String passwd;
-
-    // 비밀번호 확인
-    private String confirmPasswd;
+    // 채택된 댓글 ID
+    private Long adoptedCommentId;
 
     // file 존재 여부, checkExistence()로 파일 존재여부 확인 뒤 true로 변경
     private Boolean fileFlag;
