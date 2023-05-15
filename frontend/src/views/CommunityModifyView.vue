@@ -65,15 +65,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'CommunityModifyView',
-
-  setup() {
-
-  }
-}
-</script>
 <script setup>
 import NavBar from "@/components/NavBar.vue"
 import axios from "axios";
@@ -104,15 +95,11 @@ onMounted(() => {
 const getPost = async () => {
   try {
     const response = await axios.get('/api/boards/free/' + route.params.postId)
-    console.log("받아온 게시글 내용: " + JSON.stringify(response.data.data))
 
+    // 응답 데이터 추가
     post.value = response.data.data.post
-    existingFileList.value = response.data.data.fileList.slice()
+    existingFileList.value = response.data.data.fileList
     commentList.value = response.data.data.commentList
-
-    console.log("post: " + JSON.stringify(post.value))
-    console.log("fileList: " + JSON.stringify(fileList.value))
-    console.log("commentList: " + JSON.stringify(commentList.value))
 
   } catch (error) {
     await router.push({name: 'not-found'})
@@ -131,7 +118,6 @@ const getCategoryList = async () => {
         Authorization: 'Bearer ' + store.state.token
       }
     })
-    console.log("받아온 카테고리 리스트 내용: " + JSON.stringify(response.data.data))
     categoryList.value = response.data.data.categoryList
 
   } catch (error) {
@@ -141,41 +127,38 @@ const getCategoryList = async () => {
   }
 }
 
+/**
+ * 게시글 수정
+ */
 const modifyPost = async () => {
   const formData = new FormData()
 
+  // 게시글 데이터 입력
   for (const key in post.value) {
-    formData.append(key, post.value[key])
-    console.log("key: " + key + ", post.value[key]: " + post.value[key])
+    if (post.value[key]) {
+      formData.append(key, post.value[key])
+    }
   }
 
+  // 신규 파일 입력
   for (let i = 0; i < fileList.value.length; i++) {
     if (fileList.value[i]) {
       formData.append("file", fileList.value[i])
     }
   }
 
-  for (const entry of formData.entries()) {
-    console.log("formData 전체 출력" + entry)
-  }
-  console.log('existingfilelist: ' + JSON.stringify(existingFileList.value))
+  // 기존 파일 리스트 입력
+  formData.append("existingFiles", existingFileList.value)
+
   try {
-    const response = await axios.put('/api/boards/free/' + post.value.postId, {
-      post: formData,
-      existingFiles: existingFileList.value
-    }, {
+    const response = await axios.put('/api/boards/free/' + post.value.postId, formData, {
       headers: {
         Authorization: 'Bearer ' + store.state.token,
         'Content-Type': 'multipart/form-data',
       }
     })
-    // const response = await axios.post("/api/boards/free", formData, {
-    //   headers: {
-    //     Authorization: 'Bearer ' + store.state.token,
-    //     'Content-Type': 'multipart/form-data',
-    //   }
-    // })
     alert('게시글을 성공적으로 수정했습니다.')
+    router.back()
   } catch (error) {
     alert('게시글을 수정하는 데 실패했습니다.')
   }
@@ -191,17 +174,12 @@ const addFile = (number, event) => {
 
   // 입력한 파일이 존재하면 file 객체
   fileList.value[number] = files[0] || null
-  if (fileList.value[0]) {
-    console.log("1번파일 O" + JSON.stringify(fileList.value[0].name))
-  }
-  if (fileList.value[1]) {
-    console.log("2번파일 O" + JSON.stringify(fileList.value[1].name));
-  }
-  if (fileList.value[2]) {
-    console.log("3번파일 O" + JSON.stringify(fileList.value[2].name))
-  }
 }
 
+/**
+ * 파일 삭제 메소드
+ * @param number 파일 인덱스
+ */
 const deleteFile = (number) => {
   if (existingFileList.value[number]) {
     existingFileList.value[number] = null

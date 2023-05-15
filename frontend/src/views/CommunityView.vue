@@ -112,16 +112,10 @@ export default {
     const getPost = async () => {
       try {
         const response = await axios.get('/api/boards/free/' + route.params.postId)
-        console.log("받아온 게시글 내용: " + JSON.stringify(response.data.data))
 
         post.value = response.data.data.post
         fileList.value = response.data.data.fileList
         commentList.value = response.data.data.commentList
-
-        console.log("post: " + JSON.stringify(post))
-        console.log("fileList: " + JSON.stringify(fileList))
-        console.log("commentList: " + JSON.stringify(commentList))
-
 
         // 수정 삭제 버튼을 보여주기 위한 flag 변수 처리
         if (store.getters.isValidToken) {
@@ -180,7 +174,6 @@ export default {
         comment: comment.value
       }
 
-      console.log("data: ", JSON.stringify(data))
       try {
         const response = await axios.post('/api/boards/comment', data, {
           headers: {
