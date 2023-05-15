@@ -13,7 +13,7 @@
     <!--    FileDAO가 사용하는 부분-->
     <!--게시글 저장 시 첨부한 파일의 정보를 저장-->
     <insert id="saveFile" parameterType="com.ebstudy.board.v4.dto.FileDTO">
-        INSERT INTO files(file_name, file_realname, post_id, extension, size)
+        INSERT INTO community_files(file_name, file_realname, post_id, extension, size)
 
         VALUES (#{fileName}, #{fileRealName}, #{postId}, #{extension}, ${size})
     </insert>
@@ -23,7 +23,7 @@
             resultMap="mapFileDTO">
         SELECT *
 
-        FROM files
+        FROM community_files
 
         WHERE post_id = #{postId}
 
@@ -33,7 +33,7 @@
     <delete id="deleteFile" parameterType="long">
         DELETE
 
-        FROM files
+        FROM community_files
 
         WHERE file_id = #{fileId}
     </delete>
