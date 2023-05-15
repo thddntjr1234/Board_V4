@@ -144,7 +144,7 @@ export default {
      */
     const downloadFile = async (file) => {
       try {
-        const response = await axios.get('/api/boards/file', {
+        const response = await axios.get('/api/boards/free/file', {
           params: {
             fileName: file.fileName,
             fileRealName: file.fileRealName
@@ -175,7 +175,7 @@ export default {
       }
 
       try {
-        const response = await axios.post('/api/boards/comment', data, {
+        const response = await axios.post('/api/boards/free/comment', data, {
           headers: {
             Authorization: 'Bearer ' + store.state.token
           }
@@ -193,7 +193,7 @@ export default {
     const modifyComment = async (comment) => {
       console.log("modifyComment: " + JSON.stringify(comment))
       try {
-        const response = await axios.put('/api/boards/comment', comment, {
+        const response = await axios.put('/api/boards/free/comment', comment, {
           headers: {
             Authorization: 'Bearer ' + store.state.token
           }
@@ -211,7 +211,7 @@ export default {
      */
     const deleteComment = async (comment) => {
       try {
-        const response = await axios.delete('/api/boards/comment/' + comment.commentId, {
+        const response = await axios.delete('/api/boards/free/comment/' + comment.commentId, {
           headers: {
             Authorization: "Bearer " + store.state.token
           }
