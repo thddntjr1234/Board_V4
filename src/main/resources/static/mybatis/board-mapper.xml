@@ -36,7 +36,7 @@
         <!--db 성능에 대해서는 성능이 실제로 문제가 될 때 고려-->
         <!--TODO: 3/11 리뷰: View를 공부해서 사용해 보자, where delete_flag가 따라다니는걸 막기 위해서 쓰는 것(create view v-board, user와 admin의 경우에 delete_flag-->
         SELECT A.post_id, A.created_date, A.modified_date, A.author_id,
-               A.content, A.hits, A.passwd, A.title, A.delete_flag,
+               A.content, A.hits, A.title, A.delete_flag,
                B.category,
                C.username AS author,
                EXISTS(
@@ -101,10 +101,10 @@
     <!--PostDTO 객체에 담긴 게시글 값을 저장-->
     <insert id="savePost" parameterType="PostDTO" useGeneratedKeys="true"
             keyProperty="postId">
-        INSERT INTO posts(title, category_id, author_id, content, passwd,
+        INSERT INTO posts(title, category_id, author_id, content,
                           created_date, modified_date)
 
-        VALUES (#{title}, #{categoryId}, #{authorId}, #{content}, #{passwd},
+        VALUES (#{title}, #{categoryId}, #{authorId}, #{content},
                 #{createdDate}, #{modifiedDate})
     </insert>
 
@@ -112,9 +112,8 @@
     <update id="updatePost" parameterType="PostDTO">
         UPDATE posts
 
-        SET author_id     = #{authorId},
-            passwd        = #{passwd},
-            title         = #{title},
+        SET title         = #{title},
+            category_id   = #{categoryId},
             content       = #{content},
             modified_date = #{modifiedDate}
 
