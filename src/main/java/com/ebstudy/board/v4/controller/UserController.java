@@ -35,7 +35,7 @@ public class UserController {
      * @param loginDto loginId, password
      * @return JWT
      */
-    @PostMapping("/api/signin")
+    @PostMapping("/api/user/signin")
     public ResponseEntity<TokenDTO> signin(@Valid @RequestBody LoginDTO loginDto) {
 
         // Controller에 비즈니스 로직이 들어갔기는 한데 지금은 단일 메소드만 가지고 있으니 일단 이대로 사용

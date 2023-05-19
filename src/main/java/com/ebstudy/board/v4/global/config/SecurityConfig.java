@@ -87,6 +87,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.DELETE, "/api/boards/**").authenticated()
                 .antMatchers("/api/boards/**/new").access("isAuthenticated()")
                  //User
+                .antMatchers("/api/user/signin").permitAll()
                 .antMatchers("/api/user/{userId}").access("isAuthenticated() and hasAnyRole('ADMIN')")
                 .antMatchers("/api/user").access("isAuthenticated() and hasAnyRole('USER', 'ADMIN')")
                 .anyRequest().permitAll()
