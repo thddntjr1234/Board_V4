@@ -107,24 +107,9 @@ export default {
       this.categoryList = response.data.data.categoryList
 
       // 입력받은 categoryId 쿼리 파라미터에 맞는 카테고리를 설정
-      this.selectedCategory = this.getCategoryById()
+      // this.selectedCategory = this.getCategoryById()
     },
 
-    /**
-     * 카테고리 Id값에 해당하는 카테고리 이름을 data()의 categoryList에서 찾아 반환하는 메소드
-     * @returns 카테고리명
-     */
-    getCategoryById() {
-      const queryCategoryIdParam = parseInt(this.$route.query.categoryId)
-
-      // all 카테고리 선택시 빈 값을 전송하므로 별도로 all을 반환
-      if (!queryCategoryIdParam) {
-        console.log("all 카테고리 value 반환")
-        return ""
-      }
-
-      return this.categoryList.find((category) => category.categoryId === queryCategoryIdParam).categoryId
-    },
 
     // /**
     //  * 등록 버튼을 클릭할 시 먼저 uri로 토큰을 담은 HTTP 요청을 전송해서 인증 여부를 확인, 이후 뷰 페이지로 이동하는 메서드
