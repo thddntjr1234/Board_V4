@@ -18,9 +18,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -98,25 +97,51 @@ public class CommunityFileService {
 
     /**
      * 수정 시 입력으로 전송된 FileDTO 리스트에 해당하지 않는 파일들을 DB 및 파일 저장소에서 제거
-     * @param deliveryFiles 게시글에서 보낸 기존 파일 리스트
-     * @param originFiles DB상의 기존 파일 리스트
+     *
+     * @param existingFiles 게시글에서 보낸 기존 파일 리스트
+     * @param originFiles   DB상의 기존 파일 리스트
      */
-    private void deleteFileNotExistsDatabase(List<FileDTO> deliveryFiles, List<FileDTO> originFiles) {
+    private void deleteFileNotExistsDatabase(List<FileDTO> existingFiles, List<FileDTO> originFiles) {
 
-        // TODO: Depth를 줄일 수 있을지 고민해 보자.
-        if (originFiles != null) { // DB에 애초에 파일이 없으면 전부 저장만 하면 됨
-            outerLoop:
-            for (FileDTO originFile : originFiles) {
-                if (deliveryFiles != null) { // 전달된 기존 파일 리스트가 없다면 대조하지 않고 전부 삭제후 다시 저장하면 됨
-                    for (FileDTO deliveryFile : deliveryFiles) {
-                        if (originFile.getFileName().equals(deliveryFile.getFileName())) {
-                            continue outerLoop;
-                        }
-                    }
-                }
-                deletFile(originFile);
-            }
+        existingFiles.removeAll(Collections.singletonList(null));
+
+        if (originFiles.isEmpty()) {
+            return;
         }
+
+        // 1번 방법
+        List<String> existingFileNames = existingFiles.stream()
+                .map(FileDTO::getFileName)
+                .collect(Collectors.toList());
+
+        originFiles.stream()
+                .filter(originFile -> !existingFileNames.contains(originFile.getFileName()))
+                .forEach(this::deleteFile);
+
+
+        // 2번 방법
+        // DTO 내에 equals 메소드를 오버라이딩하여 fileName 필드를 비교하도록 수정하고 다음과 같이 작성한다.
+        //for (FileDTO originFile : originFiles) {
+        //    log.info("originfile: "+ originFile.toString() +" 이 existingFiles에 포함되는지 여부를 확인한다: " + existingFiles.contains(originFile));
+        //    if (!existingFiles.contains(originFile)) {
+        //        deleteFile(originFile);
+        //    }
+        //}
+
+        // 기존 코드
+        //if (originFiles != null) { // DB에 애초에 파일이 없으면 전부 저장만 하면 됨
+        //    outerLoop:
+        //    for (FileDTO originFile : originFiles) {
+        //        if (existingFiles != null) { // 전달된 기존 파일 리스트가 없다면 대조하지 않고 전부 삭제후 다시 저장하면 됨
+        //            for (FileDTO existingFile : existingFiles) {
+        //                if (originFile.getFileName().equals(existingFile.getFileName())) {
+        //                    continue outerLoop;
+        //                }
+        //            }
+        //        }
+        //        deleteFile(originFile);
+        //    }
+        //}
     }
 
     /**
