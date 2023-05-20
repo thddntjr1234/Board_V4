@@ -1,6 +1,8 @@
 package com.ebstudy.board.v4.service;
 
 import com.ebstudy.board.v4.dto.FileDTO;
+import com.ebstudy.board.v4.global.exception.CustomErrorCode;
+import com.ebstudy.board.v4.global.exception.CustomException;
 import com.ebstudy.board.v4.repository.CommunityFileMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -146,16 +148,19 @@ public class CommunityFileService {
 
     /**
      * 요청한 파일을 DB와 실제 파일 저장소에서 모두 삭제한다.
+     *
      * @param file 전달한 파일의 정보
      */
-    public void deletFile(FileDTO file) {
+    public void deleteFile(FileDTO file) {
 
         String filePath = basicPath + file.getFileName();
         File targetFile = new File(filePath);
 
-        // TODO: 2023/03/18 파일 삭제 과정 중 오류가 발생할 때의 상황을 고려해야 한다. 
+        // TODO: 2023/03/18 파일 삭제 과정 중 오류가 발생할 때의 상황을 고려해야 한다. -> 적용완료
         if (targetFile.exists()) {
-            targetFile.delete();
+            if (!targetFile.delete()) {
+                throw new CustomException(CustomErrorCode.FAILD_FILE_DELETE);
+            }
         }
 
         fileMapper.deleteFile(file.getFileId());
