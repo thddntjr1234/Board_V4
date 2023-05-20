@@ -33,6 +33,7 @@ public enum CustomErrorCode {
      */
     FAILD_POST_SAVE(HttpStatus.INTERNAL_SERVER_ERROR, "게시글 저장에 실패했습니다"),
     FAILD_FILE_SAVE(HttpStatus.INTERNAL_SERVER_ERROR, "파일 저장에 실패했습니다"),
+    FAILD_FILE_DELETE(HttpStatus.INTERNAL_SERVER_ERROR, "파일 삭제에 실패했습니다"),
     FAILD_COMMENT_SAVE(HttpStatus.INTERNAL_SERVER_ERROR, "댓글 저장에 실패했습니다");
 
 
