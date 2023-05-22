@@ -13,21 +13,22 @@
     <!--   내부의 데이터가 어떤 필드들로 구성되어 있는지 알 수 없으니 풀어서 일일히 선언해주는 것이 좋겟다.-->
     <!--    이벤트 수신은 여기서-->
     <Pagination :paging-values="pagingValues" :page-range="pageRange" @getPage="getPage"/>
-    <router-link :to="{name: 'CommunityWriteFormView'}">
-      <button class="btn btn-secondary">등록</button>
-    </router-link>
+
+    <button class="btn btn-secondary" @click="moveToWriteView">등록</button>
   </div>
 </template>
 
 
 <script>
-import axios from 'axios';
 import PostList from "@/components/PostList.vue";
 import Pagination from "@/components/Pagination.vue";
 import NavBar from "@/components/NavBar.vue";
 import SearchForm from "@/components/SearchForm.vue";
 import store from "@/store/storage";
 import router from "@/router/router";
+import {useRoute} from "vue-router";
+import * as boardApi from "@/apis/board";
+import * as userApi from "@/apis/user";
 
 // Options API
 export default {
@@ -56,13 +57,12 @@ export default {
      * 이외에 vuex를 사용하여 상태 저장소에 쿼리를 넣는 방법도 있음.
      **/
     async getPage(pageNumber, queryParams) {
-
       const keyword = queryParams.keyword
       const startDate = queryParams.startDate
       const endDate = queryParams.endDate
       const categoryId = queryParams.categoryId
 
-      router.push({
+      await router.push({
         path: this.$route.path,
         query: {
           pageNumber,
@@ -78,18 +78,7 @@ export default {
      * api 서버로 게시글 리스트를 전송받아 관련 데이터를 설정하는 메소드
      */
     async getPostList() {
-      const response = await axios.get('/api/boards/free', {
-        params: {
-          pageNumber: this.$route.query.pageNumber,
-          categoryId: this.$route.query.categoryId,
-
-          // spread를 사용하지 않으면 String 타입이라 ""값이 전송돼서 mybatis if문에서 제대로 걸러지지 않는다.
-          // 반면 spread를 사용하면 쿼리 파라미터가 존재하지 않을 때 null값을 반환시킨다.
-          ...(this.$route.query.keyword && {keyword: this.$route.query.keyword}),
-          ...(this.$route.query.startDate && {startDate: this.$route.query.startDate}),
-          ...(this.$route.query.endDate && {endDate: this.$route.query.endDate}),
-        }
-      })
+      const response = await boardApi.getPostList('boards/free')
 
       // console.log('response data: ' + JSON.stringify(response.data));
       this.pagingValues = response.data.data.pagingValues;
@@ -105,35 +94,14 @@ export default {
       // get 데이터 입력
       this.postList = response.data.data.postList
       this.categoryList = response.data.data.categoryList
-
-      // 입력받은 categoryId 쿼리 파라미터에 맞는 카테고리를 설정
-      // this.selectedCategory = this.getCategoryById()
     },
 
-
-    // /**
-    //  * 등록 버튼을 클릭할 시 먼저 uri로 토큰을 담은 HTTP 요청을 전송해서 인증 여부를 확인, 이후 뷰 페이지로 이동하는 메서드
-    //  * @returns {Promise<void>}
-    //  */
-    // async sendJWT() {
-    //   const jwt = store.getters.getToken
-    //   console.log("jwt: " + jwt)
-    //
-    //   try {
-    //     const response = await axios.get('/api/boards/free/new', {
-    //       headers: {
-    //         Authorization: 'Bearer ' + jwt
-    //       }
-    //     })
-    //
-    //     console.log("토큰 전달 성공, 응답 메세지: " + JSON.stringify(response.data))
-    //     await router.push({name: 'CommunityWriteFormView'})
-    //
-    //   } catch (error) {
-    //     console.error("토큰 전달 실패, 에러 메세지: " + error)
-    //     alert("게시글 등록을 위해 로그인해야 합니다.")
-    //   }
-    // }
+    async moveToWriteView() {
+      if (!store.getters.isValidToken) {
+        alert('게시글 작성은 회원만 가능합니다.')
+      }
+      await router.push({name: 'CommunityWriteFormView'})
+    },
   },
 };
 </script>

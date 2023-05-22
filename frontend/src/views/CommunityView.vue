@@ -64,12 +64,13 @@
 
 <script>
 import {onBeforeMount, onMounted, ref, reactive} from "vue";
-import axios from "axios";
 import {useRoute} from "vue-router";
 import {useStore} from "vuex";
 import router from "@/router/router";
 import NavBar from "@/components/NavBar.vue";
 import Comment from "@/components/Comment.vue"
+import * as boardApi from "@/apis/board"
+import * as userApi from "@/apis/user"
 
 export default {
   name: "CommunityView",
@@ -111,7 +112,7 @@ export default {
      */
     const getPost = async () => {
       try {
-        const response = await axios.get('/api/boards/free/' + route.params.postId)
+        const response = await boardApi.getPost(`boards/free/${route.params.postId}`)
 
         post.value = response.data.data.post
         fileList.value = response.data.data.fileList
@@ -119,11 +120,7 @@ export default {
 
         // 수정 삭제 버튼을 보여주기 위한 flag 변수 처리
         if (store.getters.isValidToken) {
-          const authorityResponse = await axios.get('/api/user', {
-            headers: {
-              Authorization: 'Bearer ' + store.state.token
-            }
-          })
+          const authorityResponse = await userApi.getMyInfo()
 
           currentUserInfo.value = authorityResponse.data
           if (authorityResponse.data.userId === post.value.authorId) {
@@ -138,18 +135,26 @@ export default {
     }
 
     /**
+     * 게시글 삭제 메소드
+     */
+    const deletePost = async () => {
+      try {
+        const response = await boardApi.deleteComment(`boards/free/${post.value.postId}`)
+        alert("게시글을 삭제하는 데 성공했습니다.")
+        router.back()
+      } catch (error) {
+        alert("게시글을 삭제하는 데 실패했습니다.")
+      }
+    }
+
+    /**
      * 요청한 파일에 대해 다운로드를 수행하는 메소드
      * @param file
-     * @returns {Promise<void>}
+     * @returns 다운로드를 요청한 파일
      */
     const downloadFile = async (file) => {
       try {
-        const response = await axios.get('/api/boards/free/file', {
-          params: {
-            fileName: file.fileName,
-            fileRealName: file.fileRealName
-          }
-        })
+        const response = await boardApi.downloadFile('boards/free/file', file)
         const blob = new Blob([response.data], {type: response.headers['content-type']})
         const url = URL.createObjectURL(blob)
         const link = document.createElement('a')
@@ -166,7 +171,7 @@ export default {
 
     /**
      * 댓글 작성 메소드
-     * @param newComment
+     * @param comment
      */
     const addComment = async (comment) => {
       const data = {
@@ -175,11 +180,7 @@ export default {
       }
 
       try {
-        const response = await axios.post('/api/boards/free/comment', data, {
-          headers: {
-            Authorization: 'Bearer ' + store.state.token
-          }
-        })
+        const response = await boardApi.addComment('boards/free/comment', data)
         alert("댓글을 성공적으로 등록했습니다.")
         router.go(0)
       } catch (error) {
@@ -193,11 +194,7 @@ export default {
     const modifyComment = async (comment) => {
       console.log("modifyComment: " + JSON.stringify(comment))
       try {
-        const response = await axios.put('/api/boards/free/comment', comment, {
-          headers: {
-            Authorization: 'Bearer ' + store.state.token
-          }
-        })
+        const response = await boardApi.modifyComment('boards/free/comment', comment)
         alert("댓글을 성공적으로 수정했습니다.")
         router.go(0)
       } catch (error) {
@@ -211,11 +208,7 @@ export default {
      */
     const deleteComment = async (comment) => {
       try {
-        const response = await axios.delete('/api/boards/free/comment/' + comment.commentId, {
-          headers: {
-            Authorization: "Bearer " + store.state.token
-          }
-        })
+        const response = await boardApi.deleteComment(`boards/free/comment/${comment.commentId}`)
         alert("댓글을 성공적으로 삭제했습니다")
         router.go(0)
       } catch (error) {
@@ -233,27 +226,11 @@ export default {
     /**
      * 게시글 수정 페이지로 이동
      */
-    const modifyPost = () => {
+    const moveToModifyView = () => {
       console.log("route path: " + route.path + '/edit')
       router.push(route.path + '/edit')
     }
 
-    /**
-     * 게시글 삭제 메소드
-     */
-    const deletePost = async () => {
-      try {
-        const response = await axios.delete('/api/boards/free/' + post.value.postId, {
-          headers: {
-            Authorization: 'Bearer ' + store.state.token
-          }
-        })
-        alert("게시글을 삭제하는 데 성공했습니다.")
-        router.back()
-      } catch (error) {
-        alert("게시글을 삭제하는 데 실패했습니다.")
-      }
-    }
 
     return {
       post,
@@ -263,7 +240,7 @@ export default {
       currentUserInfo,
       newComment,
       backToList,
-      modifyPost,
+      modifyPost: moveToModifyView,
       deletePost,
       addComment,
       modifyComment,

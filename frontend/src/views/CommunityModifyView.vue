@@ -67,9 +67,10 @@
 
 <script setup>
 import NavBar from "@/components/NavBar.vue"
-import axios from "axios";
 import router from "@/router/router";
 import {defineComponent, onBeforeMount, onMounted, ref} from "vue";
+import * as boardApi from "@/apis/board"
+import * as userApi from "@/apis/user"
 import {useRoute} from "vue-router";
 import {useStore} from "vuex";
 
@@ -84,17 +85,17 @@ const categoryList = ref({})
 const existingFileList = ref({})
 
 onMounted(() => {
-  getCategoryList()
-  getPost()
+  setCategoryList()
+  setPost()
 })
 
 /**
  * 수정 화면에서 사용할 게시글 정보
  * @returns post
  */
-const getPost = async () => {
+const setPost = async () => {
   try {
-    const response = await axios.get('/api/boards/free/' + route.params.postId)
+    const response = await boardApi.getPost(`boards/free/${route.params.postId}`)
 
     // 응답 데이터 추가
     post.value = response.data.data.post
@@ -111,13 +112,9 @@ const getPost = async () => {
  * 게시글 폼에 바인딩할 데이터 요청
  * @returns categoryList, user(info)
  */
-const getCategoryList = async () => {
+const setCategoryList = async () => {
   try {
-    const response = await axios.get("/api/boards/free/new", {
-      headers: {
-        Authorization: 'Bearer ' + store.state.token
-      }
-    })
+    const response = await boardApi.getCategoryList('boards/free/new')
     categoryList.value = response.data.data.categoryList
 
   } catch (error) {
@@ -143,20 +140,20 @@ const modifyPost = async () => {
   // 신규 파일 입력
   for (let i = 0; i < fileList.value.length; i++) {
     if (fileList.value[i]) {
+      console.log("i: " + i + ", 입력")
       formData.append("file", fileList.value[i])
     }
   }
 
   // 기존 파일 리스트 입력
-  formData.append("existingFiles", existingFileList.value)
+  const json = JSON.stringify(existingFileList.value)
+  const blob = new Blob([json], { type: "application/json"})
+  formData.append("existingFiles", blob)
 
+  console.log("existingfileList: "  + existingFileList.value)
   try {
-    const response = await axios.put('/api/boards/free/' + post.value.postId, formData, {
-      headers: {
-        Authorization: 'Bearer ' + store.state.token,
-        'Content-Type': 'multipart/form-data',
-      }
-    })
+    const response = await boardApi.modifyPost(`boards/free/${post.value.postId}`, formData)
+
     alert('게시글을 성공적으로 수정했습니다.')
     router.back()
   } catch (error) {
@@ -182,6 +179,7 @@ const addFile = (number, event) => {
  */
 const deleteFile = (number) => {
   if (existingFileList.value[number]) {
+    console.log("existingfile wㅔ거")
     existingFileList.value[number] = null
   }
 }

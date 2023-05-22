@@ -54,10 +54,11 @@
 <script>
 import {onMounted} from "vue";
 import {ref, reactive} from "vue";
-import axios from "axios";
 import {useStore} from "vuex"
 import {useRouter} from "vue-router";
 import NavBar from "@/components/NavBar.vue";
+import * as boardApi from "@/apis/board"
+import * as userApi from "@/apis/user"
 
 export default {
   name: "CommunityWriteFormView",
@@ -100,12 +101,7 @@ export default {
       }
 
       try {
-        const response = await axios.post("/api/boards/free", formData, {
-          headers: {
-            Authorization: 'Bearer ' + jwt,
-            'Content-Type': 'multipart/form-data',
-          }
-        })
+        const response = await boardApi.savePost('/boards/free')
         alert("게시글 저장 성공")
 
       } catch (e) {
@@ -120,13 +116,9 @@ export default {
      * 게시글 폼에 바인딩할 데이터 요청
      * @returns categoryList, user(info)
      */
-    const getCategoryList = async () => {
+    const getWriteFormData = async () => {
       try {
-        const response = await axios.get("/api/boards/free/new", {
-          headers: {
-            Authorization: 'Bearer ' + jwt
-          }
-        })
+        const response = await boardApi.getWriteFormData("boards/free/new")
         categoryList.value = response.data.data.categoryList
 
       } catch (error) {
@@ -145,7 +137,7 @@ export default {
     }
 
     onMounted(() => {
-      getCategoryList()
+      getWriteFormData()
     })
 
     return {
