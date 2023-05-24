@@ -80,6 +80,7 @@
 import {useRouter} from "vue-router";
 import {useStore} from "vuex";
 import {ref} from "vue";
+import * as userApi from "@/apis/user"
 import axios from "axios";
 
 export default {
@@ -98,15 +99,16 @@ export default {
      * @returns {Promise<void>}
      */
     const signin = async() => {
+      const data = {
+        loginId: loginId.value,
+        password: password.value
+      }
+      
       try {
-        const response = await axios.post("/api/signin", {
-          loginId: loginId.value,
-          password: password.value
-        })
+        const response = await userApi.signin("user/signin", data)
         console.log(response.data.token)
         await store.dispatch('setToken', response.data.token)
         alert("로그인에 성공했습니다.")
-
         location.reload()
       } catch (e) {
         alert("아이디 혹은 패스워드가 잘못되었습니다.")
