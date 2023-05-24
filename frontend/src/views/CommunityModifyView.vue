@@ -32,26 +32,11 @@
     <div class="row mb-3">
       <label class="col-sm-2 col-form-label">파일 첨부</label>
       <div class="col-sm-10">
-        <div class="mb-3">
-          <input type="file" class="form-control" v-if="!existingFileList[0]" @change="addFile(0, $event)">
-          <div v-if="existingFileList[0]" class="input-group">
-            <span class="input-group-text">{{ existingFileList[0].fileRealName || fileList[0].name }}</span>
-            <button type="button" class="btn btn-danger" @click="deleteFile(0)">삭제</button>
-          </div>
-        </div>
-        <div class="mb-3">
-          <input type="file" class="form-control" v-if="!existingFileList[1]" @change="addFile(1, $event)">
-          <div v-if="existingFileList[1]" class="input-group">
-            <span class="input-group-text">{{ existingFileList[1].fileRealName || fileList[1].name }}</span>
-            <button type="button" class="btn btn-danger" @click="deleteFile(1)">삭제</button>
-          </div>
-        </div>
-        <div class="mb-3">
-          <input type="file" class="form-control" v-if="!existingFileList[2]" @change="addFile(2, $event)">
-          <div v-if="existingFileList[2]" class="input-group">
-            <!-- fileList는 수정하기 전 원본 게시글의 파일을 가지고 있으므로 fileRealName필드가 있고, 삭제한 후 등록한 후에는 파일 객체의 name필드가 있다. -->
-            <span class="input-group-text">{{ existingFileList[2].fileRealName || fileList[2].name }}</span>
-            <button type="button" class="btn btn-danger" @click="deleteFile(2)">삭제</button>
+        <div class="mb-3" v-for="(n, i) in 3">
+          <input type="file" class="form-control" v-if="!existingFileList[i]" @change="addFile(0, $event)">
+          <div v-if="existingFileList[i]" class="input-group">
+            <span class="input-group-text">{{ existingFileList[i].fileRealName }}</span>
+            <button type="button" class="btn btn-danger" @click="deleteFile(i)">삭제</button>
           </div>
         </div>
       </div>
