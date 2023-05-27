@@ -1,5 +1,5 @@
 <template>
-  <div class="container d-flex !important justify-content-center">
+  <div class="container d-flex justify-content-center">
     <ul class="pagination">
       <li class="page-item" v-if="pagingValues.startPage > 1" @click="getPage(1, queryParams)">
         <button class="page-link">처음</button>

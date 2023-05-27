@@ -105,7 +105,7 @@ export default {
       }
       
       try {
-        const response = await userApi.signin("user/signin", data)
+        const response = await userApi.signin(data)
         console.log(response.data.token)
         await store.dispatch('setToken', response.data.token)
         alert("로그인에 성공했습니다.")

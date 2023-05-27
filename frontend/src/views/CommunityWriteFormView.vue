@@ -31,14 +31,8 @@
     <div class="row mb-3">
       <label class="col-sm-2 col-form-label">파일 첨부</label>
       <div class="col-sm-10">
-        <div class="mb-3">
-          <input type="file" class="form-control" @change="addFile(0, $event)">
-        </div>
-        <div class="mb-3">
-          <input type="file" class="form-control" @change="addFile(1, $event)">
-        </div>
-        <div class="mb-3">
-          <input type="file" class="form-control" @change="addFile(2, $event)">
+        <div class="mb-3" v-for="(n, i) in 3">
+          <input type="file" class="form-control" @change="addFile(i, $event)">
         </div>
       </div>
     </div>
@@ -101,7 +95,7 @@ export default {
       }
 
       try {
-        const response = await boardApi.savePost('/boards/free')
+        const response = await boardApi.savePost('/boards/free', formData)
         alert("게시글 저장 성공")
 
       } catch (e) {
