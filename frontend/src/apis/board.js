@@ -61,7 +61,7 @@ function modifyPost(url, formData) {
 }
 
 function savePost(url, formData) {
-    return authApiService.put(url, formData, {
+    return authApiService.post(url, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
         }
@@ -121,6 +121,10 @@ function deleteComment(url) {
     return authApiService.delete(url)
 }
 
+function adoptComment(url, post) {
+    return authApiService.put(url, post)
+}
+
 export {
     getPostList,
     getPost,
@@ -136,4 +140,5 @@ export {
     addComment,
     modifyComment,
     deleteComment,
+    adoptComment,
 }

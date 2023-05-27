@@ -8,13 +8,15 @@
     </form>
 
     <div class="p-3 mb-3 min-vh-50">
-      <div v-for="comment in commentList" :key="comment.id">
+      <div v-for="comment in commentList" :key="comment.commentId">
         <div class="row mb-3">
           <div class="col-sm-9 text-start">
+            <slot name="show-adoption" :comment="comment" :adoptedCommentId="adoptedCommentId"></slot>
             <span>{{ comment.username }}</span>
             <span>{{ comment.createdDate }}</span>
           </div>
           <div class="col-sm-3 text-end">
+            <slot name="adoption" :adoptCommentEvent="adoptCommentEvent" :adoptedCommentId="adoptedCommentId" :comment="comment"></slot>
             <button class="btn btn-outline-primary" v-if="!isEditMode && comment.userId === currentUserInfo.userId"
                     @click="enableEditMode(comment)">수정
             </button>
@@ -24,8 +26,8 @@
           </div>
         </div>
         <div class="row mb-3" v-if="!isEditMode || comment !== editingComment">
-          <div class="col-sm-12">
-            <p class="text-start">{{ comment.comment }}</p>
+          <div class="col-sm-12 text-start">
+            <textarea class="form-control-plaintext" rows="3" readonly>{{ comment.comment }}</textarea>
           </div>
         </div>
         <div class="row mb-3" v-if="isEditMode && comment === editingComment">
@@ -42,7 +44,7 @@
 </template>
 
 <script>
-import {computed, getCurrentInstance, ref} from 'vue';
+import {computed, getCurrentInstance, onMounted, ref} from 'vue';
 import {useRoute} from 'vue-router';
 
 export default {
@@ -50,19 +52,23 @@ export default {
   props: {
     commentList: {},
     currentUserInfo: '',
+    authorOfPost: false,
+    adoptedCommentId: null,
   },
 
-  setup() {
+  setup(props) {
     const newComment = ref('')
     const editingComment = ref('')
     const isEditMode = ref(false)
-
 
     const instance = getCurrentInstance()
     const addComment = () => {
       instance.emit("addComment", newComment)
     }
 
+    onMounted( () => {
+      console.log(`commnetList: ${JSON.stringify(props.commentList)}`)
+    })
     const deleteComment = (comment) => {
       console.log("delete comment raw: " + JSON.stringify(comment) + ",  value: " + JSON.stringify(comment.value))
       instance.emit("deleteComment", comment)
@@ -81,6 +87,11 @@ export default {
       isEditMode.value = false
     }
 
+    const adoptCommentEvent = (comment) => {
+      console.log("자식 컴포넌트에서 adoptComment 이벤트 호출, comment: " + JSON.stringify(comment))
+      instance.emit("adoptComment", comment)
+    }
+
     return {
       newComment,
       editingComment,
@@ -89,12 +100,12 @@ export default {
       addComment,
       deleteComment,
       modifyComment,
-      cancelEdit
+      cancelEdit,
+      adoptCommentEvent
     }
   }
 }
 </script>
 
 <style scoped>
-
 </style>

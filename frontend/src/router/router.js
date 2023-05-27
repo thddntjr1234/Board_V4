@@ -5,6 +5,10 @@ import CommunityView from "@/views/CommunityView.vue";
 import CommunityWriteFormView from "@/views/CommunityWriteFormView.vue";
 import MainPage from "@/views/MainPage.vue";
 import CommunityModifyView from "@/views/CommunityModifyView.vue";
+import QnABoardView from "@/views/QnABoardView.vue";
+import QnAView from "@/views/QnAView.vue";
+import QnAModifyView from "@/views/QnAModifyView.vue";
+import QnAWriteFormView from "@/views/QnAWriteFormView.vue";
 
 
 const router = createRouter({
@@ -40,6 +44,26 @@ const router = createRouter({
             name: "CommunityView",
             component: CommunityView
         },
+        {
+            path: "/boards/qna",
+            name: "QnABoardView",
+            component: QnABoardView
+        },
+        {
+            path: "/boards/qna/:postId",
+            name: "QnAView",
+            component: QnAView
+        },
+        {
+            path: "/boards/qna/:postId/edit",
+            name: "QnAModifyView",
+            component: QnAModifyView
+        },
+        {
+            path: "/boards/qna/new",
+            name: "QnAWriteFormView",
+            component: QnAWriteFormView
+        }
     ]
 });
 

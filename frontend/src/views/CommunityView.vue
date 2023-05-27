@@ -1,9 +1,9 @@
 <template>
   <NavBar></NavBar>
-  <div class="container-fluid">
+  <div class="container">
     <h1 class="mt-4 justify-content-start">게시판 - 보기</h1>
     <div class="row mb-3">
-      <div class="col-sm-3">
+      <div class="col-sm-3 text-start">
         <span class="fw-bold">{{ post.author }}</span>
       </div>
       <div class="col-sm-9 text-end">
@@ -13,13 +13,13 @@
     </div>
 
     <div class="row mb-3">
-      <div class="col-sm-3">
+      <div class="col-sm-8 text-start">
         <span class="fw-bold">[{{ post.category }}] {{ post.title }}</span>
       </div>
-      <div class="col-sm-3">
+      <div class="col-sm-1">
 
       </div>
-      <div class="col-sm-6 text-end">
+      <div class="col-sm-3 text-end">
         <span class>조회수: {{ post.hits }}</span>
       </div>
     </div>
@@ -29,10 +29,11 @@
     <div class="row mb-4">
       <div class="col">
         <div class="min-vh-50">
-          <p class="form-control mb-3" rowspan="20">{{ post.content }}</p>
+          <textarea class="form-control-plaintext mb-3" rows="15" readonly>{{ post.content }}</textarea>
         </div>
       </div>
     </div>
+    <hr class="row mb-4">
 
     <div class="row mb-3">
       <div class="col-sm-3">
@@ -54,7 +55,7 @@
 
     <div class="d-flex justify-content-center">
       <button class="btn btn-secondary me-3" @click="backToList">목록</button>
-      <button class="btn btn-secondary me-3" v-if="authorOfPost" @click="modifyPost">수정</button>
+      <button class="btn btn-secondary me-3" v-if="authorOfPost" @click="moveToModifyView">수정</button>
       <button class="btn btn-secondary" v-if="authorOfPost" @click="deletePost">삭제</button>
     </div>
 
@@ -104,7 +105,6 @@ export default {
     const commentList = ref({})
     const authorOfPost = ref(false)
     const currentUserInfo = ref('')
-    const newComment = ref('')
 
     /**
      * 게시글 요청 및 게시글 저자 여부 플래그 설정
@@ -139,7 +139,7 @@ export default {
      */
     const deletePost = async () => {
       try {
-        const response = await boardApi.deleteComment(`boards/free/${post.value.postId}`)
+        const response = await boardApi.deletePost(`boards/free/${post.value.postId}`)
         alert("게시글을 삭제하는 데 성공했습니다.")
         router.back()
       } catch (error) {
@@ -238,9 +238,8 @@ export default {
       commentList,
       authorOfPost,
       currentUserInfo,
-      newComment,
       backToList,
-      modifyPost: moveToModifyView,
+      moveToModifyView,
       deletePost,
       addComment,
       modifyComment,

@@ -8,7 +8,7 @@
   <div class="container">
     <p></p>
   </div>
-  <PostList :post-list="postList"></PostList>
+  <PostList :board-name="'free'" :post-list="postList"></PostList>
   <div class="d-flex justify-content-between">
     <!--   내부의 데이터가 어떤 필드들로 구성되어 있는지 알 수 없으니 풀어서 일일히 선언해주는 것이 좋겟다.-->
     <!--    이벤트 수신은 여기서-->
