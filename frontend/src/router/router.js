@@ -1,14 +1,14 @@
 import {createWebHistory, createRouter} from "vue-router";
 import ErrorPage from "@/views/ErrorView.vue";
-import CommunityBoardView from "@/views/CommunityBoardView.vue";
-import CommunityView from "@/views/CommunityView.vue";
-import CommunityWriteFormView from "@/views/CommunityWriteFormView.vue";
+import CommunityBoardView from "@/views/community/CommunityBoardView.vue";
+import CommunityView from "@/views/community/CommunityView.vue";
+import CommunityWriteFormView from "@/views/community/CommunityWriteFormView.vue";
 import MainPage from "@/views/MainPage.vue";
-import CommunityModifyView from "@/views/CommunityModifyView.vue";
-import QnABoardView from "@/views/QnABoardView.vue";
-import QnAView from "@/views/QnAView.vue";
-import QnAModifyView from "@/views/QnAModifyView.vue";
-import QnAWriteFormView from "@/views/QnAWriteFormView.vue";
+import CommunityModifyView from "@/views/community/CommunityModifyView.vue";
+import QnABoardView from "@/views/qna/QnABoardView.vue";
+import QnAView from "@/views/qna/QnAView.vue";
+import QnAModifyView from "@/views/qna/QnAModifyView.vue";
+import QnAWriteFormView from "@/views/qna/QnAWriteFormView.vue";
 
 
 const router = createRouter({
