@@ -88,7 +88,8 @@ function downloadFile(url, file) {
         params: {
             fileName: file.fileName,
             fileRealName: file.fileRealName
-        }
+        },
+        responseType: "blob",
     })
 }
 

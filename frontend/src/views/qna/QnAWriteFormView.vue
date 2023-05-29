@@ -87,7 +87,7 @@ const savePost = async () => {
   }
 
   try {
-    const response = await boardApi.savePost('/boards/qna')
+    const response = await boardApi.savePost('/boards/qna', formData)
     alert("게시글 저장 성공")
 
   } catch (e) {4
