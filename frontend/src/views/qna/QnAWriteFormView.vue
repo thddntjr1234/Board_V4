@@ -50,6 +50,7 @@ import {useRouter} from "vue-router";
 import {useStore} from "vuex";
 import {onMounted, ref} from "vue";
 import * as boardApi from "@/apis/board";
+import NavBar from "@/components/NavBar.vue";
 
 const router = useRouter()
 const store = useStore()
