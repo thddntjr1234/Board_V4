@@ -7,8 +7,8 @@
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse container-fluid" id="navbarNav">
-        <ul class="navbar-nav mr-auto">
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav flex-fill">
           <li class="nav-item">
             <router-link class="nav-link" to="/boards/notice">공지사항</router-link>
           </li>
@@ -25,7 +25,7 @@
             <router-link class="nav-link" to="/boards/inquiry">1:1문의</router-link>
           </li>
         </ul>
-        <ul class="navbar-nav justify-content-end">
+        <ul class="navbar-nav">
           <li class="nav-item">
             <button v-if="!$store.getters.isValidToken" type="button" class="btn btn-primary" @click="showModal = true">
               로그인

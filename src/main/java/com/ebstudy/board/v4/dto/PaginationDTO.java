@@ -42,4 +42,7 @@ public class PaginationDTO {
 
     // 검색 카테고리
     Integer categoryId;
+
+    // 게시글 필터
+    String filter;
 }

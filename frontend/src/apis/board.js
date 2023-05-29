@@ -20,6 +20,7 @@ function getPostList(url) {
             ...(route.query.keyword && {keyword: route.query.keyword}),
             ...(route.query.startDate && {startDate: route.query.startDate}),
             ...(route.query.endDate && {endDate: route.query.endDate}),
+            ...(route.query.filter && {filter: route.query.filter})
         }
     })
 }

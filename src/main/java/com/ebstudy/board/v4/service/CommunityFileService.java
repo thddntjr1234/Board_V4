@@ -105,21 +105,22 @@ public class CommunityFileService {
      */
     private void deleteFileNotExistsDatabase(List<FileDTO> existingFiles, List<FileDTO> originFiles) {
 
+        // [file, null, file]과 같이 전달된 경우 NPE가 발생할 수 있으므로 이를 제거
         existingFiles.removeAll(Collections.singletonList(null));
 
         if (originFiles.isEmpty()) {
             return;
         }
 
-        // 1번 방법
+        // existingFiles에서 UUID가 추가된 파일명만 분리한 리스트를 생성
         List<String> existingFileNames = existingFiles.stream()
                 .map(FileDTO::getFileName)
                 .collect(Collectors.toList());
 
+        // originFiles를 순회하며 existingFileNames에 없는 파일들을 삭제
         originFiles.stream()
                 .filter(originFile -> !existingFileNames.contains(originFile.getFileName()))
                 .forEach(this::deleteFile);
-
 
         // 2번 방법
         // DTO 내에 equals 메소드를 오버라이딩하여 fileName 필드를 비교하도록 수정하고 다음과 같이 작성한다.
@@ -156,7 +157,7 @@ public class CommunityFileService {
         String filePath = basicPath + file.getFileName();
         File targetFile = new File(filePath);
 
-        // TODO: 2023/03/18 파일 삭제 과정 중 오류가 발생할 때의 상황을 고려해야 한다. -> 적용완료
+        // 삭제 과정중 발생하는 오류에 대해 처리할 수 있도록 수정
         if (targetFile.exists()) {
             if (!targetFile.delete()) {
                 throw new CustomException(CustomErrorCode.FAILD_FILE_DELETE);

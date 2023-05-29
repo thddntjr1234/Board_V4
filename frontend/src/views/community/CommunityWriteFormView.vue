@@ -1,7 +1,7 @@
 <template>
   <NavBar></NavBar>
   <div class="container">
-    <h1>게시판 - 등록</h1>
+    <h1>커뮤니티 - 작성</h1>
     <br>
     <div class="row mb-3">
       <label for="categoryId" class="col-sm-2 col-form-label">카테고리</label>

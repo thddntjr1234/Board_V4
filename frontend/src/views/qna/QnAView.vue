@@ -1,7 +1,7 @@
 <template>
   <NavBar></NavBar>
   <div class="container">
-    <h1 class="mt-4 justify-content-start">게시판 - 보기</h1>
+    <h1 class="mt-4 justify-content-start">Q&A - 게시글</h1>
     <div class="row mb-3">
       <div class="col-sm-3">
         <span class="fw-bold">{{ post.author }}</span>

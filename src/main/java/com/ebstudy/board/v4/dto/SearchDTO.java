@@ -21,4 +21,7 @@ public class SearchDTO {
 
     // 검색기간(종료일)
     String endDate;
+
+    // 게시글 필터
+    String filter;
 }

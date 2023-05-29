@@ -39,12 +39,13 @@ export default {
     const route = useRoute();
 
     const queryParams = computed(() => {
-      const {keyword, categoryId, startDate, endDate} = route.query;
+      const {keyword, categoryId, startDate, endDate, boardType} = route.query;
       return {
         keyword,
         categoryId,
         startDate,
         endDate,
+        boardType
       };
     });
 

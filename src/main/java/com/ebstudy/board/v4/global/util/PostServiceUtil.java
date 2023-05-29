@@ -1,17 +1,9 @@
 package com.ebstudy.board.v4.global.util;
 
 import com.ebstudy.board.v4.dto.PaginationDTO;
-import com.ebstudy.board.v4.dto.PostDTO;
 import com.ebstudy.board.v4.dto.SearchDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.nio.charset.Charset;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Base64;
 
 @Component
 @RequiredArgsConstructor
@@ -59,43 +51,7 @@ public class PostServiceUtil {
                 .keyword(searchValues.getKeyword())
                 .startDate(searchValues.getStartDate())
                 .endDate(searchValues.getEndDate())
+                .filter(searchValues.getFilter())
                 .build();
-    }
-
-    // TODO: 스프링부트에서 보편적으로 사용하는 암호화 방식으로 리팩토링
-    /**
-     * jsp/servlet 게시판에서 사용하던 단방향 암호화 메소드
-     * @param pw 암호화할 패스워드
-     * @return 암호화된 패스워드
-     */
-    public String getSHA512(String pw) {
-        String encryptPw = null; //암호화된 비밀번호를 저장할 변수
-
-        //1) 해시 함수를 수행할 객체를 참조할 변수 선언
-        MessageDigest md = null;
-
-        try {
-            // 2) SHA-512 방식의 해시 함수를 수행할 수 있는 객체를 얻어옴
-            md = MessageDigest.getInstance("SHA-512");
-
-            // 3) md를 이용해 암호화를 진행할 수 있도록 pw를 byte[] 배열 형태로 변환
-            byte[] bytes = pw.getBytes(Charset.forName("UTF-8"));
-            //UTF-8 문자열인거 감안하고 변환해라라는 의미
-
-            // 4) 암호화  -> 암호화 결과가 md 내부에 저장함.
-            md.update(bytes);
-
-            // 5) 암호화된 비밀번호를 encryptPw에 대입
-            //digest가 보관하고 있다
-            //byte[]배열을 String으로 변환할 필요가 있다.
-            encryptPw = Base64.getEncoder().encodeToString(md.digest());
-            //Base64 : byte 코드를 문자열로 변환하는 객체
-            //base64 에서 변환할수 있게 해주는 객체를 가져와 변환한다
-
-        } catch (NoSuchAlgorithmException e) {
-            //SHA-512 해시 함수가 존재하지 않을 때 예외 발생
-            e.printStackTrace();
-        }
-        return encryptPw;
     }
 }
