@@ -17,7 +17,7 @@ import java.util.HashMap;
 @RequiredArgsConstructor
 public class CommunityFileController {
 
-    private final CommunityFileService communityFileService;
+    private final CommunityFileService fileService;
 
     /**
      * fileName 파라미터를 통해 경로를 노출하지 않고 파일을 다운로드
@@ -28,7 +28,7 @@ public class CommunityFileController {
     @GetMapping("/api/boards/free/file")
     public ResponseEntity<?> downloadFile(@RequestParam String fileName, @RequestParam String fileRealName) throws IOException {
 
-        HashMap<String, Object> headerAndResourece = communityFileService.downloadFile(fileName, fileRealName);
+        HashMap<String, Object> headerAndResourece = fileService.downloadFile(fileName, fileRealName);
 
         Resource resource = (Resource) headerAndResourece.get("resource");
         HttpHeaders headers = (HttpHeaders) headerAndResourece.get("headers");

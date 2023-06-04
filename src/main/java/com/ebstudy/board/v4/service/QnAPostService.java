@@ -49,7 +49,7 @@ public class QnAPostService {
      * 게시글 불러오기 메소드
      * postId 파라미터에 대한 유효성 검증과 게시글 로딩을 수행
      * @param postId 게시글 id
-     * @return 게시글 데이터와 viewName을 가진 ModelAndView 객체 반환
+     * @return 게시글 데이터
      */
     public PostDTO getPost(Long postId) {
 

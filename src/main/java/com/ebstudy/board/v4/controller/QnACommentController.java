@@ -11,11 +11,12 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequiredArgsConstructor
 public class QnACommentController {
-    private final QnACommentService qnaCommentService;
+
+    private final QnACommentService commentService;
 
     @PostMapping("/api/boards/qna/comment")
     public CommonApiResponseDTO<?> saveComment(@RequestBody CommentDTO comment) {
-        qnaCommentService.saveComment(comment);
+        commentService.saveComment(comment);
 
         return CommonApiResponseDTO.builder()
                 .success(true)
@@ -24,7 +25,7 @@ public class QnACommentController {
 
     @DeleteMapping("/api/boards/qna/comment/{commentId}")
     public CommonApiResponseDTO<?> deleteComment(@PathVariable Long commentId) {
-        qnaCommentService.deleteComment(commentId);
+        commentService.deleteComment(commentId);
 
         return CommonApiResponseDTO.builder()
                 .success(true)
@@ -33,7 +34,7 @@ public class QnACommentController {
 
     @PutMapping("/api/boards/qna/comment")
     public CommonApiResponseDTO<?> updateComment(@RequestBody CommentDTO comment) {
-        qnaCommentService.updateComment(comment);
+        commentService.updateComment(comment);
 
         return CommonApiResponseDTO.builder()
                 .success(true)

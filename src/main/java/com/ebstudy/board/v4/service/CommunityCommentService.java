@@ -26,31 +26,7 @@ public class CommunityCommentService {
      * @return 댓글 리스트
      */
     public List<CommentDTO> getCommentList(Long postId) {
-        return convertCommentListData(commentMapper.getCommentList(postId));
-    }
-
-    /**
-     * 게시글 리스트의 생성시간 값을 요구 포맷에 맞게 변환하는 메소드
-     * @param commentDTOList 댓글 리스트
-     * @return 변환된 댓글 리스트
-     */
-    private List<CommentDTO> convertCommentListData(List<CommentDTO> commentDTOList) {
-
-        List<CommentDTO> result = new LinkedList<>();
-
-        for (CommentDTO comment : commentDTOList) {
-
-            String createdDate = comment.getCreatedDate();
-
-            DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            LocalDateTime ldt = LocalDateTime.parse(createdDate, format);
-
-            comment.setCreatedDate(ldt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-
-            result.add(comment);
-        }
-
-        return result;
+        return commentMapper.getCommentList(postId);
     }
 
     /**

@@ -19,10 +19,11 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class QnAPostController {
-    private final QnAPostService qnaPostService;
-    private final QnAFileService qnaFileService;
+
+    private final QnAPostService postService;
+    private final QnAFileService fileService;
     private final UserService userService;
-    private final QnACommentService qnaCommentService;
+    private final QnACommentService commentService;
 
     /**
      * 게시글 리스트를 로딩
@@ -32,12 +33,12 @@ public class QnAPostController {
     @GetMapping("/api/boards/qna")
     public CommonApiResponseDTO<?> getPostList(@ModelAttribute SearchDTO searchValues) {
 
-        List<CategoryDTO> categoryList = qnaPostService.getCategoryList();
+        List<CategoryDTO> categoryList = postService.getCategoryList();
 
         // 받아온 검색조건을 입력해 pagingValues를 가져온다
-        PaginationDTO pagingValues = qnaPostService.getPaginationValues(searchValues);
+        PaginationDTO pagingValues = postService.getPaginationValues(searchValues);
         // 받아온 페지네이션 값을 사용하여 게시글 리스트를 불러온다
-        List<PostDTO> postList = qnaPostService.getPostList(pagingValues);
+        List<PostDTO> postList = postService.getPostList(pagingValues);
 
         HashMap<String, Object> postListResponse = new HashMap<>();
         postListResponse.put("categoryList", categoryList);
@@ -59,9 +60,9 @@ public class QnAPostController {
     @GetMapping("/api/boards/qna/{postId}")
     public CommonApiResponseDTO<?> getPost(@PathVariable Long postId) {
 
-        PostDTO post = qnaPostService.getPost(postId);
-        List<FileDTO> fileList = qnaFileService.getFileList(postId);
-        List<CommentDTO> commentList = qnaCommentService.getCommentList(postId);
+        PostDTO post = postService.getPost(postId);
+        List<FileDTO> fileList = fileService.getFileList(postId);
+        List<CommentDTO> commentList = commentService.getCommentList(postId);
 
         log.info("getPost 정상 수행에 따른 게시글 로드 완료");
 
@@ -85,7 +86,7 @@ public class QnAPostController {
     public CommonApiResponseDTO<?> getWriteForm() {
 
         UserDTO user = userService.getUserFromContext();
-        List<CategoryDTO> categoryList = qnaPostService.getCategoryList();
+        List<CategoryDTO> categoryList = postService.getCategoryList();
 
         HashMap<String, Object> data = new HashMap<>();
         data.put("user", user);
@@ -108,13 +109,13 @@ public class QnAPostController {
     public CommonApiResponseDTO<?> savePost(@CustomValidation(value = {"categoryId", "title", "content"})
                                             @ModelAttribute PostDTO post) throws IOException {
 
-        // Post정보에 담긴 authorId값과 jwt내의 authorId(
-        //Long authorId = post.getAuthorId();
-        //userService.verifySameUser(authorId);
+        // Post정보에 담긴 authorId값과 jwt 정보 값을 비교
+        Long authorId = post.getAuthorId();
+        userService.verifySameUser(authorId);
 
-        qnaPostService.savePost(post);
+        postService.savePost(post);
         log.info("savePost 수행 완료");
-        qnaFileService.saveFile(post.getPostId(), post.getFile());
+        fileService.saveFile(post.getPostId(), post.getFile());
 
         return CommonApiResponseDTO.builder()
                 .success(true)
@@ -133,12 +134,12 @@ public class QnAPostController {
         // Multipart/Form-Data 방식과 json타입의 객체를 같이 사용하려면 json파트에 대해 @RequestPart 어노테이션을 적용해 주면 된다.
 
         // 수정 요청한 게시글 데이터를 DB에서 가져와서 해당 정보 기준으로 비교한다(postId를 다르게 하고 authorId를 일치시키는 방식으로 위조할 수 있기 때문에)
-        PostDTO originPost = qnaPostService.getPost(post.getPostId());
+        PostDTO originPost = postService.getPost(post.getPostId());
         userService.verifySameUser(originPost.getAuthorId());
 
         // 게시글 먼저 수정
-        qnaPostService.updatePost(post);
-        qnaFileService.updateFile(post.getPostId(), existingFiles, post.getFile());
+        postService.updatePost(post);
+        fileService.updateFile(post.getPostId(), existingFiles, post.getFile());
 
         return CommonApiResponseDTO.builder()
                 .success(true)
@@ -156,10 +157,10 @@ public class QnAPostController {
     public CommonApiResponseDTO<?> deletePost(@ModelAttribute PostDTO post) {
 
         // 수정 요청한 게시글의 작성자와 JWT안의 요청자 정보가 일치하는지 확인
-        PostDTO originPost = qnaPostService.getPost(post.getPostId());
+        PostDTO originPost = postService.getPost(post.getPostId());
         userService.verifySameUser(originPost.getAuthorId());
 
-        qnaPostService.deletePost(post);
+        postService.deletePost(post);
 
         return CommonApiResponseDTO.builder()
                 .success(true)
@@ -169,10 +170,10 @@ public class QnAPostController {
     @PutMapping("/api/boards/qna/{postId}/adoption")
     public CommonApiResponseDTO<?> adoptComment(@RequestBody PostDTO post) {
 
-        PostDTO originPost = qnaPostService.getPost(post.getPostId());
+        PostDTO originPost = postService.getPost(post.getPostId());
         userService.verifySameUser(originPost.getAuthorId());
 
-        qnaPostService.adoptComment(post);
+        postService.adoptComment(post);
 
         return CommonApiResponseDTO.builder()
                 .success(true)

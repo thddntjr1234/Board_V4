@@ -1,6 +1,5 @@
 package com.ebstudy.board.v4.controller;
 
-import com.ebstudy.board.v4.service.CommunityFileService;
 import com.ebstudy.board.v4.service.QnAFileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +18,8 @@ import java.util.HashMap;
 @Slf4j
 @RequiredArgsConstructor
 public class QnAFileController {
-    private final QnAFileService qnaFileService;
+
+    private final QnAFileService fileService;
 
     /**
      * fileName 파라미터를 통해 경로를 노출하지 않고 파일을 다운로드
@@ -30,7 +30,7 @@ public class QnAFileController {
     @GetMapping("/api/boards/qna/file")
     public ResponseEntity<?> downloadFile(@RequestParam String fileName, @RequestParam String fileRealName) throws IOException {
 
-        HashMap<String, Object> headerAndResourece = qnaFileService.downloadFile(fileName, fileRealName);
+        HashMap<String, Object> headerAndResourece = fileService.downloadFile(fileName, fileRealName);
 
         Resource resource = (Resource) headerAndResourece.get("resource");
         HttpHeaders headers = (HttpHeaders) headerAndResourece.get("headers");

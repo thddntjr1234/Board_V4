@@ -24,7 +24,7 @@ public class CommunityPostController {
 
     private final CommunityPostService postService;
     private final UserService userService;
-    private final CommunityFileService communityFileService;
+    private final CommunityFileService fileService;
     private final CommunityCommentService commentService;
 
     /**
@@ -64,7 +64,7 @@ public class CommunityPostController {
     public CommonApiResponseDTO<?> getPost(@PathVariable Long postId) {
 
         PostDTO post = postService.getPost(postId);
-        List<FileDTO> fileList = communityFileService.getFileList(postId);
+        List<FileDTO> fileList = fileService.getFileList(postId);
         List<CommentDTO> commentList = commentService.getCommentList(postId);
 
         log.info("getPost 정상 수행에 따른 게시글 로드 완료");
@@ -112,13 +112,13 @@ public class CommunityPostController {
     public CommonApiResponseDTO<?> savePost(@CustomValidation(value = {"categoryId", "title", "content"})
                                                 @ModelAttribute PostDTO post) throws IOException {
 
-        // Post정보에 담긴 authorId값과 jwt내의 authorId(
-        //Long authorId = post.getAuthorId();
-        //userService.verifySameUser(authorId);
+        // Post정보에 담긴 authorId값과 jwt 정보 값을 비교
+        Long authorId = post.getAuthorId();
+        userService.verifySameUser(authorId);
 
         postService.savePost(post);
         log.info("savePost 수행 완료");
-        communityFileService.saveFile(post.getPostId(), post.getFile());
+        fileService.saveFile(post.getPostId(), post.getFile());
 
         return CommonApiResponseDTO.builder()
                 .success(true)
@@ -142,7 +142,7 @@ public class CommunityPostController {
 
         // 게시글 먼저 수정
         postService.updatePost(post);
-        communityFileService.updateFile(post.getPostId(), existingFiles, post.getFile());
+        fileService.updateFile(post.getPostId(), existingFiles, post.getFile());
 
         return CommonApiResponseDTO.builder()
                 .success(true)

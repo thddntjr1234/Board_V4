@@ -138,8 +138,9 @@ const getPostList = async () => {
 const moveToWriteView = async () => {
   if (!store.getters.isValidToken) {
     alert('게시글 작성은 회원만 가능합니다.')
+  } else {
+    await router.push({name: 'CommunityWriteFormView'})
   }
-  await router.push({name: 'CommunityWriteFormView'})
 }
 
 /**

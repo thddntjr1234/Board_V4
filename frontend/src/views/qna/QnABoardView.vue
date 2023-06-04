@@ -9,8 +9,8 @@
     <form class="form-inline">
       <div class="input-group input-group-sm">
         <span class="input-group-text">등록일</span>
-        <input name="startDate" class="form-control" type="date" v-model="startDate" />
-        <input name="endDate" class="form-control" type="date" v-model="endDate" />
+        <input name="startDate" class="form-control" type="date" v-model="startDate"/>
+        <input name="endDate" class="form-control" type="date" v-model="endDate"/>
 
         <select class="form-select" name="categoryId" v-model="categoryId">
           <option value="">전체 카테고리</option>
@@ -18,18 +18,8 @@
             {{ category.category }}
           </option>
         </select>
-        <input type="search" name="keyword" class="form-control" v-model="keyword" placeholder="제목/내용/작성자명 키워드" />
+        <input type="search" name="keyword" class="form-control" v-model="keyword" placeholder="제목/내용/작성자명 키워드"/>
         <button class="btn btn-primary" type="submit">검색</button>
-      </div>
-    </form>
-  </div>
-  <br>
-
-  <!-- 게시글 뷰 모드 및 작성부  -->
-  <div class="container">
-    <div class="d-flex justify-content-between">
-      <button class="btn btn-primary" @click="moveToWriteView">게시글 등록</button>
-      <div class="btn-group">
         <div class="dropdown">
           <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton"
                   data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -46,6 +36,16 @@
             </li>
           </ul>
         </div>
+      </div>
+    </form>
+  </div>
+  <br>
+
+  <!-- 게시글 뷰 모드 및 작성부  -->
+  <div class="container">
+    <div class="d-flex justify-content-between">
+      <button class="btn btn-primary" @click="moveToWriteView">게시글 등록</button>
+      <div class="btn-group">
         <button class="btn btn-outline-primary" @click="togglePostListComponent('list')">리스트</button>
         <button class="btn btn-outline-primary" @click="togglePostListComponent('card')">카드</button>
       </div>
@@ -157,8 +157,9 @@ const getPostList = async () => {
 const moveToWriteView = async () => {
   if (!store.getters.isValidToken) {
     alert('게시글 작성은 회원만 가능합니다.')
+  } else {
+    await router.push({name: 'QnAWriteFormView'})
   }
-  await router.push({name: 'QnAWriteFormView'})
 }
 
 /**
@@ -201,7 +202,7 @@ const toggleFilter = (filterName) => {
       query['filter'] = filterName
       break
   }
-  router.replace ({ query })
+  router.replace({query})
 }
 
 const setFilterName = (filterName) => {

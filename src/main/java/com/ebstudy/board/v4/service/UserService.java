@@ -81,15 +81,8 @@ public class UserService {
 
         Optional<String> loginId = SecurityUtil.getCurrentUsername();
         UserDTO queryResult = userMapper.findUserByLoginId(loginId.get());
-        UserDTO user = UserDTO
-                .builder()
-                .userId(queryResult.getUserId())
-                .loginId(queryResult.getLoginId())
-                .name(queryResult.getName())
-                .role(queryResult.getRole())
-                .build();
 
-        return Optional.ofNullable(user);
+        return Optional.ofNullable(queryResult);
     }
 
     /**
