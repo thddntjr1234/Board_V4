@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace : package + classname -->
+<mapper namespace="com.ebstudy.board.v4.repository.InquiryPostMapper">
+    <resultMap type="com.ebstudy.board.v4.dto.PostDTO" id="mapPostDTO">
+        <result property="postId" column="post_id"/>
+        <result property="createdDate" column="created_date"/>
+        <result property="modifiedDate" column="modified_date"/>
+        <result property="authorId" column="author_id"/>
+        <result property="answerStatus" column="answer_status"/>
+    </resultMap>
+
+    <!--검색 조건별로 WHERE 조건 검색을 추가하는 구문-->
+    <sql id="search">
+        <where>
+            <if test="paginationValues.startDate != null and paginationValues.endDate != null">
+                AND created_date BETWEEN #{paginationValues.startDate} AND #{paginationValues.endDate}
+            </if>
+            <if test="paginationValues.keyword != null">
+                AND (title LIKE CONCAT('%', #{paginationValues.keyword}, '%')
+                OR content LIKE CONCAT('%', #{paginationValues.keyword}, '%')
+                OR ${author} LIKE CONCAT('%', #{paginationValues.keyword}, '%'))
+            </if>
+            <if test="paginationValues.filter == 'myPost'">
+                AND A.author_id = #{authorId}
+            </if>
+        </where>
+    </sql>
+
+
+    <!--List<PostDTO> 형식으로 검색 조건에 해당하는 startPostNumber 번째 게시글부터 10개를 뽑아 리스트를 반환-->
+    <select id="getPostList" resultType="PostDTO"
+            resultMap="mapPostDTO">
+        <!--db 성능에 대해서는 성능이 실제로 문제가 될 때 고려-->
+        SELECT A.post_id, A.created_date, A.modified_date, A.author_id,
+            A.content, A.hits, A.title, A.delete_flag, A.secret,
+            B.username AS author,
+            EXISTS (
+                SELECT 1
+                FROM inquiry_comments
+                WHERE post_id = A.post_id
+                ) AS answer_status
+
+        FROM v_inquiry_not_deleted_post A
+            LEFT JOIN users B ON A.author_id = B.user_id
+
+        <include refid="search">
+            <property name="author" value="username"/>
+        </include>
+
+        ORDER BY A.post_id DESC LIMIT #{paginationValues.startPostNumber}, 10
+    </select>
+
+    <!--현재 데이터베이스에 존재하는 게시글의 총 개수를 반환-->
+    <select id="getPostCount" resultType="int">
+        SELECT COUNT(post_id)
+
+        FROM v_inquiry_not_deleted_post A
+            LEFT JOIN users B ON A.author_id = B.user_id
+
+        <include refid="search">
+            <property name="author" value="username"/>
+        </include>
+    </select>
+
+    <!--CDATA를 쓰면 sql 안에서 < >같은 문자를 써도 xml코드로 인식하지 않는다-->
+    <!--요청한 postId에 해당하는 게시글을 반환-->
+    <select id="getPost" parameterType="long" resultType="PostDTO"
+            resultMap="mapPostDTO">
+        SELECT post_id, created_date, modified_date, title, author_id,
+               content, hits, delete_flag, secret, username AS author,
+               EXISTS (
+                   SELECT 1
+                   FROM inquiry_comments
+                   WHERE post_id = A.post_id
+                   ) AS answer_status
+
+        FROM v_inquiry_not_deleted_post A
+            LEFT JOIN users C ON A.author_id = C.user_id
+
+        WHERE post_id = #{postId}
+    </select>
+
+    <!--  useGeneratedKeys의 keyProperty는 dto에 담겨 반환되므로 db PK에 해당하는 dto의 필드명을 써야 한다.   -->
+    <!--PostDTO 객체에 담긴 게시글 값을 저장-->
+    <insert id="savePost" parameterType="PostDTO" useGeneratedKeys="true"
+            keyProperty="postId">
+        INSERT INTO community_posts(title, author_id, content,
+                                    created_date, modified_date)
+
+        VALUES (#{title}, #{authorId}, #{content},
+                #{createdDate}, #{modifiedDate})
+    </insert>
+
+    <!--postId값의 게시글을 수정-->
+    <update id="updatePost" parameterType="PostDTO">
+        UPDATE community_posts
+
+        SET title         = #{title},
+            content       = #{content},
+            modified_date = #{modifiedDate}
+
+        WHERE post_id = #{postId}
+    </update>
+
+    <!--해당 postId값의 게시글을 삭제-->
+    <update id="deletePost" parameterType="long">
+        UPDATE community_posts
+
+        SET delete_flag = true
+
+        WHERE post_id = #{postId}
+    </update>
+
+    <!--postId값을 가진 열의 조회수를 증가-->
+    <update id="increaseHits" parameterType="long">
+        UPDATE community_posts
+
+        SET hits = hits + 1
+
+        WHERE post_id = #{postId}
+    </update>
+</mapper>
+

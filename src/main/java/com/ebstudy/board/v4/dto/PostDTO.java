@@ -1,8 +1,6 @@
 package com.ebstudy.board.v4.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
@@ -12,7 +10,9 @@ import java.util.List;
 
 @Getter
 @Setter
-@ToString
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class PostDTO {
 
     // 게시글 pk
@@ -46,6 +46,12 @@ public class PostDTO {
 
     // 채택된 댓글 ID
     private Long adoptedCommentId;
+
+    // 문의 답변 여부
+    private Boolean answerStatus;
+
+    // 비공개 여부
+    private Boolean secret;
 
     // file 존재 여부, checkExistence()로 파일 존재여부 확인 뒤 true로 변경
     private Boolean fileFlag;

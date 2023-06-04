@@ -20,8 +20,17 @@ public enum CustomErrorCode {
     /**
      * 401 UNAUTHORIZED: 인증되지 않은 사용자의 요청
      */
-    UNAUTHORIZED_REQUEST(HttpStatus.UNAUTHORIZED, "Unauthorized reqeust"),
-    INVALID_USERS_REQUEST(HttpStatus.UNAUTHORIZED, "게시글 작성자의 요청이 아닙니다."),
+    UNAUTHORIZED_REQUEST(HttpStatus.UNAUTHORIZED, "유효하지 않은 사용자의 요청입니다."),
+
+    /**
+     * 403 FORBIDDEN: 인증되었으나 권한이 없는 사용자
+     */
+    INVALID_USERS_REQUEST(HttpStatus.FORBIDDEN, "게시글 작성자의 요청이 아닙니다."),
+    DENIED_POST_REQUEST(HttpStatus.FORBIDDEN, "해당 게시글은 작성자만 열람할 수 있습니다."),
+    DENIED_POST_UPDATE(HttpStatus.FORBIDDEN, "답변된 게시글은 더이상 수정할 수 없습니다."),
+    DENIED_POST_DELETE(HttpStatus.FORBIDDEN, "답변된 게시글은 더이상 삭제할 수 없습니다."),
+    ALREADY_ANSWERED_POST(HttpStatus.FORBIDDEN, "해당 게시글은 더이상 댓글을 작성할 수 없습니다."),
+
 
     /**
      * 404 NOT_FOUND: 리소스를 찾을 수 없음

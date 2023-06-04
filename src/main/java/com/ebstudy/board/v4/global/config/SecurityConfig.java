@@ -80,6 +80,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                  //Comment
+                .antMatchers("/api/boards/inquiry/comment/**").access("isAuthenticated() and hasRole('ADMIN')")
                 .antMatchers("/api/boards/**/comment").authenticated()
                  //Post
                 .antMatchers(HttpMethod.POST, "/api/boards/**").authenticated()
