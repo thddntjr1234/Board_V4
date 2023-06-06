@@ -20,7 +20,13 @@
               </h5>
             </div>
             <div class="d-flex justify-content-between align-items-center">
-              <p class="m-0">{{ post.category }}</p>
+              <div v-if="boardName === 'inquiry'">
+                <p class="m-0" v-if="post.answerStatus">[답변 완료]</p>
+                <p class="m-0" v-else>[답변 완료]</p>
+              </div>
+              <div v-else>
+                <p class="m-0">{{ post.category }}</p>
+              </div>
               <div class="d-flex align-items-end">
                 <p class="m-0">조회수: {{ post.hits }}</p>
               </div>
