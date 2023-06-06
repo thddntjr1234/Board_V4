@@ -79,6 +79,7 @@ import {useStore} from "vuex";
 import * as boardApi from "@/apis/board";
 import * as userApi from "@/apis/user";
 import router from "@/router/router";
+import {convertListDateFormat, convertOneDateFormat} from "@/utils/date-format-converter";
 
 onMounted(() => {
   getPost()
@@ -116,9 +117,9 @@ const getPost = async () => {
   try {
     const response = await boardApi.getPost(`boards/inquiry/${route.params.postId}`)
 
-    post.value = response.data.data.post
+    post.value = convertOneDateFormat(response.data.data.post)
     fileList.value = response.data.data.fileList
-    commentList.value = response.data.data.commentList
+    commentList.value = convertListDateFormat(response.data.data.commentList)
 
     // 수정 삭제 버튼을 보여주기 위한 flag 변수 처리
     if (store.getters.isValidToken) {
