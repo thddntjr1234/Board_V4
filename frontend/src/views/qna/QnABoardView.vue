@@ -53,7 +53,7 @@
   </div>
 
   <div class="container">
-    <component :is="currentPostListComponent" :board-name="'qna'" :post-list="postList" :show-qn-a="true"></component>
+    <component :is="currentPostListComponent" :board-name="'qna'" :post-list="postList"></component>
   </div>
   <br>
 
@@ -74,6 +74,7 @@ import {onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
 import {useStore} from "vuex";
 import * as boardApi from "@/apis/board";
+import {convertDateFormat} from "@/utils/date-format-converter";
 
 const route = useRoute()
 const store = useStore()
@@ -82,7 +83,7 @@ const store = useStore()
 const keyword = ref(route.query.keyword || null)
 const startDate = ref(route.query.startDate || null)
 const endDate = ref(route.query.endDate || null)
-const categoryId = ref('')
+const categoryId = ref(route.query.categoryId || "")
 
 // 게시글 리스트 및 페이지 데이터
 const pageRange = ref([])
@@ -147,7 +148,7 @@ const getPostList = async () => {
   }
 
   // 데이터 입력
-  postList.value = response.data.data.postList
+  postList.value = convertDateFormat(response.data.data.postList)
   categoryList.value = response.data.data.categoryList
 }
 
