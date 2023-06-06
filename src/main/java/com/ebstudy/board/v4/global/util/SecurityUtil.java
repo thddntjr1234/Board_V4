@@ -61,14 +61,17 @@ public class SecurityUtil {
              securityUserInfo = (CustomUserDetails) authentication.getPrincipal();
         }
 
-        UserDTO user = UserDTO
-                .builder()
-                .userId(securityUserInfo.getUserId())
-                .loginId(securityUserInfo.getLoginId())
-                .name(securityUserInfo.getUsername())
-                // List<GrantedAuthority> -> Role enum으로 변환
-                .role(Role.valueOf(securityUserInfo.getAuthorities().iterator().next().getAuthority()))
-                .build();
+        UserDTO user = null;
+        if (securityUserInfo != null) {
+            user = UserDTO
+                    .builder()
+                    .userId(securityUserInfo.getUserId())
+                    .loginId(securityUserInfo.getLoginId())
+                    .name(securityUserInfo.getUsername())
+                    // List<GrantedAuthority> -> Role enum으로 변환
+                    .role(Role.valueOf(securityUserInfo.getAuthorities().iterator().next().getAuthority()))
+                    .build();
+        }
 
         return Optional.ofNullable(user);
     }

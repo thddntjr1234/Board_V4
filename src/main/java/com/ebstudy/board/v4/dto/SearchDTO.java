@@ -24,4 +24,7 @@ public class SearchDTO {
 
     // 게시글 필터
     String filter;
+
+    // 비밀 게시글 제외 여부
+    String secret;
 }

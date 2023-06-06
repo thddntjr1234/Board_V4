@@ -1,6 +1,7 @@
 package com.ebstudy.board.v4.service;
 
 import com.ebstudy.board.v4.dto.*;
+import com.ebstudy.board.v4.global.authority.Role;
 import com.ebstudy.board.v4.global.exception.CustomErrorCode;
 import com.ebstudy.board.v4.global.exception.CustomException;
 import com.ebstudy.board.v4.global.util.PostServiceUtil;
@@ -47,21 +48,23 @@ public class InquiryPostService {
 
         // 비밀 게시글 처리가 된 경우 게시글 리스트 반환 시 데이터를 노출하지 않아야 한다.
         // 필요한 데이터만 추가된 게시글로 변환
-        postList.stream().map(post -> {
+        return postList.stream().map(post -> {
             if (post.getSecret()) {
                 return PostDTO.builder()
                         .postId(post.getPostId())
                         .category(post.getCategory())
                         .createdDate(post.getCreatedDate())
+                        .modifiedDate(post.getModifiedDate())
+                        .title(post.getTitle())
                         .author(post.getAuthor())
+                        .hits(post.getHits())
+                        .answerStatus(post.getAnswerStatus())
                         .secret(post.getSecret())
                         .build();
             } else {
                 return post;
             }
         }).collect(Collectors.toList());
-
-        return postList;
     }
 
     /**
@@ -108,8 +111,9 @@ public class InquiryPostService {
         if (post.getSecret()) {
             UserDTO userInfo = userService.getUserFromContext();
 
+
             // 게시글 작성자와 api 요청자가 동일한지 확인한다.
-            if (!userInfo.getUserId().equals(post.getAuthorId())) {
+            if (!userInfo.getRole().equals(Role.ROLE_ADMIN) && !userInfo.getUserId().equals(post.getAuthorId())) {
                 throw new CustomException(CustomErrorCode.DENIED_POST_REQUEST);
             }
         }

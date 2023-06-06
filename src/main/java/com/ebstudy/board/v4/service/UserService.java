@@ -93,7 +93,7 @@ public class UserService {
         Optional<UserDTO> user = securityUtil.getCurrentUserInfo();
 
         if (user.isEmpty()) {
-            throw new CustomException(CustomErrorCode.INVALID_USERS_REQUEST);
+            throw new CustomException(CustomErrorCode.UNAUTHORIZED_REQUEST);
         }
 
         return user.orElse(null);

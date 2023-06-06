@@ -52,6 +52,7 @@ public class PostServiceUtil {
                 .startDate(searchValues.getStartDate())
                 .endDate(searchValues.getEndDate())
                 .filter(searchValues.getFilter())
+                .secret(searchValues.getSecret())
                 .build();
     }
 }

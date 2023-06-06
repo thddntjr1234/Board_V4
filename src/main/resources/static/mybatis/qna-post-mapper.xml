@@ -35,7 +35,9 @@
                 AND EXISTS(
                     SELECT 1
                     FROM qna_comments
-                    WHERE qna_comments.post_id = A.post_id) = false
+                    WHERE qna_comments.post_id = A.post_id
+                        AND qna_comments.delete_flag = false
+                    ) = false
             </if>
         </where>
     </sql>

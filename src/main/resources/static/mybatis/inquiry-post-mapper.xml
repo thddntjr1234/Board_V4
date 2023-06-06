@@ -25,6 +25,9 @@
             <if test="paginationValues.filter == 'myPost'">
                 AND A.author_id = #{authorId}
             </if>
+            <if test="paginationValues.secret == 'exclude'">
+                AND A.secret = false
+            </if>
         </where>
     </sql>
 
@@ -40,6 +43,7 @@
                 SELECT 1
                 FROM inquiry_comments
                 WHERE post_id = A.post_id
+                  AND A.delete_flag = false
                 ) AS answer_status
 
         FROM v_inquiry_not_deleted_post A
@@ -74,6 +78,7 @@
                    SELECT 1
                    FROM inquiry_comments
                    WHERE post_id = A.post_id
+                     AND A.delete_flag = false
                    ) AS answer_status
 
         FROM v_inquiry_not_deleted_post A
@@ -86,7 +91,7 @@
     <!--PostDTO 객체에 담긴 게시글 값을 저장-->
     <insert id="savePost" parameterType="PostDTO" useGeneratedKeys="true"
             keyProperty="postId">
-        INSERT INTO community_posts(title, author_id, content,
+        INSERT INTO inquiry_posts(title, author_id, content,
                                     created_date, modified_date)
 
         VALUES (#{title}, #{authorId}, #{content},
@@ -95,7 +100,7 @@
 
     <!--postId값의 게시글을 수정-->
     <update id="updatePost" parameterType="PostDTO">
-        UPDATE community_posts
+        UPDATE inquiry_posts
 
         SET title         = #{title},
             content       = #{content},
@@ -106,7 +111,7 @@
 
     <!--해당 postId값의 게시글을 삭제-->
     <update id="deletePost" parameterType="long">
-        UPDATE community_posts
+        UPDATE inquiry_posts
 
         SET delete_flag = true
 
@@ -115,7 +120,7 @@
 
     <!--postId값을 가진 열의 조회수를 증가-->
     <update id="increaseHits" parameterType="long">
-        UPDATE community_posts
+        UPDATE inquiry_posts
 
         SET hits = hits + 1
 

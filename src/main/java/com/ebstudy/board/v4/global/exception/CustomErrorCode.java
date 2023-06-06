@@ -15,7 +15,7 @@ public enum CustomErrorCode {
      * 400 BAD_REQUEST: 잘못된 요청
      */
     INVALID_REQUEST(HttpStatus.BAD_REQUEST, "Invalid parameter values"),
-    INVALID_POST_REQUEST(HttpStatus.BAD_REQUEST, "유효하지 않은 게시글을 요청했습니다."),
+    INVALID_USERS_REQUEST(HttpStatus.FORBIDDEN, "올바른 사용자의 요청이 아닙니다."),
 
     /**
      * 401 UNAUTHORIZED: 인증되지 않은 사용자의 요청
@@ -25,7 +25,6 @@ public enum CustomErrorCode {
     /**
      * 403 FORBIDDEN: 인증되었으나 권한이 없는 사용자
      */
-    INVALID_USERS_REQUEST(HttpStatus.FORBIDDEN, "게시글 작성자의 요청이 아닙니다."),
     DENIED_POST_REQUEST(HttpStatus.FORBIDDEN, "해당 게시글은 작성자만 열람할 수 있습니다."),
     DENIED_POST_UPDATE(HttpStatus.FORBIDDEN, "답변된 게시글은 더이상 수정할 수 없습니다."),
     DENIED_POST_DELETE(HttpStatus.FORBIDDEN, "답변된 게시글은 더이상 삭제할 수 없습니다."),
@@ -36,6 +35,7 @@ public enum CustomErrorCode {
      * 404 NOT_FOUND: 리소스를 찾을 수 없음
      */
     NOT_FOUND(HttpStatus.NOT_FOUND, "Reqeust data is not found"),
+    INVALID_POST_REQUEST(HttpStatus.NOT_FOUND, "존재하지 않은 게시글을 요청했습니다."),
 
     /**
      * 500 INTERNAL_SERVER_ERROR: 내부 서버 오류
