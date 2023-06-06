@@ -8,14 +8,14 @@
               <h6 class="m-0">{{ post.author }}</h6>
               <div class="d-flex align-items-end">
                 <p class="m-0">{{ post.createdDate }}</p>
-                <p v-if="post.modifiedDate" class="m-0">수정됨</p>
               </div>
             </div>
             <div class="d-flex justify-content-start">
-              <div v-if="showQnA">
+              <div v-if="boardName === 'qna'">
                 <p class="m-0" v-if="post.adoptedCommentId">&#9989;</p>
               </div>
               <h5 class="card-title">
+                <span v-if="post.secret" style="padding-right: 5px;">&#128274;</span>
                 <router-link :to="{path: `/boards/${boardName}/${post.postId}`}">{{ post.title }}</router-link>
               </h5>
             </div>
@@ -36,7 +36,6 @@
 const props = defineProps({
   boardName: '',
   postList: [],
-  showQnA: false
 })
 </script>
 

@@ -3,9 +3,14 @@
     <table class="table table-hover" style="text-align: center; font-size: 12px">
       <thead>
       <tr>
-        <th class="w-auto" style="text-align: center;">카테고리</th>
-        <th class="w-auto" style="text-align: center;" v-if="showQnA">채택여부</th>
-        <th class="w-auto" style="text-align: center;">&nbsp;</th>
+        <template v-if="boardName === 'qna' || boardName === 'free'">
+          <th class="w-auto" style="text-align: center;">카테고리</th>
+          <th class="w-auto" style="text-align: center;" v-if="boardName === 'qna'">채택여부</th>
+          <th class="w-auto" style="text-align: center;">&nbsp;</th>
+        </template>
+        <template v-if="boardName === 'inquiry'">
+          <th class="w-auto" style="text-align: center;">답변여부</th>
+        </template>
         <th class="w-50" style="text-align: center">제목</th>
         <th class="w-auto" style="text-align: center;">작성자</th>
         <th class="w-auto" style="text-align: center;">조회수</th>
@@ -15,16 +20,28 @@
       </thead>
       <tbody>
       <tr v-for="post in postList" v-bind:key="post">
-        <td>{{ post.category }}</td>
-
-        <td v-if="showQnA">
-          <span v-if="post.adoptedCommentId">&#9989;</span>
-          <span v-else>&nbsp</span>
-        </td>
-        <td v-if="post.fileFlag">&#128193;</td>
-        <td v-else>&nbsp</td>
+        <template v-if="boardName === 'qna' || boardName === 'free'">
+          <td>{{ post.category }}</td>
+          <td v-if="boardName === 'qna'">
+            <span v-if="post.adoptedCommentId">&#9989;</span>
+            <span v-else>&nbsp</span>
+          </td>
+          <td>
+            <span v-if="post.fileFlag">&#128193;</span>
+            <span v-else>&nbsp;</span>
+          </td>
+        </template>
+        <template v-if="boardName === 'inquiry'">
+          <td>
+            <span v-if="post.answerStatus">답변 완료</span>
+            <span v-else>답변 대기중</span>
+          </td>
+        </template>
 
         <td class="d-flex justify-content-start">
+          <span v-if="post.secret" style="padding-right: 5px;">
+            &#128274;
+          </span>
           <router-link :to="{path: `/boards/${boardName}/${post.postId}`}">{{ post.title }}</router-link>
         </td>
         <td>{{ post.author }}</td>
@@ -37,23 +54,12 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "PostList",
+<script setup>
+const props = defineProps({
+  boardName: '',
+  postList: [],
+})
 
-  props: {
-    boardName: '',
-    postList: [],
-    showQnA: false
-  },
-
-  setup() {
-    const convertDateFormat = () => {
-
-    }
-
-  }
-}
 </script>
 
 <style scoped>

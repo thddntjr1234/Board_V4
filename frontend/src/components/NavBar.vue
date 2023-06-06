@@ -77,17 +77,16 @@
 </template>
 
 <script>
-import {useRouter} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import {useStore} from "vuex";
 import {ref} from "vue";
 import * as userApi from "@/apis/user"
-import axios from "axios";
 
 export default {
   name: "NavBar",
 
   setup() {
-    const router = useRouter()
+    const route = useRoute()
     const store = useStore()
 
     const showModal = ref(false)
@@ -120,7 +119,10 @@ export default {
       if (store.getters.isValidToken) {
         await store.dispatch('removeToken')
         alert("로그아웃에 성공했습니다.")
-        location.reload()
+
+        // 로그아웃 시 쿼리 파라미터를 제거한 경로로 리다이렉트
+        const path = route.path.split('?')[0]
+        location.replace(path)
       }
     }
 
