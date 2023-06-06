@@ -91,7 +91,7 @@ for ( i = 0 to formData.value.length ) {
 
 에러 메세지:
 
-2023-03-31 17:28:36.276 DEBUG 59783 --- [nio-8081-exec-2] o.s.web.method.HandlerMethod : Could not resolve parameter [0] in public com.ebstudy.board.v4.dto.response.CommonApiResponseDTO<?> com.ebstudy.board.v4.controller.PostController.savePost(com.ebstudy.board.v4.dto.PostDTO) throws java.io.IOException: org.springframework.validation.BeanPropertyBindingResult: 1 errors
+2023-03-31 17:28:36.276 DEBUG 59783 --- [nio-8081-exec-2] o.s.web.method.HandlerMethod : Could not resolve parameter [0] in public com.ebstudy.board.v4.dto.response.CommonApiResponseDTO<?> com.ebstudy.board.v4.controller.CommunityPostController.savePost(com.ebstudy.board.v4.dto.PostDTO) throws java.io.IOException: org.springframework.validation.BeanPropertyBindingResult: 1 errors
 
 Field error in object 'postDTO' on field 'file': rejected value [null]; codes [typeMismatch.postDTO.file,typeMismatch.file,typeMismatch.java.util.List,typeMismatch]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [postDTO.file,file]; arguments []; default message [file]]; default message [Failed to convert property value of type 'java.lang.String' to required type 'java.util.List' for property 'file'; nested exception is java.lang.IllegalStateException: Cannot convert value of type 'java.lang.String' to required type 'org.springframework.web.multipart.MultipartFile' for property 'file[0]': no matching editors or conversion strategy found]
 

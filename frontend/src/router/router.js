@@ -9,6 +9,10 @@ import QnABoardView from "@/views/qna/QnABoardView.vue";
 import QnAView from "@/views/qna/QnAView.vue";
 import QnAModifyView from "@/views/qna/QnAModifyView.vue";
 import QnAWriteFormView from "@/views/qna/QnAWriteFormView.vue";
+import InquiryBoardView from "@/views/inquiry/InquiryBoardView.vue";
+import InquiryView from "@/views/inquiry/InquiryView.vue";
+import InquiryModifyView from "@/views/inquiry/InquiryModifyView.vue";
+import InquiryWriteFormView from "@/views/inquiry/InquiryWriteFormView.vue";
 
 
 const router = createRouter({
@@ -63,6 +67,26 @@ const router = createRouter({
             path: "/boards/qna/new",
             name: "QnAWriteFormView",
             component: QnAWriteFormView
+        },
+        {
+          path: "/boards/inquiry",
+          name: "InquiryBoardView",
+          component: InquiryBoardView
+        },
+        {
+            path: "/boards/inquiry/:postId",
+            name: "InquiryView",
+            component: InquiryView
+        },
+        {
+            path: "/boards/inquiry/:postId/edit",
+            name: "InquiryModifyView",
+            component: InquiryModifyView
+        },
+        {
+            path: "/boards/inquiry/new",
+            name: "InquiryWriteFormView",
+            component: InquiryWriteFormView
         }
     ]
 });

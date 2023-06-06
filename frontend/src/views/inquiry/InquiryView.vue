@@ -1,0 +1,246 @@
+<template>
+  <NavBar></NavBar>
+  <div class="container">
+    <h1 class="mt-4 justify-content-start">Q&A - 게시글</h1>
+    <div class="row mb-3">
+      <div class="col-sm-3">
+        <span class="fw-bold">{{ post.author }}</span>
+      </div>
+      <div class="col-sm-9 text-end">
+        <span class="ms-4">등록일시: {{ post.createdDate }}</span>
+        <span class="ms-4" v-if="post.modifiedDate !== null">수정일시: {{ post.modifiedDate }}</span>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-sm-8 text-start">
+        <span v-if="post.adoptedCommentId">&#9989; &nbsp &nbsp</span>
+        <span class="fw-bold">
+          <span v-if="post.answerStatus">[답변 완료]</span>
+          <span v-else>[답변 대기중]</span>
+          <span> {{ post.title }}</span>
+        </span>
+      </div>
+      <div class="col-sm-1">
+
+      </div>
+      <div class="col-sm-3 text-end">
+        <span class>조회수: {{ post.hits }}</span>
+      </div>
+    </div>
+
+    <hr class="mb-4">
+
+    <div class="row mb-4">
+      <div class="col">
+        <div class="min-vh-50">
+          <textarea class="form-control-plaintext mb-3" rows="15" readonly>{{ post.content }}</textarea>
+        </div>
+      </div>
+    </div>
+    <hr class="row mb-4">
+
+    <div class="row mb-3">
+      <div class="col-sm-3">
+        <span class="fw-bold">첨부파일</span>
+      </div>
+      <div class="col-sm-9">
+        <div v-for="file in fileList" :key="file.fileName">
+          <a href="#" @click="downloadFile(file)">{{ file.fileRealName }}</a>
+        </div>
+      </div>
+    </div>
+
+    <hr class="mb-4">
+
+    <Comment :current-user-info="currentUserInfo" :comment-list="commentList" :author-of-post="authorOfPost"
+             @addComment="addComment" @modifyComment="modifyComment" @deleteComment="deleteComment">
+    </Comment>
+
+    <hr class="mb-4">
+
+    <div class="d-flex justify-content-center">
+      <button class="btn btn-secondary me-3" @click="backToList">목록</button>
+      <button class="btn btn-secondary me-3" v-if="authorOfPost" @click="moveToModifyView">수정</button>
+      <button class="btn btn-secondary" v-if="authorOfPost" @click="deletePost">삭제</button>
+    </div>
+
+    <hr class="mt-4">
+  </div>
+</template>
+
+<script setup>
+
+import {onMounted, ref} from "vue";
+import Comment from "@/components/Comment.vue";
+import NavBar from "@/components/NavBar.vue";
+import {useRoute} from "vue-router";
+import {useStore} from "vuex";
+import * as boardApi from "@/apis/board";
+import * as userApi from "@/apis/user";
+import router from "@/router/router";
+
+onMounted(() => {
+  getPost()
+})
+
+const route = useRoute()
+const store = useStore()
+
+const post = ref({
+  postId: null,
+  hits: null,
+  categoryId: null,
+  createdDate: null,
+  modifiedDate: null,
+  title: null,
+  content: null,
+  authorId: null,
+  author: null,
+  category: '',
+  passwd: null,
+  confirmPasswd: null,
+  fileFlag: false,
+  file: null
+})
+const fileList = ref({})
+const commentList = ref({})
+const authorOfPost = ref(false)
+const currentUserInfo = ref('')
+
+/**
+ * 게시글 요청 및 게시글 저자 여부 플래그 설정
+ * @returns post
+ */
+const getPost = async () => {
+  try {
+    const response = await boardApi.getPost(`boards/inquiry/${route.params.postId}`)
+
+    post.value = response.data.data.post
+    fileList.value = response.data.data.fileList
+    commentList.value = response.data.data.commentList
+
+    // 수정 삭제 버튼을 보여주기 위한 flag 변수 처리
+    if (store.getters.isValidToken) {
+      const authorityResponse = await userApi.getMyInfo()
+
+      currentUserInfo.value = authorityResponse.data
+      if (authorityResponse.data.userId === post.value.authorId) {
+        authorOfPost.value = true
+      }
+    }
+
+  } catch (error) {
+    if (error.response.status === 404) {
+      await router.push({name: 'not-found'})
+    } else {
+      alert('비밀 게시글은 작성자만 조회할 수 있습니다.')
+      await router.push({name: 'InquiryBoardView'})
+    }
+  }
+}
+
+/**
+ * 게시글 삭제 메소드
+ */
+const deletePost = async () => {
+  try {
+    const response = await boardApi.deletePost(`boards/inquiry/${post.value.postId}`)
+    alert("게시글을 삭제하는 데 성공했습니다.")
+    router.back()
+  } catch (error) {
+    alert("게시글을 삭제하는 데 실패했습니다.")
+  }
+}
+
+/**
+ * 요청한 파일에 대해 다운로드를 수행하는 메소드
+ * @param file
+ * @returns 다운로드를 요청한 파일
+ */
+const downloadFile = async (file) => {
+  try {
+    const response = await boardApi.downloadFile('boards/inquiry/file', file)
+    const blob = new Blob([response.data], {type: response.headers['content-type']})
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+
+    link.href = url
+    link.download = file.fileRealName
+    document.body.appendChild(link)
+    link.click()
+
+  } catch (error) {
+    alert("파일 다운로드에 실패했습니다.")
+  }
+}
+
+/**
+ * 댓글 작성 메소드
+ * @param comment
+ */
+const addComment = async (comment) => {
+  const data = {
+    postId: post.value.postId,
+    comment: comment.value
+  }
+
+  try {
+    const response = await boardApi.addComment('boards/inquiry/comment', data)
+    alert("댓글을 성공적으로 등록했습니다.")
+    router.go(0)
+  } catch (error) {
+
+    if (error.response.status === 403) {
+      alert("관리자만 답변할 수 있습니다.")
+    } else {
+      alert("댓글을 등록하는 데 실패했습니다.")
+    }
+  }
+}
+
+/**
+ * 댓글 수정 메소드
+ */
+const modifyComment = async (comment) => {
+  console.log("modifyComment: " + JSON.stringify(comment))
+  try {
+    const response = await boardApi.modifyComment('boards/inquiry/comment', comment)
+    alert("댓글을 성공적으로 수정했습니다.")
+    router.go(0)
+  } catch (error) {
+    alert("댓글 수정하는 데 실패했습니다.")
+  }
+}
+
+/**
+ * 댓글 삭제 메소드
+ * @param comment
+ */
+const deleteComment = async (comment) => {
+  try {
+    const response = await boardApi.deleteComment(`boards/inquiry/comment/${comment.commentId}`)
+    alert("댓글을 성공적으로 삭제했습니다")
+    router.go(0)
+  } catch (error) {
+    alert("댓글을 삭제하는 데 실패했습니다.")
+  }
+}
+
+/**
+ * 이전 페이지(목록)으로 이동
+ */
+const backToList = () => {
+  router.back()
+}
+
+/**
+ * 게시글 수정 페이지로 이동
+ */
+const moveToModifyView = () => {
+  router.push({name: 'InquiryModifyView'})
+}
+</script>
+
+<style scoped>
+</style>
