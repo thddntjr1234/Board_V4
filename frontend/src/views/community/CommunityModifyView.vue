@@ -70,15 +70,15 @@ const categoryList = ref({})
 const existingFileList = ref({})
 
 onMounted(() => {
-  setCategoryList()
-  setPost()
+  getCategoryList()
+  getPost()
 })
 
 /**
  * 수정 화면에서 사용할 게시글 정보
  * @returns post
  */
-const setPost = async () => {
+const getPost = async () => {
   try {
     const response = await boardApi.getPost(`boards/free/${route.params.postId}`)
 
@@ -97,7 +97,7 @@ const setPost = async () => {
  * 게시글 폼에 바인딩할 데이터 요청
  * @returns categoryList, user(info)
  */
-const setCategoryList = async () => {
+const getCategoryList = async () => {
   try {
     const response = await boardApi.getCategoryList('boards/free/new')
     categoryList.value = response.data.data.categoryList
@@ -164,7 +164,6 @@ const addFile = (number, event) => {
  */
 const deleteFile = (number) => {
   if (existingFileList.value[number]) {
-    console.log("existingfile wㅔ거")
     existingFileList.value[number] = null
   }
 }
