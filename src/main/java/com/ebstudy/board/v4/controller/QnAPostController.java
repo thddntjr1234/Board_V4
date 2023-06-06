@@ -108,11 +108,6 @@ public class QnAPostController {
     // ResponseEntity 로 리턴하면 raw type 경고가 나타나므로 와일드카드 ?를 선언해서 raw type의 불안정성을 제거
     public CommonApiResponseDTO<?> savePost(@CustomValidation(value = {"categoryId", "title", "content"})
                                             @ModelAttribute PostDTO post) throws IOException {
-
-        // Post정보에 담긴 authorId값과 jwt 정보 값을 비교
-        Long authorId = post.getAuthorId();
-        userService.verifySameUser(authorId);
-
         postService.savePost(post);
         log.info("savePost 수행 완료");
         fileService.saveFile(post.getPostId(), post.getFile());
