@@ -228,7 +228,7 @@ export default {
      */
     const moveToModifyView = () => {
       console.log("route path: " + route.path + '/edit')
-      router.push(route.path + '/edit')
+      router.push({name: "CommunityWriteFormView"})
     }
 
 
