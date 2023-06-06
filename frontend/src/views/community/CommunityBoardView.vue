@@ -62,6 +62,7 @@ import {onBeforeMount, onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
 import {useStore} from "vuex";
 import * as boardApi from "@/apis/board";
+import {convertDateFormat} from "@/utils/date-format-converter";
 
 const route = useRoute()
 const store = useStore()
@@ -128,7 +129,7 @@ const getPostList = async () => {
   }
 
   // 데이터 입력
-  postList.value = response.data.data.postList
+  postList.value = convertDateFormat(response.data.data.postList)
   categoryList.value = response.data.data.categoryList
 }
 
