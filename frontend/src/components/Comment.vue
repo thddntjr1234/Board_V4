@@ -12,8 +12,8 @@
         <div class="row mb-3">
           <div class="col-sm-9 text-start">
             <slot name="show-adoption" :comment="comment" :adoptedCommentId="adoptedCommentId"></slot>
-            <span>{{ comment.username }}</span>
-            <span>{{ comment.createdDate }}</span>
+            <span style="padding-right: 10px;">{{ comment.username }}</span>
+            <span style="font-size: 11px">{{ comment.createdDate }} 작성</span>
           </div>
           <div class="col-sm-3 text-end">
             <slot name="adoption" :adoptCommentEvent="adoptCommentEvent" :adoptedCommentId="adoptedCommentId" :comment="comment"></slot>

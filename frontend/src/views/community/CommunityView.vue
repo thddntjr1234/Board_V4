@@ -72,6 +72,7 @@ import NavBar from "@/components/NavBar.vue";
 import Comment from "@/components/Comment.vue"
 import * as boardApi from "@/apis/board"
 import * as userApi from "@/apis/user"
+import {convertListDateFormat, convertOneDateFormat} from "@/utils/date-format-converter";
 
 export default {
   name: "CommunityView",
@@ -114,9 +115,9 @@ export default {
       try {
         const response = await boardApi.getPost(`boards/free/${route.params.postId}`)
 
-        post.value = response.data.data.post
+        post.value = convertOneDateFormat(response.data.data.post)
         fileList.value = response.data.data.fileList
-        commentList.value = response.data.data.commentList
+        commentList.value = convertListDateFormat(response.data.data.commentList)
 
         // 수정 삭제 버튼을 보여주기 위한 flag 변수 처리
         if (store.getters.isValidToken) {

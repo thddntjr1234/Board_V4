@@ -22,7 +22,7 @@
             <div class="d-flex justify-content-between align-items-center">
               <div v-if="boardName === 'inquiry'">
                 <p class="m-0" v-if="post.answerStatus">[답변 완료]</p>
-                <p class="m-0" v-else>[답변 완료]</p>
+                <p class="m-0" v-else>[답변 대기중]</p>
               </div>
               <div v-else>
                 <p class="m-0">{{ post.category }}</p>
