@@ -37,7 +37,7 @@ public class InquiryPostService {
     public List<PostDTO> getPostList(PaginationDTO pagingValue) {
 
         // '내 게시글' 필터 처리를 위한 userId 값 입력
-        // Security Context 정보 조회한 값을 사용한다.
+        // Security Context 정보를 조회한 값을 사용한다.
         Long userId = null;
         if (pagingValue.getFilter() != null) {
             // TODO: 2023/06/01 Optional orelseThrow 처리를 getMyUserWithAuthorites에서 처리하고 일반 UserDTO 객체로 돌려주는게 맞는 것 같다.
@@ -75,12 +75,17 @@ public class InquiryPostService {
      */
     public PaginationDTO getPaginationValues(SearchDTO searchValues) {
 
+        // Pagination 값을 처리하기 위해 getPostCount 시 내 게시글만 조회할 수 있도록 해당 메소드에서도 유저 정보를 가져와야 한다.
         Long userId = null;
-        // 검색 조건에 해당하는 게시글의 총 개수를 카운트
         if (searchValues.getFilter() != null) {
             userId = userService.getUserFromContext().getUserId();
         }
 
+        // 입력된 검색어를 전처리한다.
+        String keyword = searchValues.getKeyword();
+        searchValues.setKeyword(postServiceUtil.removeUnnecessarySpaces(keyword)) ;
+
+        // 검색 조건에 해당하는 게시글의 총 개수를 카운트
         int totalPostCount = boardMapper.getPostCount(searchValues, userId);
 
         return postServiceUtil.calPagingValues(totalPostCount, searchValues);

@@ -40,8 +40,13 @@ public class QnAPostService {
      */
     public PaginationDTO getPaginationValues(SearchDTO searchValues) {
 
+        // 입력된 검색어를 전처리한다.
+        String keyword = searchValues.getKeyword();
+        searchValues.setKeyword(postServiceUtil.removeUnnecessarySpaces(keyword)) ;
+
         // 검색 조건에 해당하는 게시글의 총 개수를 카운트
         int totalPostCount = boardMapper.getPostCount(searchValues);
+
         return postServiceUtil.calPagingValues(totalPostCount, searchValues);
     }
 

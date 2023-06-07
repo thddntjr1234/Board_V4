@@ -55,4 +55,24 @@ public class PostServiceUtil {
                 .secret(searchValues.getSecret())
                 .build();
     }
+
+    /**
+     * 키워드에서 불필요한 공백을 제거한다.
+     * @param keyword 불필요한 공백을 제거할 키워드
+     * @return 공백이 제거된 키워드
+     */
+    public String removeUnnecessarySpaces(String keyword) {
+        // null 혹은 공백으로만 이루어졌다면 null을 반환한다.
+        if (keyword == null || keyword.isBlank()) {
+            return null;
+        }
+
+        // 연속되는 공백을 하나로 줄인다.
+        keyword = keyword.replaceAll("\\s+", " ");
+
+        // 맨 앞과 뒤의 공백을 제거한다.
+        keyword = keyword.trim();
+
+        return keyword;
+    }
 }
