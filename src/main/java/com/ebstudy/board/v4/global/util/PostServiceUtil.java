@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
 public class PostServiceUtil {
 
     /**
-     * 페이징에 필요한 변수값과 현재 페이지에 잘못된 값이 입력된 경우 이를 보정하는 메소드
+     * 검색 조건에 해당하는 총 게시글 개수와 요청 페이지 값을 기반으로 페이지네이션에 필요한 값들을 반환한다.
      *
-     * @param totalPostCount 전체 게시글 개수
-     * @param searchValues 검색조건
+     * @param totalPostCount 검색 조건에 해당하는 전체 게시글 개수
+     * @param searchValues 검색조건 및 요청 페이지 값
      * @return 페이징에 필요한 시작페이지와 끝 페이지 값과 보정된 요청 페이지 값, 총 페이지 값(끝으로 이동 시 사용), DB LIMIT 시작값
      */
     public PaginationDTO calPagingValues(int totalPostCount, SearchDTO searchValues) {
@@ -53,6 +53,7 @@ public class PostServiceUtil {
                 .endDate(searchValues.getEndDate())
                 .filter(searchValues.getFilter())
                 .secret(searchValues.getSecret())
+                .sort(searchValues.getSort())
                 .build();
     }
 
@@ -61,7 +62,7 @@ public class PostServiceUtil {
      * @param keyword 불필요한 공백을 제거할 키워드
      * @return 공백이 제거된 키워드
      */
-    public String removeUnnecessarySpaces(String keyword) {
+    private String removeUnnecessarySpaces(String keyword) {
         // null 혹은 공백으로만 이루어졌다면 null을 반환한다.
         if (keyword == null || keyword.isBlank()) {
             return null;
@@ -74,5 +75,18 @@ public class PostServiceUtil {
         keyword = keyword.trim();
 
         return keyword;
+    }
+
+    /**
+     * 검색 조건값을 전처리한다.
+     * @param searchValues 전처리할 검색 조건값
+     * @return 전처리된 검색 조건값
+     */
+    public SearchDTO preProcessSearchValues(SearchDTO searchValues) {
+        // 입력된 검색어의 공백을 전처리
+        String keyword = searchValues.getKeyword();
+        searchValues.setKeyword(removeUnnecessarySpaces(keyword));
+
+        return searchValues;
     }
 }

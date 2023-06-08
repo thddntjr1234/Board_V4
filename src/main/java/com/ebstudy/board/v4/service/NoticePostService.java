@@ -4,7 +4,7 @@ import com.ebstudy.board.v4.dto.*;
 import com.ebstudy.board.v4.global.exception.CustomErrorCode;
 import com.ebstudy.board.v4.global.exception.CustomException;
 import com.ebstudy.board.v4.global.util.PostServiceUtil;
-import com.ebstudy.board.v4.repository.QnAPostMapper;
+import com.ebstudy.board.v4.repository.NoticePostMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,9 +18,9 @@ import java.util.Optional;
 @Slf4j
 @Validated
 @RequiredArgsConstructor
-public class QnAPostService {
+public class NoticePostService {
 
-    private final QnAPostMapper boardMapper;
+    private final NoticePostMapper boardMapper;
     private final PostServiceUtil postServiceUtil;
     private final UserService userService;
 
@@ -33,6 +33,10 @@ public class QnAPostService {
         return boardMapper.getPostList(pagingValue);
     }
 
+    public List<PostDTO> getFixedPostList(String target) {
+        return boardMapper.getFixedPostList(target);
+    }
+
     /**
      * Pagination에 사용되는 변수들을 반환하는 메소드
      * @param searchValues 검색 조건
@@ -40,7 +44,7 @@ public class QnAPostService {
      */
     public PaginationDTO getPaginationValues(SearchDTO searchValues) {
 
-        // 입력된 검색어를 전처리한다.
+        // 입력된 검색 조건을 전처리한다
         searchValues = postServiceUtil.preProcessSearchValues(searchValues);
 
         // 검색 조건에 해당하는 게시글의 총 개수를 카운트
@@ -71,14 +75,6 @@ public class QnAPostService {
         increaseHits(postId);
 
         return post.get();
-    }
-
-    /**
-     * 카테고리 리스트를 가져오는 메소드
-     * @return 카테고리 리스트
-     */
-    public List<CategoryDTO> getCategoryList() {
-        return boardMapper.getCategoryList();
     }
 
     /**
@@ -117,9 +113,5 @@ public class QnAPostService {
      */
     public void deletePost(PostDTO post) {
         boardMapper.deletePost(post);
-    }
-
-    public void adoptComment(PostDTO post) {
-        boardMapper.adoptComment(post);
     }
 }

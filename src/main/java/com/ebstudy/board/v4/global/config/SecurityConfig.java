@@ -82,11 +82,23 @@ public class SecurityConfig {
                  //Comment
                 .antMatchers("/api/boards/inquiry/comment/**").access("isAuthenticated() and hasRole('ADMIN')")
                 .antMatchers("/api/boards/**/comment").authenticated()
-                 //Post
+
+                //Post
+                .antMatchers(HttpMethod.POST, "/api/boards/notice").access("isAuthenticated() and hasRole('ADMIN')")
                 .antMatchers(HttpMethod.POST, "/api/boards/**").authenticated()
+
+                //Put
+                .antMatchers(HttpMethod.PUT, "/api/boards/notice").access("isAuthenticated() and hasRole('ADMIN')")
                 .antMatchers(HttpMethod.PUT, "/api/boards/**").authenticated()
+
+                //Delete
+                .antMatchers(HttpMethod.DELETE, "/api/boards/notice").access("isAuthenticated() and hasRole('ADMIN')")
                 .antMatchers(HttpMethod.DELETE, "/api/boards/**").authenticated()
+
+                //Form
+                .antMatchers("/api/boards/notice/new").access("isAuthenticated() and hasRole('ADMIN')")
                 .antMatchers("/api/boards/**/new").access("isAuthenticated()")
+
                  //User
                 .antMatchers("/api/user/signin").permitAll()
                 .antMatchers("/api/user/{userId}").access("isAuthenticated() and hasAnyRole('ADMIN')")
