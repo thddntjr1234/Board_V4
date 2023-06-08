@@ -1,8 +1,22 @@
 <template>
   <NavBar></NavBar>
   <div class="container">
-    <h1>문의 - 수정</h1>
+    <h1>공지사항 - 수정</h1>
     <br>
+    <div class="row mb-3">
+      <label for="categoryId" class="col-sm-2 col-form-label">카테고리</label>
+      <div class="col-sm-10">
+        <select id="categoryId" class="form-select" name="categoryId" v-model="post.target" required>
+          <option disabled value="">공지사항 노출 대상</option>
+          <option value="all">전체 게시판</option>
+          <option value="community">커뮤니티 게시판</option>
+          <option value="qna">Q&A 게시판</option>
+          <option value="inquiry">1:1문의 게시판</option>
+          <option value="image">이미지 게시판</option>
+          <option value="none">공지사항 게시판에만 노출</option>
+        </select>
+      </div>
+    </div>
     <div class="row mb-3">
       <label for="title" class="col-sm-2 col-form-label">제목</label>
       <div class="col-sm-10">
@@ -42,7 +56,7 @@
 <script setup>
 import NavBar from "@/components/NavBar.vue"
 import router from "@/router/router";
-import {defineComponent, onBeforeMount, onMounted, ref} from "vue";
+import {onMounted, ref} from "vue";
 import * as boardApi from "@/apis/board"
 import * as userApi from "@/apis/user"
 import {useRoute} from "vue-router";
@@ -54,8 +68,6 @@ const store = useStore()
 
 const post = ref({})
 const fileList = ref([])
-const commentList = ref({})
-const categoryList = ref({})
 const existingFileList = ref({})
 
 onMounted(() => {
@@ -68,16 +80,30 @@ onMounted(() => {
  */
 const getPost = async () => {
   try {
-    const response = await boardApi.getPost(`boards/inquiry/${route.params.postId}`)
+    const response = await boardApi.getPost(`boards/notice/${route.params.postId}`)
 
     // 응답 데이터 추가
     post.value = response.data.data.post
     existingFileList.value = response.data.data.fileList
-    commentList.value = response.data.data.commentList
 
   } catch (error) {
     await router.push({name: 'not-found'})
     console.error("게시글 데이터를 받아오는 데 실패했습니다")
+  }
+}
+
+/**
+ * 게시글 폼에 바인딩할 데이터 요청
+ * @returns categoryList, user(info)
+ */
+const getCategoryList = async () => {
+  try {
+    const response = await boardApi.getCategoryList('boards/notice/new')
+
+  } catch (error) {
+    console.error("비회원 접근, 이전 페이지로 리다이렉트한다.")
+    alert("게시글 작성은 회원만 가능합니다.")
+    await router.push({name: 'CommunityBoardView'})
   }
 }
 
@@ -108,9 +134,8 @@ const modifyPost = async () => {
   formData.append("existingFiles", blob)
 
   console.log("existingfileList: "  + existingFileList.value)
-
   try {
-    const response = await boardApi.modifyPost(`boards/inquiry/${post.value.postId}`, formData)
+    const response = await boardApi.modifyPost(`boards/notice/${post.value.postId}`, formData)
 
     alert('게시글을 성공적으로 수정했습니다.')
     router.back()
@@ -137,7 +162,6 @@ const addFile = (number, event) => {
  */
 const deleteFile = (number) => {
   if (existingFileList.value[number]) {
-    console.log("existingfile 제거")
     existingFileList.value[number] = null
   }
 }

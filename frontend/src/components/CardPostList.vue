@@ -28,7 +28,10 @@
                 <p class="m-0">{{ post.category }}</p>
               </div>
               <div class="d-flex align-items-end">
-                <p class="m-0">조회수: {{ post.hits }}</p>
+                <template v-if="boardName === 'notice'">
+                  <div class="m-0">댓글: {{ post.commentCount }}개</div>
+                </template>
+                <p class="m-0" style="padding-left: 10px">조회수: {{ post.hits }}</p>
               </div>
             </div>
           </div>

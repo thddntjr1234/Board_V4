@@ -42,7 +42,7 @@
   </div>
 
   <div class="container">
-    <component :is="currentPostListComponent" :board-name="'inquiry'" :post-list="postList"></component>
+    <component :is="currentPostListComponent" :board-name="'inquiry'" :post-list="postList" :notice-list="noticeList"></component>
   </div>
   <br>
 
@@ -72,23 +72,21 @@ const store = useStore()
 const keyword = ref(route.query.keyword || null)
 const startDate = ref(route.query.startDate || null)
 const endDate = ref(route.query.endDate || null)
-const categoryId = ref(route.query.categoryId || "")
 const filter = ref(route.query.filter || "")
 const secret = ref(route.query.secret || "")
 
 // 게시글 리스트 및 페이지 데이터
+const noticeList = ref([])
 const pageRange = ref([])
 const pagingValues = ref([])
 const categoryList = ref([])
 const postList = ref([])
 
-// 선택한 필터
-const selectedFilter = ref('')
-
 // 목록 선택
 const currentPostListComponent = ref(BoardPostList)
 
 onMounted(() => {
+  getFixedNoticeList()
   getPostList()
   getBoardComponentByName(route.query.boardType)
 })
@@ -98,36 +96,50 @@ onMounted(() => {
  * 기존의 router query를 사용하는 방식으로 검색 조건을 유지하게 한다면 이 방법을 사용할 수 있다.
  * 이외에 vuex를 사용하여 상태 저장소에 쿼리를 넣는 방법도 있음.
  **/
-const getPage = async (pageNumber, queryParams) => {
+const getPage = async (pageNumber) => {
+  route.query.pageNumber = pageNumber
+  await getPostList()
 
-  const keyword = queryParams.keyword
-  const startDate = queryParams.startDate
-  const endDate = queryParams.endDate
-  const categoryId = queryParams.categoryId
-  const boardType = queryParams.boardType
-  const filter = queryParams.filter
-  const secret = queryParams.secret
+  // const keyword = queryParams.keyword
+  // const startDate = queryParams.startDate
+  // const endDate = queryParams.endDate
+  // const categoryId = queryParams.categoryId
+  // const boardType = queryParams.boardType
+  // const filter = queryParams.filter
+  // const secret = queryParams.secret
 
-  await router.push({
-    path: route.path,
-    query: {
-      pageNumber,
-      keyword,
-      startDate,
-      categoryId,
-      endDate,
-      secret,
-      boardType,
-      filter
-    }
-  })
+  // await router.push({
+  //   path: route.path,
+  //   query: {
+  //     pageNumber,
+  //     keyword,
+  //     startDate,
+  //     categoryId,
+  //     endDate,
+  //     secret,
+  //     boardType,
+  //     filter
+  //   }
+  // })
 }
 
 /**
  * api 서버로 게시글 리스트를 전송받아 관련 데이터를 설정하는 메소드
  */
 const getPostList = async () => {
-  const response = await boardApi.getPostList('boards/inquiry')
+  const response = await boardApi.getPostList('boards/inquiry', {
+    pageNumber: route.query.pageNumber,
+    categoryId: route.query.categoryId,
+
+    // spread를 사용하지 않으면 String 타입이라 ""값이 전송돼서 mybatis if문에서 제대로 걸러지지 않는다.
+    // 반면 spread를 사용하면 쿼리 파라미터가 존재하지 않을 때 null값을 반환시킨다.
+    ...(route.query.keyword && {keyword: route.query.keyword}),
+    ...(route.query.startDate && {startDate: route.query.startDate}),
+    ...(route.query.endDate && {endDate: route.query.endDate}),
+    ...(route.query.filter && {filter: route.query.filter}),
+    ...(route.query.secret && {secret: route.query.secret}),
+    ...(route.query.sort && {sort: route.query.sort})
+  })
 
   pagingValues.value = response.data.data.pagingValues;
 
@@ -144,6 +156,10 @@ const getPostList = async () => {
   categoryList.value = response.data.data.categoryList
 }
 
+const getFixedNoticeList = async () => {
+  const response = await boardApi.getFixedNoticeList('inquiry')
+  noticeList.value = response.data.data
+}
 
 /**
  * 게시글 작성 화면으로 이동하는 메소드

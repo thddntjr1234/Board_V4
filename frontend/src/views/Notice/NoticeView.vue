@@ -1,9 +1,9 @@
 <template>
   <NavBar></NavBar>
   <div class="container">
-    <h1 class="mt-4 justify-content-start">Q&A - 게시글</h1>
+    <h1 class="mt-4 justify-content-start">공지사항 - 게시글</h1>
     <div class="row mb-3">
-      <div class="col-sm-3">
+      <div class="col-sm-3 text-start">
         <span class="fw-bold">{{ post.author }}</span>
       </div>
       <div class="col-sm-9 text-end">
@@ -14,8 +14,7 @@
 
     <div class="row mb-3">
       <div class="col-sm-8 text-start">
-        <span v-if="post.adoptedCommentId">&#9989; &nbsp &nbsp</span>
-        <span class="fw-bold">[{{ post.category }}] {{ post.title }}</span>
+        <span class="fw-bold"> {{ post.title }}</span>
       </div>
       <div class="col-sm-1">
 
@@ -49,15 +48,8 @@
 
     <hr class="mb-4">
 
-    <Comment :current-user-info="currentUserInfo" :comment-list="commentList" :author-of-post="authorOfPost" :adoptedCommentId="post.adoptedCommentId"
-             @addComment="addComment" @modifyComment="modifyComment" @deleteComment="deleteComment" @adoptComment="adoptComment">
-      <template v-slot:show-adoption="{ comment, adoptedCommentId }">
-        <span v-if="comment.commentId === adoptedCommentId">&#9989;&nbsp;</span>
-      </template>
-      <template v-slot:adoption="{ adoptCommentEvent, comment, adoptedCommentId }">
-        <button class="btn btn-outline-dark" v-if="authorOfPost && !adoptedCommentId" @click="adoptCommentEvent(comment)">채택</button>
-      </template>
-    </Comment>
+    <Comment :current-user-info="currentUserInfo" :comment-list="commentList"
+             @addComment="addComment" @modifyComment="modifyComment" @deleteComment="deleteComment"></Comment>
 
     <hr class="mb-4">
 
@@ -72,16 +64,15 @@
 </template>
 
 <script setup>
-
 import {onMounted, ref} from "vue";
-import Comment from "@/components/Comment.vue";
-import NavBar from "@/components/NavBar.vue";
 import {useRoute} from "vue-router";
 import {useStore} from "vuex";
 import * as boardApi from "@/apis/board";
+import {convertListDateFormat, convertOneDateFormat} from "@/utils/date-format-converter";
 import * as userApi from "@/apis/user";
 import router from "@/router/router";
-import {convertListDateFormat, convertOneDateFormat} from "@/utils/date-format-converter";
+import NavBar from "@/components/NavBar.vue";
+import Comment from "@/components/Comment.vue";
 
 onMounted(() => {
   getPost()
@@ -102,7 +93,7 @@ const currentUserInfo = ref('')
  */
 const getPost = async () => {
   try {
-    const response = await boardApi.getPost(`boards/qna/${route.params.postId}`)
+    const response = await boardApi.getPost(`boards/notice/${route.params.postId}`)
 
     post.value = convertOneDateFormat(response.data.data.post)
     fileList.value = response.data.data.fileList
@@ -129,7 +120,7 @@ const getPost = async () => {
  */
 const deletePost = async () => {
   try {
-    const response = await boardApi.deletePost(`boards/qna/${post.value.postId}`)
+    const response = await boardApi.deletePost(`boards/notice/${post.value.postId}`)
     alert("게시글을 삭제하는 데 성공했습니다.")
     router.back()
   } catch (error) {
@@ -144,7 +135,7 @@ const deletePost = async () => {
  */
 const downloadFile = async (file) => {
   try {
-    const response = await boardApi.downloadFile('boards/qna/file', file)
+    const response = await boardApi.downloadFile('boards/notice/file', file)
     const blob = new Blob([response.data], {type: response.headers['content-type']})
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
@@ -170,7 +161,7 @@ const addComment = async (comment) => {
   }
 
   try {
-    const response = await boardApi.addComment('boards/qna/comment', data)
+    const response = await boardApi.addComment('boards/notice/comment', data)
     alert("댓글을 성공적으로 등록했습니다.")
     router.go(0)
   } catch (error) {
@@ -184,7 +175,7 @@ const addComment = async (comment) => {
 const modifyComment = async (comment) => {
   console.log("modifyComment: " + JSON.stringify(comment))
   try {
-    const response = await boardApi.modifyComment('boards/qna/comment', comment)
+    const response = await boardApi.modifyComment('boards/notice/comment', comment)
     alert("댓글을 성공적으로 수정했습니다.")
     router.go(0)
   } catch (error) {
@@ -198,30 +189,11 @@ const modifyComment = async (comment) => {
  */
 const deleteComment = async (comment) => {
   try {
-    const response = await boardApi.deleteComment(`boards/qna/comment/${comment.commentId}`)
+    const response = await boardApi.deleteComment(`boards/notice/comment/${comment.commentId}`)
     alert("댓글을 성공적으로 삭제했습니다")
     router.go(0)
   } catch (error) {
     alert("댓글을 삭제하는 데 실패했습니다.")
-  }
-}
-
-/**
- * 댓글 채택 메소드
- *
- */
-const adoptComment = async (comment) => {
-  console.log(`adoptcommnet: ${comment.commentId}`)
-  const data = {
-    postId: post.value.postId,
-    adoptedCommentId: comment.commentId
-  }
-  try {
-    const response = await boardApi.adoptComment(`boards/qna/${post.value.postId}/adoption`, data)
-    alert('채택 완료')
-    router.go(0)
-  } catch (e) {
-    alert("오류")
   }
 }
 
@@ -237,9 +209,10 @@ const backToList = () => {
  */
 const moveToModifyView = () => {
   console.log("route path: " + route.path + '/edit')
-  router.push({name: 'QnAModifyView'})
+  router.push({name: "NoticeModifyView"})
 }
 </script>
 
 <style scoped>
+
 </style>

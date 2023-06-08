@@ -1,27 +1,24 @@
 <template>
   <NavBar></NavBar>
   <div class="container">
-    <h1>커뮤니티 - 목록(page : {{ pagingValues.currentPage }} )</h1><br>
+    <h1> 공지사항 - 목록(page : {{ pagingValues.currentPage }} )</h1><br>
   </div>
 
   <!--검색-->
-  <div class="container">
+  <div class="container col-sm-6">
     <form class="form-inline">
-      <div class="input-group input-group-sm">
-        <span class="input-group-text">등록일</span>
-        <input name="startDate" class="form-control" type="date" v-model="startDate" />
-        <input name="endDate" class="form-control" type="date" v-model="endDate" />
-
-        <select class="form-select" name="categoryId" v-model="categoryId">
-          <option value="">전체 카테고리</option>
-          <option v-for="category in categoryList" :key="category.categoryId" :value="category.categoryId">
-            {{ category.category }}
-          </option>
+      <div class="input-group">
+        <select class="form-select" name="sort" v-model="sort">
+          <option value="" disabled>정렬 방식</option>
+          <option value="post_id">최신순</option>
+          <option value="comment_count">댓글순</option>
+          <option value="hits">조회순</option>
         </select>
-        <input type="search" name="keyword" class="form-control" v-model="keyword" placeholder="제목/내용/작성자명 키워드" />
+        <input type="search" name="keyword" class="form-control" v-model="keyword" placeholder="제목/내용/작성자명 키워드"/>
         <button class="btn btn-primary" type="submit">검색</button>
       </div>
     </form>
+
   </div>
   <br>
 
@@ -41,7 +38,7 @@
   </div>
 
   <div class="container">
-    <component :is="currentPostListComponent" :board-name="'free'" :post-list="postList" :notice-list="noticeList"></component>
+    <component :is="currentPostListComponent" :board-name="'notice'" :post-list="postList"></component>
   </div>
   <br>
 
@@ -58,7 +55,7 @@ import CardPostList from "@/components/CardPostList.vue";
 import Pagination from "@/components/Pagination.vue";
 import NavBar from "@/components/NavBar.vue";
 import router from "@/router/router";
-import {onMounted, ref} from "vue";
+import {onBeforeMount, onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
 import {useStore} from "vuex";
 import * as boardApi from "@/apis/board";
@@ -69,21 +66,15 @@ const store = useStore()
 
 const pageRange = ref([])
 const pagingValues = ref([])
-const categoryList = ref([])
 const postList = ref([])
-const noticeList = ref([])
-
+const sort = ref(route.query.sort || "")
 // 검색 폼 데이터
 const keyword = ref(route.query.keyword || null)
-const startDate = ref(route.query.startDate || null)
-const endDate = ref(route.query.endDate || null)
-const categoryId = ref(route.query.categoryId || "")
 
 // 목록 선택
 const currentPostListComponent = ref(BoardPostList)
 
 onMounted(() => {
-  getFixedNoticeList()
   getPostList()
   getBoardComponentByName(route.query.boardType)
 })
@@ -97,21 +88,17 @@ const getPage = async (pageNumber) => {
   route.query.pageNumber = pageNumber
   await getPostList()
 
-  // 기존 페이지 변경 시 동작하는 코드, 메소드 호출을 통해 데이터를 변경하는 것이 아니라 뷰를 갱신하도록 수행한다.
   // const keyword = queryParams.keyword
-  // const startDate = queryParams.startDate
-  // const endDate = queryParams.endDate
-  // const categoryId = queryParams.categoryId
-
+  // const sort = queryParams.sort
+  // const boardType = queryParams.boardType
+  //
   // await router.push({
   //   path: route.path,
   //   query: {
   //     pageNumber,
   //     keyword,
-  //     startDate,
-  //     categoryId,
-  //     endDate,
-  //     boardType: queryParams.boardType
+  //     sort,
+  //     boardType
   //   }
   // })
 }
@@ -120,8 +107,7 @@ const getPage = async (pageNumber) => {
  * api 서버로 게시글 리스트를 전송받아 관련 데이터를 설정하는 메소드
  */
 const getPostList = async () => {
-
-  const response = await boardApi.getPostList('boards/free', {
+  const response = await boardApi.getPostList('boards/notice', {
     pageNumber: route.query.pageNumber,
     categoryId: route.query.categoryId,
 
@@ -132,8 +118,7 @@ const getPostList = async () => {
     ...(route.query.endDate && {endDate: route.query.endDate}),
     ...(route.query.filter && {filter: route.query.filter}),
     ...(route.query.secret && {secret: route.query.secret}),
-    ...(route.query.sort && {sort: route.query.sort})
-  })
+    ...(route.query.sort && {sort: route.query.sort})})
 
   // console.log('response data: ' + JSON.stringify(response.data));
   pagingValues.value = response.data.data.pagingValues;
@@ -148,13 +133,6 @@ const getPostList = async () => {
 
   // 데이터 입력
   postList.value = convertListDateFormat(response.data.data.postList)
-  categoryList.value = response.data.data.categoryList
-}
-
-const getFixedNoticeList = async () => {
-  const response = await boardApi.getFixedNoticeList('community')
-  noticeList.value = response.data.data
-  console.log(JSON.stringify(noticeList.value))
 }
 
 /**
@@ -164,7 +142,7 @@ const moveToWriteView = async () => {
   if (!store.getters.isValidToken) {
     alert('게시글 작성은 회원만 가능합니다.')
   } else {
-    await router.push({name: 'CommunityWriteFormView'})
+    await router.push({name: 'NoticeWriteFormView'})
   }
 }
 
@@ -192,7 +170,6 @@ const getBoardComponentByName = (componentName) => {
       break
   }
 }
-
 </script>
 
 <style scoped>

@@ -1,32 +1,25 @@
 import {authApiService, nonAuthApiService} from "@/apis/service"
-import {useRoute} from "vue-router";
-import {head} from "axios";
 
 /**
  * 게시글 리스트를 요청하는 API
  * @param url 요청할 게시판의 URI 주소
+ * @param params 검색 조건 파라미터
  * @returns postList, pagingValues, categoryList
  */
-function getPostList(url) {
-    const route = useRoute()
-
-    const params = {
-        pageNumber: route.query.pageNumber,
-        categoryId: route.query.categoryId,
-
-        // spread를 사용하지 않으면 String 타입이라 ""값이 전송돼서 mybatis if문에서 제대로 걸러지지 않는다.
-        // 반면 spread를 사용하면 쿼리 파라미터가 존재하지 않을 때 null값을 반환시킨다.
-        ...(route.query.keyword && {keyword: route.query.keyword}),
-        ...(route.query.startDate && {startDate: route.query.startDate}),
-        ...(route.query.endDate && {endDate: route.query.endDate}),
-        ...(route.query.filter && {filter: route.query.filter}),
-        ...(route.query.secret && {secret: route.query.secret})
-    }
-    if (route.query.filter === 'myPost') {
+function getPostList(url, params) {
+    if (params.filter === 'myPost') {
         return authApiService.get(url, {params})
     }
 
     return nonAuthApiService.get(url, {params})
+}
+
+function getFixedNoticeList(board) {
+    return nonAuthApiService.get('/boards/notice/fix', {
+        params: {
+            target: board
+        }
+    })
 }
 
 /**
@@ -141,6 +134,7 @@ export {
     getPost,
     getCategoryList,
     getWriteFormData,
+    getFixedNoticeList,
 
     savePost,
     modifyPost,

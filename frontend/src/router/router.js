@@ -13,6 +13,10 @@ import InquiryBoardView from "@/views/inquiry/InquiryBoardView.vue";
 import InquiryView from "@/views/inquiry/InquiryView.vue";
 import InquiryModifyView from "@/views/inquiry/InquiryModifyView.vue";
 import InquiryWriteFormView from "@/views/inquiry/InquiryWriteFormView.vue";
+import NoticeBoardView from "@/views/Notice/NoticeBoardView.vue";
+import NoticeView from "@/views/Notice/NoticeView.vue";
+import NoticeModifyView from "@/views/Notice/NoticeModifyView.vue";
+import NoticeWriteFormView from "@/views/Notice/NoticeWriteFormView.vue";
 
 
 const router = createRouter({
@@ -87,6 +91,26 @@ const router = createRouter({
             path: "/boards/inquiry/new",
             name: "InquiryWriteFormView",
             component: InquiryWriteFormView
+        },
+        {
+            path: "/boards/notice",
+            name: "NoticeBoardView",
+            component: NoticeBoardView,
+        },
+        {
+            path: "/boards/notice/:postId",
+            name: "NoticeView",
+            component: NoticeView,
+        },
+        {
+            path: "/boards/notice/:postId/edit",
+            name: "NoticeModifyView",
+            component: NoticeModifyView
+        },
+        {
+            path: "/boards/notice/new",
+            name: "NoticeWriteFormView",
+            component: NoticeWriteFormView
         }
     ]
 });

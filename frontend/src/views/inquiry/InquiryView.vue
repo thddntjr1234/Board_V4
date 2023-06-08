@@ -1,7 +1,7 @@
 <template>
   <NavBar></NavBar>
   <div class="container">
-    <h1 class="mt-4 justify-content-start">Q&A - 게시글</h1>
+    <h1 class="mt-4 justify-content-start">문의 - 게시글</h1>
     <div class="row mb-3">
       <div class="col-sm-3">
         <span class="fw-bold">{{ post.author }}</span>
@@ -88,22 +88,7 @@ onMounted(() => {
 const route = useRoute()
 const store = useStore()
 
-const post = ref({
-  postId: null,
-  hits: null,
-  categoryId: null,
-  createdDate: null,
-  modifiedDate: null,
-  title: null,
-  content: null,
-  authorId: null,
-  author: null,
-  category: '',
-  passwd: null,
-  confirmPasswd: null,
-  fileFlag: false,
-  file: null
-})
+const post = ref({})
 const fileList = ref({})
 const commentList = ref({})
 const authorOfPost = ref(false)

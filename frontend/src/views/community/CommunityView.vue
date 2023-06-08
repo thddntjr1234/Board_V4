@@ -86,22 +86,7 @@ export default {
     const route = useRoute()
     const store = useStore()
 
-    const post = ref({
-      postId: null,
-      hits: null,
-      categoryId: null,
-      createdDate: null,
-      modifiedDate: null,
-      title: null,
-      content: null,
-      authorId: null,
-      author: null,
-      category: '',
-      passwd: null,
-      confirmPasswd: null,
-      fileFlag: false,
-      file: null
-    })
+    const post = ref({})
     const fileList = ref({})
     const commentList = ref({})
     const authorOfPost = ref(false)
@@ -229,7 +214,7 @@ export default {
      */
     const moveToModifyView = () => {
       console.log("route path: " + route.path + '/edit')
-      router.push({name: "CommunityWriteFormView"})
+      router.push({name: "CommunityModifyView"})
     }
 
 
