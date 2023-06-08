@@ -53,6 +53,12 @@ public class PostDTO {
     // 비공개 여부
     private Boolean secret;
 
+    // 댓글 개수
+    private Long commentCount;
+
+    // 공지사항 노출 게시판 지정
+    private String target;
+
     // file 존재 여부, checkExistence()로 파일 존재여부 확인 뒤 true로 변경
     private Boolean fileFlag;
 

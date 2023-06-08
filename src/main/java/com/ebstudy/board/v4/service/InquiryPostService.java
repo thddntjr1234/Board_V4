@@ -81,9 +81,8 @@ public class InquiryPostService {
             userId = userService.getUserFromContext().getUserId();
         }
 
-        // 입력된 검색어를 전처리한다.
-        String keyword = searchValues.getKeyword();
-        searchValues.setKeyword(postServiceUtil.removeUnnecessarySpaces(keyword)) ;
+        // 입력된 검색 조건을 전처리한다
+        searchValues = postServiceUtil.preProcessSearchValues(searchValues);
 
         // 검색 조건에 해당하는 게시글의 총 개수를 카운트
         int totalPostCount = boardMapper.getPostCount(searchValues, userId);
@@ -116,7 +115,6 @@ public class InquiryPostService {
         if (post.getSecret()) {
             UserDTO userInfo = userService.getUserFromContext();
 
-
             // 게시글 작성자와 api 요청자가 동일한지 확인한다.
             if (!userInfo.getRole().equals(Role.ROLE_ADMIN) && !userInfo.getUserId().equals(post.getAuthorId())) {
                 throw new CustomException(CustomErrorCode.DENIED_POST_REQUEST);
@@ -137,7 +135,6 @@ public class InquiryPostService {
 
         post.setAuthorId(user.getUserId());
         post.setCreatedDate(String.valueOf(LocalDateTime.now()));
-        post.setCategoryId(2L);
 
         boardMapper.savePost(post);
     }

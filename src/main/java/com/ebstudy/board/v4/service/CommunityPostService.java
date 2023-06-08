@@ -40,9 +40,8 @@ public class CommunityPostService {
      */
     public PaginationDTO getPaginationValues(SearchDTO searchValues) {
 
-        // 입력된 검색어를 전처리한다.
-        String keyword = searchValues.getKeyword();
-        searchValues.setKeyword(postServiceUtil.removeUnnecessarySpaces(keyword)) ;
+        // 입력된 검색 조건을 전처리한다
+        searchValues = postServiceUtil.preProcessSearchValues(searchValues);
 
         // 검색 조건에 해당하는 게시글의 총 개수를 카운트
         int totalPostCount = boardMapper.getPostCount(searchValues);
