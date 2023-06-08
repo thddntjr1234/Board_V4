@@ -153,8 +153,7 @@ const getPostList = async () => {
 
 const getFixedNoticeList = async () => {
   const response = await boardApi.getFixedNoticeList('community')
-  noticeList.value = response.data.data
-  console.log(JSON.stringify(noticeList.value))
+  noticeList.value = convertListDateFormat(response.data.data)
 }
 
 /**

@@ -158,7 +158,7 @@ const getPostList = async () => {
 
 const getFixedNoticeList = async () => {
   const response = await boardApi.getFixedNoticeList('inquiry')
-  noticeList.value = response.data.data
+  noticeList.value = convertListDateFormat(response.data.data)
 }
 
 /**
