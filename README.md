@@ -2,6 +2,7 @@
 Vue.js 3.2.47, Spring Boot 2.7.8, Java 11, Mybatis 2.3, MariaDB, Gradle을 사용한 간단한 RESTful 게시판 프로젝트
 
 ## 주요 기능 설명
+- 공지사항, QNA, 커뮤니티, 문의 게시판별로 고유 기능이 존재
 - 게시글 작성, 수정, 삭제, 조회(조회수 증가)
 - 파일 업로드, 수정, 삭제
 - 댓글 작성
@@ -12,7 +13,8 @@ Vue.js 3.2.47, Spring Boot 2.7.8, Java 11, Mybatis 2.3, MariaDB, Gradle을 사�
 
 ## 데이터베이스 ERD
 링크: https://www.erdcloud.com/d/LXuKoB6WG5itgTh8J
-<iframe width="800" height="400" src="https://www.erdcloud.com/p/LXuKoB6WG5itgTh8J" frameborder="0" allowfullscreen></iframe>
+<img width="2102" alt="ERD" src="https://github.com/thddntjr1234/Board_V4/assets/29126159/2d2c3d58-9a3c-42ed-ae49-c8f905a83681">
+
 
 ## 코드 피드백
 <details>
