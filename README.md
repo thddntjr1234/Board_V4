@@ -11,8 +11,7 @@ Vue.js 3.2.47, Spring Boot 2.7.8, Java 11, Mybatis 2.3, MariaDB, Gradle을 사�
 
 
 ## 데이터베이스 ERD
-![스크린샷 2023-04-06 오후 3 46 18](https://user-images.githubusercontent.com/29126159/230293561-4f4dd289-3f0f-4888-97a2-0b432f8b0da1.jpeg)
-
+https://www.erdcloud.com/d/LXuKoB6WG5itgTh8J
 
 ## 코드 피드백
 <details>
