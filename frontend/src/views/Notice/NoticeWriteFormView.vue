@@ -59,8 +59,8 @@ const router = useRouter()
 const store = useStore()
 
 // 변수를 ref 혹은 reactive로 감싸면 반응형으로 바뀐다.
-const title = ref()
-const content = ref()
+const title = ref('')
+const content = ref('')
 const target = ref('')
 const file = ref([])
 

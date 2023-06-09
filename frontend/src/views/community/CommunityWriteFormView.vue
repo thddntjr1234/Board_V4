@@ -66,13 +66,9 @@ export default {
     const jwt = store.state.token
 
     // 변수를 ref 혹은 reactive로 감싸면 반응형으로 바뀐다.
-    const categoryId = ref()
-    const title = ref()
-    const content = ref()
-    const author = ref()
-    const createdDate = ref()
-    const passwd = ref()
-    const confirmPasswd = ref()
+    const categoryId = ref('')
+    const title = ref('')
+    const content = ref('')
     const file = ref([])
 
     /**
@@ -82,10 +78,8 @@ export default {
       const formData = new FormData()
 
       // ref에 접근하려면 .value옵션을 붙여야 함
-      formData.append("categoryId", categoryId.value)
       formData.append("title", title.value)
       formData.append("content", content.value)
-      formData.append("createdDate", createdDate.value)
 
       // 파일이 있다면 이를 일일히 append해야 리스트 단위로 들어가지 않는다.
       for (let i = 0; i < file.value.length; i++) {
@@ -126,8 +120,8 @@ export default {
     const addFile = (number, event) => {
       const files = event.target.files
 
+      // 입력한 파일이 존재하지 않으면 null값 입력
       file.value[number] = files[0] || null
-      // TODO: 더미 파일을 올리는 방식이 아니라 null값을 전송하더라도 서버에서 이를 처리할 수 있어야 한다.
     }
 
     onMounted(() => {
@@ -139,10 +133,6 @@ export default {
       categoryId,
       title,
       content,
-      author,
-      createdDate,
-      passwd,
-      confirmPasswd,
       file,
       jwt,
       addFile,

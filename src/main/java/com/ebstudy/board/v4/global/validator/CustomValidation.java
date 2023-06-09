@@ -8,9 +8,6 @@ import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.*;
 
-/**
- * 입력받은 두 비밀번호가 같은지
- */
 @Target({PARAMETER})
 @Retention(RetentionPolicy.RUNTIME) // 어노테이션은 실행시간동안 유지하기 위해 RUNTIME 설정
 @Constraint(validatedBy = CustomValidator.class)

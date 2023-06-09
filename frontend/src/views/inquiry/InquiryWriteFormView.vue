@@ -48,9 +48,8 @@ const categoryList = ref()
 const jwt = store.state.token
 
 // 변수를 ref 혹은 reactive로 감싸면 반응형으로 바뀐다.
-const title = ref()
-const content = ref()
-const createdDate = ref()
+const title = ref('')
+const content = ref('')
 const file = ref([])
 
 /**
@@ -104,7 +103,6 @@ const addFile = (number, event) => {
   const files = event.target.files
 
   file.value[number] = files[0] || null
-  // TODO: 더미 파일을 올리는 방식이 아니라 null값을 전송하더라도 서버에서 이를 처리할 수 있어야 한다.
 }
 
 onMounted(() => {
