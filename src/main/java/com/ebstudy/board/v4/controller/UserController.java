@@ -32,6 +32,7 @@ public class UserController {
 
     /**
      * 유효한 로그인 요청에 대해 JWT 발급
+     *
      * @param loginDto loginId, password
      * @return JWT
      */
@@ -53,6 +54,10 @@ public class UserController {
         return new ResponseEntity<>(new TokenDTO(jwt), httpHeaders, HttpStatus.OK);
     }
 
+    /**
+     * 자신의 전체 정보를 조회
+     * @return 유저 정보
+     */
     @GetMapping("/api/user")
     public ResponseEntity<Optional<UserDTO>> getMyUserInfo() {
         log.info("getMyUserInfo 수행");
@@ -60,6 +65,11 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    /**
+     * 타인의 전체 정보를 조회
+     * @param loginId 조회할 유저의 로그인 아이디
+     * @return 유저 정보
+     */
     @GetMapping("/api/user/{loginId}")
     public ResponseEntity<Optional<UserDTO>> getUserInfo(@PathVariable String loginId) {
         log.info("getUserInfo 수행");

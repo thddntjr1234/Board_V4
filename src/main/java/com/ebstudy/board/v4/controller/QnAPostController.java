@@ -27,6 +27,7 @@ public class QnAPostController {
 
     /**
      * 게시글 리스트를 로딩
+     *
      * @param searchValues 검색조건
      * @return 페이지 번호별로 로딩한 게시글 리스트
      */
@@ -53,7 +54,7 @@ public class QnAPostController {
 
     /**
      * 게시글 로딩
-     * /boards/free/3
+     *
      * @param postId 가져올 게시글 번호
      * @return 가져온 게시글 데이터
      */
@@ -79,8 +80,8 @@ public class QnAPostController {
 
     /**
      * 게시글 작성 폼으로 이동
-     * /boards/free/new
-     * @return 게시글 폼 viewName과 카테고리 리스트를 가진 ModelAndView 객체
+     *
+     * @return 게시글 폼 데이터
      */
     @GetMapping("/api/boards/qna/new")
     public CommonApiResponseDTO<?> getWriteForm() {
@@ -100,9 +101,9 @@ public class QnAPostController {
 
     /**
      * 게시글 저장
-     * /boards/free POST
+     *
      * @param post 저장할 게시글
-     * @return HttpStatus를 가진 ResponseEntity<> 객체
+     * @return 성공 여부를 가진 Response객체
      */
     @PostMapping("/api/boards/qna")
     // ResponseEntity 로 리턴하면 raw type 경고가 나타나므로 와일드카드 ?를 선언해서 raw type의 불안정성을 제거
@@ -119,7 +120,7 @@ public class QnAPostController {
 
     /**
      * 게시글 수정
-     * /boards/free/3 PUT
+     *
      * @param post 수정할 내용이 담긴 게시글 DTO
      * @return 공통 반환타입 CommonApiResponseDTO 객체
      */
@@ -143,7 +144,6 @@ public class QnAPostController {
 
     /**
      * 게시글 삭제, flag 설정으로 숨김 처리
-     * /boards/free/3 DELTE
      *
      * @param post postId, passwd 값 전달
      * @return 공통 반환타입 CommonApiResponseDTO 객체
@@ -162,6 +162,12 @@ public class QnAPostController {
                 .build();
     }
 
+    /**
+     * 게시글 채택
+     *
+     * @param post 채택할 게시글 정보가 담긴 게시글 데이터
+     * @return 성공 여부를 담은 Response 객체
+     */
     @PutMapping("/api/boards/qna/{postId}/adoption")
     public CommonApiResponseDTO<?> adoptComment(@RequestBody PostDTO post) {
 

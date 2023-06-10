@@ -75,7 +75,7 @@ public class InquiryPostController {
     /**
      * 게시글 작성 폼으로 이동
      *
-     * @return 게시글 폼 viewName과 카테고리 리스트를 가진 ModelAndView 객체
+     * @return 게시글 폼 데이터
      */
     @GetMapping("/api/boards/inquiry/new")
     public CommonApiResponseDTO<?> getWriteForm() {

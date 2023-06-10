@@ -23,7 +23,8 @@ public class NoticeFileController {
 
     /**
      * fileName 파라미터를 통해 경로를 노출하지 않고 파일을 다운로드
-     * @param fileName 서버상에 저장된 파일명
+     *
+     * @param fileName     서버상에 저장된 파일명
      * @param fileRealName 사용자가 입력한 실제 파일명
      * @return 사용자가 입력한 실제 파일명의 파일을 담은 ResponseEntity<Resource> 객체
      */
