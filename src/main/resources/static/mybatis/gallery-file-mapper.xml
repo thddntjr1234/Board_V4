@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace : package + classname -->
+<mapper namespace="com.ebstudy.board.v4.repository.GalleryFileMapper">
+    <resultMap id="mapFileDTO" type="FileDTO">
+        <result property="fileId" column="file_id"/>
+        <result property="fileName" column="file_name"/>
+        <result property="fileRealName" column="file_realname"/>
+    </resultMap>
+
+    <!--    FileDAO가 사용하는 부분-->
+    <!--게시글 저장 시 첨부한 파일의 정보를 저장-->
+    <insert id="saveFile" parameterType="com.ebstudy.board.v4.dto.FileDTO" useGeneratedKeys="true" keyProperty="fileId">
+        INSERT INTO image_files(file_name, file_realname, extension, size)
+
+        VALUES (#{fileName}, #{fileRealName}, #{extension}, #{size})
+    </insert>
+
+    <insert id="saveThumbnail" parameterType="com.ebstudy.board.v4.dto.FileDTO" useGeneratedKeys="true" keyProperty="fileId">
+        INSERT INTO image_files(file_name, file_realname, extension, size, post_id, thumbnail_path)
+
+        VALUES (#{fileName}, #{fileRealName}, #{extension}, #{size}, #{postId}, #{imgAccessUrl})
+    </insert>
+
+    <!--postId값에 해당하는 파일의 목록을 반환-->
+    <select id="getFileList" parameterType="long" resultType="com.ebstudy.board.v4.dto.FileDTO"
+            resultMap="mapFileDTO">
+        SELECT *
+
+        FROM image_files
+
+        WHERE post_id = #{postId} AND file_name NOT REGEXP '^thumb_'
+
+        ORDER BY file_id
+    </select>
+
+    <delete id="deleteFile" parameterType="long">
+        DELETE
+
+        FROM image_files
+
+        WHERE file_id = #{fileId}
+    </delete>
+
+    <update id="updatePostIdFromFile">
+        UPDATE image_files
+
+        SET post_id = #{postId}
+
+        WHERE file_id = #{fileId}
+    </update>
+</mapper>
+
