@@ -40,6 +40,7 @@
       </div>
     </div>
   </div>
+  <br>
 
   <div class="container">
     <component :is="currentPostListComponent" :board-name="'inquiry'" :post-list="postList" :notice-list="noticeList"></component>
@@ -63,7 +64,7 @@ import {onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
 import {useStore} from "vuex";
 import * as boardApi from "@/apis/board";
-import {convertListDateFormat} from "@/utils/date-format-converter";
+import {convertPostListDateFormat} from "@/utils/format-converter";
 
 const route = useRoute()
 const store = useStore()
@@ -152,13 +153,13 @@ const getPostList = async () => {
   }
 
   // 데이터 입력
-  postList.value = convertListDateFormat(response.data.data.postList)
+  postList.value  = convertPostListDateFormat(response.data.data.postList)
   categoryList.value = response.data.data.categoryList
 }
 
 const getFixedNoticeList = async () => {
   const response = await boardApi.getFixedNoticeList('inquiry')
-  noticeList.value = convertListDateFormat(response.data.data)
+  noticeList.value  = convertPostListDateFormat(response.data.data)
 }
 
 /**

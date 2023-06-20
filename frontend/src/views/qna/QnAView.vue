@@ -3,7 +3,7 @@
   <div class="container">
     <h1 class="mt-4 justify-content-start">Q&A - 게시글</h1>
     <div class="row mb-3">
-      <div class="col-sm-3">
+      <div class="col-sm-3 text-start">
         <span class="fw-bold">{{ post.author }}</span>
       </div>
       <div class="col-sm-9 text-end">
@@ -81,7 +81,7 @@ import {useStore} from "vuex";
 import * as boardApi from "@/apis/board";
 import * as userApi from "@/apis/user";
 import router from "@/router/router";
-import {convertListDateFormat, convertOneDateFormat} from "@/utils/date-format-converter";
+import {convertCommentListDataFormat, convertPostDateFormat} from "@/utils/format-converter";
 
 onMounted(() => {
   getPost()
@@ -104,9 +104,9 @@ const getPost = async () => {
   try {
     const response = await boardApi.getPost(`boards/qna/${route.params.postId}`)
 
-    post.value = convertOneDateFormat(response.data.data.post)
+    post.value = convertPostDateFormat(response.data.data.post)
     fileList.value = response.data.data.fileList
-    commentList.value = convertListDateFormat(response.data.data.commentList)
+    commentList.value = convertCommentListDataFormat(response.data.data.commentList)
 
     // 수정 삭제 버튼을 보여주기 위한 flag 변수 처리
     if (store.getters.isValidToken) {

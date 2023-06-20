@@ -68,11 +68,11 @@ import {onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
 import {useStore} from "vuex";
 import * as boardApi from "@/apis/board";
-import {convertListDateFormat, convertOneDateFormat} from "@/utils/date-format-converter";
 import * as userApi from "@/apis/user";
 import router from "@/router/router";
 import NavBar from "@/components/NavBar.vue";
 import Comment from "@/components/Comment.vue";
+import {convertCommentListDataFormat, convertPostDateFormat} from "@/utils/format-converter";
 
 onMounted(() => {
   getPost()
@@ -95,9 +95,9 @@ const getPost = async () => {
   try {
     const response = await boardApi.getPost(`boards/notice/${route.params.postId}`)
 
-    post.value = convertOneDateFormat(response.data.data.post)
+    post.value = convertPostDateFormat(response.data.data.post)
     fileList.value = response.data.data.fileList
-    commentList.value = convertListDateFormat(response.data.data.commentList)
+    commentList.value = convertCommentListDataFormat(response.data.data.commentList)
 
     // 수정 삭제 버튼을 보여주기 위한 flag 변수 처리
     if (store.getters.isValidToken) {

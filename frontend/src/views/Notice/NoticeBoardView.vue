@@ -23,10 +23,6 @@
   <br>
 
   <div class="container">
-    <p></p>
-  </div>
-
-  <div class="container">
     <div class="d-flex justify-content-between">
       <button class="btn btn-primary" @click="moveToWriteView">게시글 등록</button>
 
@@ -36,6 +32,7 @@
       </div>
     </div>
   </div>
+  <br>
 
   <div class="container">
     <component :is="currentPostListComponent" :board-name="'notice'" :post-list="postList"></component>
@@ -55,11 +52,11 @@ import CardPostList from "@/components/CardPostList.vue";
 import Pagination from "@/components/Pagination.vue";
 import NavBar from "@/components/NavBar.vue";
 import router from "@/router/router";
-import {onBeforeMount, onMounted, ref} from "vue";
+import {onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
 import {useStore} from "vuex";
 import * as boardApi from "@/apis/board";
-import {convertListDateFormat} from "@/utils/date-format-converter";
+import {convertPostListDateFormat} from "@/utils/format-converter";
 
 const route = useRoute()
 const store = useStore()
@@ -132,7 +129,7 @@ const getPostList = async () => {
   }
 
   // 데이터 입력
-  postList.value = convertListDateFormat(response.data.data.postList)
+  postList.value = convertPostListDateFormat(response.data.data.postList)
 }
 
 /**
@@ -173,21 +170,4 @@ const getBoardComponentByName = (componentName) => {
 </script>
 
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
 </style>
