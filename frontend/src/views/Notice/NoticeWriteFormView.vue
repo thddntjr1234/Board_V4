@@ -12,7 +12,7 @@
           <option value="community">커뮤니티 게시판</option>
           <option value="qna">Q&A 게시판</option>
           <option value="inquiry">1:1문의 게시판</option>
-          <option value="image">이미지 게시판</option>
+          <option value="gallery">이미지 게시판</option>
           <option value="none">공지사항 게시판에만 노출</option>
         </select>
       </div>

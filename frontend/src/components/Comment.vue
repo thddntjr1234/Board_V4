@@ -27,7 +27,8 @@
         </div>
         <div class="row mb-3" v-if="!isEditMode || comment !== editingComment">
           <div class="col-sm-12 text-start">
-            <textarea class="form-control-plaintext" rows="3" readonly>{{ comment.comment }}</textarea>
+            <div v-html="comment.comment"></div>
+<!--            <textarea class="form-control-plaintext" rows="3" readonly>{{ comment.comment }}</textarea>-->
           </div>
         </div>
         <div class="row mb-3" v-if="isEditMode && comment === editingComment">
@@ -38,7 +39,7 @@
           </div>
         </div>
         <hr>
-      </div>
+      </div>터
     </div>
   </div>
 </template>
@@ -66,9 +67,6 @@ export default {
       instance.emit("addComment", newComment)
     }
 
-    onMounted( () => {
-      console.log(`commnetList: ${JSON.stringify(props.commentList)}`)
-    })
     const deleteComment = (comment) => {
       console.log("delete comment raw: " + JSON.stringify(comment) + ",  value: " + JSON.stringify(comment.value))
       instance.emit("deleteComment", comment)
@@ -80,10 +78,15 @@ export default {
 
     const enableEditMode = (comment) => {
       isEditMode.value = true
+      // console.log("modifyComment: " + JSON.stringify(comment))
+
+      // <br>태그로 변환했던 내용을 다시 원래 개행문자로 되돌린다.
       editingComment.value = comment
+      editingComment.value.comment = editingComment.value.comment.replace(/<br>/g, '\n')
     }
 
     const cancelEdit = () => {
+      editingComment.value.comment = editingComment.value.comment.replace(/\n/g, '<br>')
       isEditMode.value = false
     }
 

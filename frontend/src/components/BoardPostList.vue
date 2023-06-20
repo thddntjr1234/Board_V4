@@ -20,19 +20,19 @@
       </thead>
       <tbody>
       <!--공지사항 게시글 부분-->
-      <tr class="table-primary" v-for="notice in noticeList" v-bind:key="notice">
-        <td>[공지사항]</td>
-        <template v-if="boardName === 'qna' || boardName === 'free'">
+      <tr class="table bg-primary bg-opacity-10" v-for="notice in noticeList" v-bind:key="notice">
+        <template v-if="boardName === 'qna' || boardName === 'free' || boardName === 'inquiry'">
+          <td>[공지사항]</td>
           <td v-if="boardName === 'qna'"></td>
-          <td></td>
+          <td v-if="boardName === 'qna' || boardName === 'free'"></td>
         </template>
-          <td class="d-flex justify-content-start">
-            <router-link :to="{path: `/boards/notice/${notice.postId}`}">{{ notice.title }}</router-link>
-          </td>
-          <td>{{ notice.author }}</td>
-          <td>{{ notice.hits }}</td>
-          <td>{{ notice.createdDate }}</td>
-          <td>{{ notice.modifiedDate }}</td>
+        <td style="text-align: justify">
+          <router-link :to="{path: `/boards/notice/${notice.postId}`}">{{ notice.title }}</router-link>
+        </td>
+        <td>{{ notice.author }}</td>
+        <td>{{ notice.hits }}</td>
+        <td>{{ notice.createdDate }}</td>
+        <td>{{ notice.modifiedDate }}</td>
       </tr>
       <!--각 게시판 게시글 부분-->
       <tr v-for="post in postList" v-bind:key="post">
@@ -54,11 +54,11 @@
           </td>
         </template>
 
-        <td class="d-flex justify-content-start">
+        <td style="text-align: justify">
           <span v-if="post.secret" style="padding-right: 5px;">
             &#128274;
           </span>
-          <router-link :to="{path: `/boards/${boardName}/${post.postId}`}">
+          <router-link :to="{path: `/boards/${boardName}/${post.postId}`}" class="text-reset">
             {{ post.title }}
             <span v-if="post.commentCount" style="padding-left: 5px">[{{ post.commentCount }}]</span>
           </router-link>
@@ -84,5 +84,11 @@ const props = defineProps({
 </script>
 
 <style scoped>
+a, u {
+  text-decoration: none;
+}
 
+a:hover, u:hover {
+  text-decoration: underline;
+}
 </style>

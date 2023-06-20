@@ -37,6 +37,15 @@ function getPost(url) {
 }
 
 /**
+ * 이미지 갤러리 게시글 수정 시 게시글 정보와 파일 정보를 함께 가져오는 API
+ * @param url 요청할 게시글 URI
+ * @returns post, fileList
+ */
+function getPostWithFileList(url) {
+    return nonAuthApiService.get(url)
+}
+
+/**
  * 카테고리 리스트를 요청하는 API
  * @param url 카테고리 요청 URI
  * @returns categoryList
@@ -97,6 +106,17 @@ function downloadFile(url, file) {
 }
 
 /**
+ *
+ */
+function saveImage(formData) {
+    return authApiService.post('boards/gallery/file', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        }
+    })
+}
+
+/**
  * 댓글 작성을 요청하는 API
  * @param url 댓글 작성 URI
  * @param data 댓글 정보
@@ -135,12 +155,14 @@ export {
     getCategoryList,
     getWriteFormData,
     getFixedNoticeList,
+    getPostWithFileList,
 
     savePost,
     modifyPost,
     deletePost,
 
     downloadFile,
+    saveImage,
 
     addComment,
     modifyComment,

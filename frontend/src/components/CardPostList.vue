@@ -3,7 +3,7 @@
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-1 g-4">
       <!--상단 공지사항-->
       <div v-for="notice in noticeList" :key="notice" class="col">
-        <div class="card bg-primary bg-opacity-25">
+        <div class="card bg-primary bg-opacity-10">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-2">
               <h6 class="m-0">{{ notice.author }}</h6>
@@ -12,9 +12,9 @@
               </div>
             </div>
             <div class="d-flex justify-content-start">
-              <h5 class="card-title">
+              <h6 class="card-title">
                 <router-link :to="{path: `/boards/notice/${notice.postId}`}">{{ notice.title }}</router-link>
-              </h5>
+              </h6>
             </div>
             <div class="d-flex justify-content-between align-items-center">
               <p class="m-0">공지사항</p>
@@ -27,43 +27,150 @@
       </div>
       <!--게시글-->
       <div v-for="post in postList" :key="post" class="col">
-        <div class="card">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <h6 class="m-0">{{ post.author }}</h6>
-              <div class="d-flex align-items-end">
-                <p class="m-0">{{ post.createdDate }}</p>
-              </div>
-            </div>
-            <div class="d-flex justify-content-start">
-              <div v-if="boardName === 'qna'">
-                <p class="m-0" v-if="post.adoptedCommentId">&#9989;</p>
-              </div>
-              <h5 class="card-title">
-                <span v-if="post.secret" style="padding-right: 5px;">&#128274;</span>
-                <router-link :to="{path: `/boards/${boardName}/${post.postId}`}">{{ post.title }}</router-link>
-              </h5>
-            </div>
-            <div class="d-flex justify-content-between align-items-center">
-              <div v-if="boardName === 'inquiry'">
-                <p class="m-0" v-if="post.answerStatus">[답변 완료]</p>
-                <p class="m-0" v-else>[답변 대기중]</p>
-              </div>
-              <div v-else-if="boardName === 'notice'">
-                <p class="m-0">공지사항</p>
-              </div>
-              <div v-else>
-                <p class="m-0">{{ post.category }}</p>
-              </div>
-              <div class="d-flex align-items-end">
-                <template v-if="boardName === 'notice'">
-                  <div class="m-0">댓글: {{ post.commentCount }}개</div>
-                </template>
-                <p class="m-0" style="padding-left: 10px">조회수: {{ post.hits }}</p>
+        <!--자유 게시판 HTML-->
+        <div v-if="boardName === 'free'" class="row">
+          <div class="col-xl-12">
+            <div class="card mb-3 card-body">
+              <div class="row align-items-center">
+                <div class="col">
+                  <div class="overflow-hidden flex-nowrap">
+                    <div class="d-flex justify-content-between">
+                      <p class="m-0 mb-1">{{ post.author }}</p>
+                      <p class="m-0 mb-1">{{ post.createdDate }}</p>
+                    </div>
+                    <h6 class="m-0 mb-1 text-start">
+                      <router-link :to="{path: `/boards/${boardName}/${post.postId}`}" class="text-reset">
+                        {{ post.title }} {{(post.fileFlag) ? '&#128193' : null}}
+                      </router-link>
+                    </h6>
+                    <div class="d-flex justify-content-between">
+                      <small class="m-0 mb-1">{{ post.category }}</small>
+                      <small class="m-0 mb-1 ">조회수: {{ post.hits }}</small>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
+
+        <!--공지사항 게시판 HTML-->
+        <div v-if="boardName === 'notice'" class="row">
+          <div class="col-xl-12">
+            <div class="card mb-3 card-body">
+              <div class="row align-items-center">
+                <div class="col">
+                  <div class="overflow-hidden flex-nowrap">
+                    <div class="d-flex justify-content-between">
+                      <p class="m-0 mb-1">{{ post.author }}</p>
+                      <p class="m-0 mb-1">{{ post.createdDate }}</p>
+                    </div>
+                    <h5 class="m-0 mb-1 text-start">
+                      <router-link :to="{path: `/boards/${boardName}/${post.postId}`}" class="text-reset">
+                        {{ post.title }}  {{ (post.commentCount) ? `[${post.commentCount}]` : null }}
+                      </router-link>
+                    </h5>
+                    <div class="d-flex justify-content-between">
+                      <small class="m-0 mb-1">{{ '공지사항' }}</small>
+                      <small class="m-0 mb-1 ">조회수: {{ post.hits }}</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--Q&A 게시판 HTML-->
+        <div v-if="boardName === 'qna'" class="row">
+          <div class="col-xl-12">
+            <div class="card mb-3 card-body">
+              <div class="row align-items-center">
+                <div class="col">
+                  <div class="overflow-hidden flex-nowrap">
+                    <div class="d-flex justify-content-between">
+                      <p class="m-0 mb-1">{{ post.author }}</p>
+                      <p class="m-0 mb-1">{{ post.createdDate }}</p>
+                    </div>
+                    <h6 class="m-0 mb-1 text-start">
+                      <router-link :to="{path: `/boards/${boardName}/${post.postId}`}">
+                        {{ (post.adoptedCommentId) ? '&#9989;' : null }} {{ post.title }} {{(post.fileFlag) ? '&#128193' : null}}
+                      </router-link>
+                    </h6>
+                    <div class="d-flex justify-content-between">
+                      <small class="m-0 mb-1">{{ post.category }}</small>
+                      <small class="m-0 mb-1 ">조회수: {{ post.hits }}</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--문의 게시판 HTML-->
+        <div v-if="boardName === 'inquiry'" class="row">
+          <div class="col-xl-12">
+            <div class="card mb-3 card-body">
+              <div class="row align-items-center">
+                <div class="col">
+                  <div class="overflow-hidden flex-nowrap">
+                    <div class="d-flex justify-content-between">
+                      <p class="m-0 mb-1">{{ post.author }}</p>
+                      <p class="m-0 mb-1">{{ post.createdDate }}</p>
+                    </div>
+                    <h6 class="m-0 mb-1 text-start">
+                      <router-link :to="{path: `/boards/${boardName}/${post.postId}`}" class="text-reset">
+                        {{ (post.secret) ? '&#128274;' : null }} {{ post.title }} {{(post.fileFlag) ? '&#128193' : null}}
+                      </router-link>
+                    </h6>
+                    <div class="d-flex justify-content-between">
+                      <small class="m-0 mb-1">{{ (post.answerStatus) ? '[답변 완료]' : '[답변 대기중]' }}</small>
+                      <small class="m-0 mb-1 ">조회수: {{ post.hits }}</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!--        이미지 갤러리 HTML-->
+        <div v-if="boardName === 'gallery'" class="row">
+          <div class="col-xl-12">
+            <div class="card mb-3 card-body">
+              <div class="row align-items-center">
+                <div class="col-auto" v-if="boardName === 'gallery'">
+                  <a href="#!.html">
+                    <img v-if="post.thumbnailPath" :src="post.thumbnailPath" alt="이미지" class="width-90">
+                    <img v-else src="/no_thumb.png" alt="이미지" class="width-90">
+                  </a>
+                </div>
+                <div class="col">
+                  <div class="overflow-hidden flex-nowrap">
+                    <div class="d-flex justify-content-between">
+                      <p class="m-0 mb-1">{{ post.author }}</p>
+                      <p class="m-0 mb-1">{{ post.createdDate }}</p>
+                    </div>
+                    <h6 class="m-0 mb-1 text-start">
+                      <router-link :to="{path: `/boards/${boardName}/${post.postId}`}" class="text-reset">{{
+                          post.title
+                        }}
+                      </router-link>
+                    </h6>
+                    <div class="d-flex justify-content-between">
+                      <small class="m-0 mb-1"></small>
+                      <small class="m-0 mb-1 ">조회수: {{ post.hits }}</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
       </div>
     </div>
   </div>
@@ -78,5 +185,11 @@ const props = defineProps({
 </script>
 
 <style scoped>
+  a, u {
+    text-decoration: none;
+  }
 
+  a:hover, u:hover {
+    text-decoration: underline;
+  }
 </style>

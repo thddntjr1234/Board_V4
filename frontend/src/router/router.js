@@ -17,6 +17,10 @@ import NoticeBoardView from "@/views/Notice/NoticeBoardView.vue";
 import NoticeView from "@/views/Notice/NoticeView.vue";
 import NoticeModifyView from "@/views/Notice/NoticeModifyView.vue";
 import NoticeWriteFormView from "@/views/Notice/NoticeWriteFormView.vue";
+import GalleryBoardView from "@/views/gallery/GalleryBoardView.vue";
+import GalleryView from "@/views/gallery/GalleryView.vue";
+import GalleryModifyView from "@/views/gallery/GalleryModifyView.vue";
+import GalleryWriteFormView from "@/views/gallery/GalleryWriteFormView.vue";
 
 
 const router = createRouter({
@@ -111,7 +115,27 @@ const router = createRouter({
             path: "/boards/notice/new",
             name: "NoticeWriteFormView",
             component: NoticeWriteFormView
-        }
+        },
+        {
+            path: "/boards/gallery",
+            name: "GalleryBoardView",
+            component: GalleryBoardView
+        },
+        {
+            path: "/boards/gallery/:postId",
+            name: "GalleryView",
+            component: GalleryView
+        },
+        {
+            path: "/boards/gallery/:postId/edit",
+            name: "GalleryModifyView",
+            component: GalleryModifyView
+        },
+        {
+            path: "/boards/gallery/new",
+            name: "GalleryWriteFormView",
+            component: GalleryWriteFormView
+        },
     ]
 });
 

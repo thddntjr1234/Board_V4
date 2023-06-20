@@ -19,7 +19,7 @@
             <router-link class="nav-link" to="/boards/free">커뮤니티</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/boards/image">이미지 갤러리</router-link>
+            <router-link class="nav-link" to="/boards/gallery">이미지 갤러리</router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/boards/inquiry">1:1문의</router-link>
