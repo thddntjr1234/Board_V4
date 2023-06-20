@@ -39,6 +39,7 @@ public class PostDTO {
     // 작성자 ID
     private Long authorId;
 
+    // 작성자명
     private String author;
 
     // 카테고리 이름
@@ -65,4 +66,9 @@ public class PostDTO {
     // 게시글 저장 시 전달할 용도로 사용하는 파일 리스트
     private List<MultipartFile> file;
 
+    // 이미지 썸네일 ID
+    private Long thumbnailId;
+
+    // 이미지 썸네일 접근 주소
+    private String thumbnailPath;
 }

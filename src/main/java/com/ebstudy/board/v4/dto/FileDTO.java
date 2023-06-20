@@ -1,12 +1,12 @@
 package com.ebstudy.board.v4.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @Setter
-@ToString
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class FileDTO {
 
     // 소속된 게시글의 pk값(fk)
@@ -26,4 +26,7 @@ public class FileDTO {
 
     // 크기
     private Long size;
+
+    // 이미지에 접근할 수 있는 url
+    private String imgAccessUrl;
 }

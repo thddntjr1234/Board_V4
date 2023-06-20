@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace : package + classname -->
+<mapper namespace="com.ebstudy.board.v4.repository.GalleryCommentMapper">
+    <resultMap id="mapCommentDTO" type="CommentDTO">
+        <result property="commentId" column="comment_id"/>
+        <result property="postId" column="post_id"/>
+        <result property="createdDate" column="created_date"/>
+    </resultMap>
+
+    <!--    CommentDAO가 사용하는 부분-->
+    <!--postId값에 해당하는 게시글의 댓글 목록을 반환-->
+    <select id="getCommentList" parameterType="long" resultType="com.ebstudy.board.v4.dto.CommentDTO"
+            resultMap="mapCommentDTO">
+        SELECT A.comment_id, A.post_id, A.user_id, B.username, A.created_date, A.comment
+
+        FROM image_comments A
+                 LEFT JOIN users B
+                           ON A.user_id = B.user_id
+
+        WHERE post_id = #{postId}
+          AND delete_flag = false
+
+        ORDER BY created_date DESC
+    </select>
+
+    <!--댓글 저장-->
+    <insert id="saveComment" parameterType="com.ebstudy.board.v4.dto.CommentDTO">
+        INSERT INTO image_comments(comment, created_date, post_id, user_id)
+
+        VALUES (#{comment}, #{createdDate}, #{postId}, #{userId})
+    </insert>
+
+    <!--댓글 삭제-->
+    <update id="deleteComment" parameterType="long">
+        UPDATE image_comments
+
+        SET delete_flag = true
+
+        WHERE comment_id = #{commentId}
+    </update>
+
+    <!--commentId에 해당하는 댓글을 반환-->
+    <select id="findCommentByCommentId" parameterType="long" resultType="CommentDTO">
+        SELECT *
+
+        FROM image_comments
+
+        WHERE comment_id = #{commentId}
+    </select>
+
+    <!--댓글 수정-->
+    <update id="updateComment" parameterType="CommentDTO">
+        UPDATE image_comments
+
+        SET comment       = #{comment},
+            modified_date = #{modifiedDate}
+
+        WHERE comment_id = #{commentId}
+    </update>
+</mapper>
+
