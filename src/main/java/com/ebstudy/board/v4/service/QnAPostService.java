@@ -119,6 +119,10 @@ public class QnAPostService {
         boardMapper.deletePost(post);
     }
 
+    /**
+     * 게시글 데이터 내 채택된 댓글의 id값을 데이터베이스에 추가
+     * @param post 채택된 댓글의 id값이 있는 게시글 데이터
+     */
     public void adoptComment(PostDTO post) {
         boardMapper.adoptComment(post);
     }
