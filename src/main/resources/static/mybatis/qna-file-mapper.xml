@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- namespace : package + classname -->
-<mapper namespace="com.ebstudy.board.v4.repository.QnAFileMapper">
+<mapper namespace="com.ebstudy.board.v4.qna.repository.QnAFileMapper">
     <resultMap id="mapFileDTO" type="FileDTO">
         <result property="postId" column="post_id"/>
         <result property="fileId" column="file_id"/>

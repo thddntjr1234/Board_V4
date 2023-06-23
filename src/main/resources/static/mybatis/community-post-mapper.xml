@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- namespace : package + classname -->
-<mapper namespace="com.ebstudy.board.v4.repository.CommunityPostMapper">
+<mapper namespace="com.ebstudy.board.v4.community.repository.CommunityPostMapper">
     <resultMap type="com.ebstudy.board.v4.dto.PostDTO" id="mapPostDTO">
         <result property="postId" column="post_id"/>
         <result property="categoryId" column="category_id"/>

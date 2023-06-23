@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- namespace : package + classname -->
-<mapper namespace="com.ebstudy.board.v4.repository.GalleryFileMapper">
+<mapper namespace="com.ebstudy.board.v4.gallery.repository.GalleryFileMapper">
     <resultMap id="mapFileDTO" type="FileDTO">
         <result property="fileId" column="file_id"/>
         <result property="fileName" column="file_name"/>

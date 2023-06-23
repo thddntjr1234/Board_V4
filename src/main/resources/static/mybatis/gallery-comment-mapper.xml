@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- namespace : package + classname -->
-<mapper namespace="com.ebstudy.board.v4.repository.GalleryCommentMapper">
+<mapper namespace="com.ebstudy.board.v4.gallery.repository.GalleryCommentMapper">
     <resultMap id="mapCommentDTO" type="CommentDTO">
         <result property="commentId" column="comment_id"/>
         <result property="postId" column="post_id"/>
