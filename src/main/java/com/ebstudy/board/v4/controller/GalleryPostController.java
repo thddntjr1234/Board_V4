@@ -148,13 +148,13 @@ public class GalleryPostController {
         // 썸네일 수정이 필요한 경우 썸네일 수정 작업을 수행
         if (!registeredFileList.isEmpty()) {
 
-            Long beforeThumbnailId = post.getThumbnailId();
+            Long beforeThumbnailId = originPost.getThumbnailId();
             // 썸네일 생성 및 생성된 썸네일 PK값 반환
             Long thumbnailId = fileService.saveThumbnailImage(post.getPostId(), registeredFileList);
 
             // 게시글에 썸네일 ID 추가
             postService.addThumbnailId(post.getPostId(), thumbnailId);
-            // 새로운 썸네일 추가 이후 기존 썸네일을 삭제 처리
+            // 새로운 썸네일 추가 이후 기존 썸네일을 삭제 처리(로컬에서의 용량이 2KB정도이므로 로컬에서 삭제하지는 않고 데이터 일치를 위해 DB에서만 삭제한다)
             fileService.deleteThumbnail(beforeThumbnailId);
         }
 
