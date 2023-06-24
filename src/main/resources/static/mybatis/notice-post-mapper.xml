@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- namespace : package + classname -->
-<mapper namespace="com.ebstudy.board.v4.notice.repository.NoticePostMapper">
-    <resultMap type="com.ebstudy.board.v4.dto.PostDTO" id="mapPostDTO">
+<mapper namespace="com.ebstudy.board.notice.repository.NoticePostMapper">
+    <resultMap type="com.ebstudy.board.dto.PostDTO" id="mapPostDTO">
         <result property="postId" column="post_id"/>
         <result property="categoryId" column="category_id"/>
         <result property="createdDate" column="created_date"/>
@@ -14,7 +14,7 @@
         <result property="fileFlag" column="file_flag"/>
     </resultMap>
 
-    <resultMap id="mapCategoryDTO" type="com.ebstudy.board.v4.dto.CategoryDTO">
+    <resultMap id="mapCategoryDTO" type="com.ebstudy.board.dto.CategoryDTO">
         <result property="categoryId" column="category_id"/>
     </resultMap>
 
