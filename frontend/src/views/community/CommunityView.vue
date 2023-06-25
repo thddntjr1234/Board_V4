@@ -13,11 +13,8 @@
     </div>
 
     <div class="row mb-3">
-      <div class="col-sm-8 text-start">
+      <div class="col-sm-9 text-start">
         <span class="fw-bold">[{{ post.category }}] {{ post.title }}</span>
-      </div>
-      <div class="col-sm-1">
-
       </div>
       <div class="col-sm-3 text-end">
         <span class>조회수: {{ post.hits }}</span>
@@ -72,7 +69,7 @@ import NavBar from "@/components/NavBar.vue";
 import Comment from "@/components/Comment.vue"
 import * as boardApi from "@/apis/board"
 import * as userApi from "@/apis/user"
-import {convertCommentListDataFormat, convertPostDateFormat} from "@/utils/format-converter";
+import {convertCommentListDataFormat, convertPostFormat} from "@/utils/format-converter";
 
 export default {
   name: "CommunityView",
@@ -100,7 +97,7 @@ export default {
       try {
         const response = await boardApi.getPost(`boards/free/${route.params.postId}`)
 
-        post.value = convertPostDateFormat(response.data.data.post)
+        post.value = convertPostFormat(response.data.data.post)
         fileList.value = response.data.data.fileList
         commentList.value = convertCommentListDataFormat(response.data.data.commentList)
 

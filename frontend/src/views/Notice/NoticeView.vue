@@ -13,11 +13,8 @@
     </div>
 
     <div class="row mb-3">
-      <div class="col-sm-8 text-start">
-        <span class="fw-bold"> {{ post.title }}</span>
-      </div>
-      <div class="col-sm-1">
-
+      <div class="col-sm-9 text-start">
+        <span class="fw-bold">{{ post.title }}</span>
       </div>
       <div class="col-sm-3 text-end">
         <span class>조회수: {{ post.hits }}</span>
@@ -72,7 +69,7 @@ import * as userApi from "@/apis/user";
 import router from "@/router/router";
 import NavBar from "@/components/NavBar.vue";
 import Comment from "@/components/Comment.vue";
-import {convertCommentListDataFormat, convertPostDateFormat} from "@/utils/format-converter";
+import {convertCommentListDataFormat, convertPostFormat} from "@/utils/format-converter";
 
 onMounted(() => {
   getPost()
@@ -95,7 +92,7 @@ const getPost = async () => {
   try {
     const response = await boardApi.getPost(`boards/notice/${route.params.postId}`)
 
-    post.value = convertPostDateFormat(response.data.data.post)
+    post.value = convertPostFormat(response.data.data.post)
     fileList.value = response.data.data.fileList
     commentList.value = convertCommentListDataFormat(response.data.data.commentList)
 

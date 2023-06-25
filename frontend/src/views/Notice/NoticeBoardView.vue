@@ -56,7 +56,7 @@ import {onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
 import {useStore} from "vuex";
 import * as boardApi from "@/apis/board";
-import {convertPostListDateFormat} from "@/utils/format-converter";
+import {convertPostListFormat} from "@/utils/format-converter";
 
 const route = useRoute()
 const store = useStore()
@@ -124,7 +124,7 @@ const getPostList = async () => {
   }
 
   // 데이터 입력
-  postList.value = convertPostListDateFormat(response.data.data.postList)
+  postList.value = convertPostListFormat(response.data.data.postList)
 }
 
 /**

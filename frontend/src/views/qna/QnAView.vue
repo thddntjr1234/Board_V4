@@ -13,12 +13,9 @@
     </div>
 
     <div class="row mb-3">
-      <div class="col-sm-8 text-start">
+      <div class="col-sm-9 text-start">
         <span v-if="post.adoptedCommentId">&#9989; &nbsp &nbsp</span>
         <span class="fw-bold">[{{ post.category }}] {{ post.title }}</span>
-      </div>
-      <div class="col-sm-1">
-
       </div>
       <div class="col-sm-3 text-end">
         <span class>조회수: {{ post.hits }}</span>
@@ -81,7 +78,7 @@ import {useStore} from "vuex";
 import * as boardApi from "@/apis/board";
 import * as userApi from "@/apis/user";
 import router from "@/router/router";
-import {convertCommentListDataFormat, convertPostDateFormat} from "@/utils/format-converter";
+import {convertCommentListDataFormat, convertPostFormat} from "@/utils/format-converter";
 
 onMounted(() => {
   getPost()
@@ -104,7 +101,7 @@ const getPost = async () => {
   try {
     const response = await boardApi.getPost(`boards/qna/${route.params.postId}`)
 
-    post.value = convertPostDateFormat(response.data.data.post)
+    post.value = convertPostFormat(response.data.data.post)
     fileList.value = response.data.data.fileList
     commentList.value = convertCommentListDataFormat(response.data.data.commentList)
 
