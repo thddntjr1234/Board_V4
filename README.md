@@ -15,6 +15,8 @@
 - MyBatis
 - MariaDB
 
+<hr>
+
 ### 기능 설명
 #### 공통
 - 공지사항, Q&A, 커뮤니티, 1:1 문의, 이미지 갤러리 구현
@@ -41,10 +43,12 @@
   - 관리자가 댓글 작성시 답변완료 표시
   - 답변 완료된 게시글은 수정/삭제 불가 처리
 ### 동작 화면
+<hr>
 
 ### ERD
 링크: https://www.erdcloud.com/d/LXuKoB6WG5itgTh8J
 <img width="1908" alt="스크린샷 2023-06-25 오전 11 53 16" src="https://github.com/thddntjr1234/Board_V4/assets/29126159/e8c6a2c1-a3e2-47f9-93e2-197653b0c6d0">
+<hr>
 
 ### 아키텍쳐
 AWS 배포 후 추가 예정
