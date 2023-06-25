@@ -251,7 +251,7 @@ public class GalleryFileService {
         File file = new File(localStoragePath, image.getFileName());
         Thumbnails
                 .of(file)
-                .forceSize(80, 90)
+                .forceSize(170, 170)
                 .toFile(new File(localStoragePath, "thumb_" + image.getFileName()));
 
         // 저장한 이미지를 불러와 리사이징된 크기와 썸네일 이미지 이름을 구한다.
