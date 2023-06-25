@@ -112,25 +112,20 @@ onMounted(() => {
  * 이외에 vuex를 사용하여 상태 저장소에 쿼리를 넣는 방법도 있음.
  **/
 const getPage = async (pageNumber) => {
-  route.query.pageNumber = pageNumber
-  await getPostList()
+  // route.query.pageNumber = pageNumber
+  // await getPostList()
 
-  // const keyword = queryParams.keyword
-  // const startDate = queryParams.startDate
-  // const endDate = queryParams.endDate
-  // const categoryId = queryParams.categoryId
-  // await router.push({
-  //   path: route.path,
-  //   query: {
-  //     pageNumber,
-  //     keyword,
-  //     startDate,
-  //     categoryId,
-  //     endDate,
-  //     boardType: queryParams.boardType,
-  //     filter: queryParams.filter
-  //   }
-  // })
+  router.replace({
+    path: route.path, query: {
+      pageNumber: pageNumber,
+      keyword: route.query.keyword,
+      startDate: route.query.startDate,
+      endDate: route.query.endDate,
+      categoryId: route.query.categoryId,
+      boardType: route.query.boardType,
+      filter: route.query.filter,
+    }
+  })
 }
 
 /**
@@ -189,8 +184,9 @@ const moveToWriteView = async () => {
  */
 const togglePostListComponent = (component) => {
   // 쿼리 파라미터용으로 사용할 변수
-  getBoardComponentByName(component)
-  route.query.boardType = component
+  // getBoardComponentByName(component)
+
+  router.replace({ path: route.path, query: {boardType: component}})
 }
 
 /**

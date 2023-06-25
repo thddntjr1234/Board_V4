@@ -13,7 +13,8 @@
         <input name="endDate" class="form-control" type="date" v-model="endDate"/>
 
         <div class="input-group-text">
-          <input class="form-check-input" type="checkbox" name="secret" id="secretCheckbox" :checked="secret === 'exclude' ? 'checked' : false" value="exclude"/>
+          <input class="form-check-input" type="checkbox" name="secret" id="secretCheckbox"
+                 :checked="secret === 'exclude' ? 'checked' : false" value="exclude"/>
           <label class="form-check-label" for="secretCheckbox">
             비밀 게시글 제외
           </label>
@@ -43,7 +44,8 @@
   <br>
 
   <div class="container">
-    <component :is="currentPostListComponent" :board-name="'inquiry'" :post-list="postList" :notice-list="noticeList"></component>
+    <component :is="currentPostListComponent" :board-name="'inquiry'" :post-list="postList"
+               :notice-list="noticeList"></component>
   </div>
   <br>
 
@@ -98,30 +100,21 @@ onMounted(() => {
  * 이외에 vuex를 사용하여 상태 저장소에 쿼리를 넣는 방법도 있음.
  **/
 const getPage = async (pageNumber) => {
-  route.query.pageNumber = pageNumber
-  await getPostList()
+  // route.query.pageNumber = pageNumber
+  // await getPostList()
 
-  // const keyword = queryParams.keyword
-  // const startDate = queryParams.startDate
-  // const endDate = queryParams.endDate
-  // const categoryId = queryParams.categoryId
-  // const boardType = queryParams.boardType
-  // const filter = queryParams.filter
-  // const secret = queryParams.secret
-
-  // await router.push({
-  //   path: route.path,
-  //   query: {
-  //     pageNumber,
-  //     keyword,
-  //     startDate,
-  //     categoryId,
-  //     endDate,
-  //     secret,
-  //     boardType,
-  //     filter
-  //   }
-  // })
+  router.replace({
+    path: route.path, query: {
+      pageNumber: pageNumber,
+      keyword: route.query.keyword,
+      startDate: route.query.startDate,
+      endDate: route.query.endDate,
+      categoryId: route.query.categoryId,
+      boardType: route.query.boardType,
+      filter: route.query.filter,
+      secret: route.query.secret
+    }
+  })
 }
 
 /**
@@ -153,13 +146,13 @@ const getPostList = async () => {
   }
 
   // 데이터 입력
-  postList.value  = convertPostListDateFormat(response.data.data.postList)
+  postList.value = convertPostListDateFormat(response.data.data.postList)
   categoryList.value = response.data.data.categoryList
 }
 
 const getFixedNoticeList = async () => {
   const response = await boardApi.getFixedNoticeList('inquiry')
-  noticeList.value  = convertPostListDateFormat(response.data.data)
+  noticeList.value = convertPostListDateFormat(response.data.data)
 }
 
 /**
@@ -179,8 +172,9 @@ const moveToWriteView = async () => {
  */
 const togglePostListComponent = (component) => {
   // 쿼리 파라미터용으로 사용할 변수
-  getBoardComponentByName(component)
-  route.query.boardType = component
+  // getBoardComponentByName(component)
+
+  router.replace({path: route.path, query: {boardType: component}})
 }
 
 /**

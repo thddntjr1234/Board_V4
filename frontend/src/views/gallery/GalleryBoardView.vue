@@ -4,30 +4,6 @@
     <h1> 이미지 갤러리 - 목록(page : {{ pagingValues.currentPage }} )</h1><br>
   </div>
 
-<!--  &lt;!&ndash;검색&ndash;&gt;-->
-<!--  <div class="container col-sm-6">-->
-<!--    <form class="form-inline">-->
-<!--      <div class="input-group">-->
-<!--        <input type="search" name="keyword" class="form-control" v-model="keyword" placeholder="제목/내용/작성자명 키워드"/>-->
-<!--        <button class="btn btn-primary" type="submit">검색</button>-->
-<!--      </div>-->
-<!--    </form>-->
-
-<!--  </div>-->
-<!--  <br>-->
-
-<!--  <div class="container">-->
-<!--    <div class="d-flex justify-content-between">-->
-<!--      <button class="btn btn-primary" @click="moveToWriteView">게시글 등록</button>-->
-
-<!--      <div class="btn-group">-->
-<!--        <button class="btn btn-outline-primary" @click="togglePostListComponent('list')">리스트</button>-->
-<!--        <button class="btn btn-outline-primary" @click="togglePostListComponent('card')">카드</button>-->
-<!--        <button class="btn btn-outline-primary" @click="togglePostListComponent('gallery')">갤러리</button>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-
   <div class="container">
     <div class="row">
       <div class="col-3 d-flex justify-content-start">
@@ -104,22 +80,16 @@ onMounted(() => {
  * 이외에 vuex를 사용하여 상태 저장소에 쿼리를 넣는 방법도 있음.
  **/
 const getPage = async (pageNumber) => {
-  route.query.pageNumber = pageNumber
-  await getPostList()
+  // route.query.pageNumber = pageNumber
+  // await getPostList()
 
-  // const keyword = queryParams.keyword
-  // const sort = queryParams.sort
-  // const boardType = queryParams.boardType
-  //
-  // await router.push({
-  //   path: route.path,
-  //   query: {
-  //     pageNumber,
-  //     keyword,
-  //     sort,
-  //     boardType
-  //   }
-  // })
+  router.replace({
+    path: route.path, query: {
+      pageNumber: pageNumber,
+      keyword: route.query.keyword,
+      boardType: route.query.boardType
+    }
+  })
 }
 
 /**
@@ -175,8 +145,9 @@ const moveToWriteView = async () => {
  */
 const togglePostListComponent = (component) => {
   // 쿼리 파라미터용으로 사용할 변수
-  getBoardComponentByName(component)
-  route.query.boardType = component
+  // getBoardComponentByName(component)
+
+  router.replace({ path: route.path, query: {boardType: component}})
 }
 
 /**
