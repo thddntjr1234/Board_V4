@@ -39,7 +39,7 @@
           </div>
         </div>
         <hr>
-      </div>터
+      </div>
     </div>
   </div>
 </template>

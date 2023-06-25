@@ -25,6 +25,7 @@
           </div>
         </div>
       </div>
+
       <!--게시글-->
       <div v-for="post in postList" :key="post" class="col">
         <!--자유 게시판 HTML-->
@@ -142,10 +143,10 @@
             <div class="card mb-3 card-body">
               <div class="row align-items-center">
                 <div class="col-auto" v-if="boardName === 'gallery'">
-                  <a href="#!.html">
-                    <img v-if="post.thumbnailPath" :src="post.thumbnailPath" alt="이미지" class="width-90">
-                    <img v-else src="/no_thumb.png" alt="이미지" class="width-90">
-                  </a>
+                  <router-link :to="{path: `/boards/${boardName}/${post.postId}`}" class="text-reset">
+                    <img v-if="post.thumbnailPath" :src="post.thumbnailPath" alt="이미지" class="card-img" style="width: 90px; height: 90px;">
+                    <img v-else src="/no_thumb.png" alt="이미지" class="card-img opacity-25">
+                  </router-link>
                 </div>
                 <div class="col">
                   <div class="overflow-hidden flex-nowrap">
@@ -169,8 +170,6 @@
             </div>
           </div>
         </div>
-
-
       </div>
     </div>
   </div>
