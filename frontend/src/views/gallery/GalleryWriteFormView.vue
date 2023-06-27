@@ -119,10 +119,10 @@ const setEditor = () => {
         // 1. 이미지 업로드를 먼저 수행한다.
         const uploadResult = await uploadImage(blob);
 
-        console.log(uploadResult.data.data)
+        console.log(uploadResult.data)
         // 2. 업로드한 이미지 정보를 반환받아 addedImageList에 추가한 후 imgAccessUrl을 콜백한다.
-        addedImageList.value.push(uploadResult.data.data)
-        callback(uploadResult.data.data.imgAccessUrl)
+        addedImageList.value.push(uploadResult.data)
+        callback(uploadResult.data.imgAccessUrl)
       }
     },
   })

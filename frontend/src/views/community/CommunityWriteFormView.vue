@@ -107,7 +107,7 @@ export default {
     const getWriteFormData = async () => {
       try {
         const response = await boardApi.getWriteFormData("boards/free/new")
-        categoryList.value = response.data.data.categoryList
+        categoryList.value = response.data.categoryList
 
       } catch (error) {
         console.error("비회원 접근, 이전 페이지로 리다이렉트한다.")

@@ -61,7 +61,6 @@ const savePost = async () => {
   // ref에 접근하려면 .value옵션을 붙여야 함
   formData.append("title", title.value)
   formData.append("content", content.value)
-  formData.append("createdDate", createdDate.value)
 
   // 파일이 있다면 이를 일일히 append해야 리스트 단위로 들어가지 않는다.
   for (let i = 0; i < file.value.length; i++) {
@@ -89,7 +88,7 @@ const savePost = async () => {
 const getWriteFormData = async () => {
   try {
     const response = await boardApi.getWriteFormData("boards/inquiry/new")
-    categoryList.value = response.data.data.categoryList
+    categoryList.value = response.data.categoryList
 
   } catch (error) {
     console.error("비회원 접근, 이전 페이지로 리다이렉트한다.")

@@ -71,9 +71,9 @@ const getPost = async () => {
     const response = await boardApi.getPost(`boards/inquiry/${route.params.postId}`)
 
     // 응답 데이터 추가
-    post.value = response.data.data.post
-    existingFileList.value = response.data.data.fileList
-    commentList.value = response.data.data.commentList
+    post.value = response.data.post
+    existingFileList.value = response.data.fileList
+    commentList.value = response.data.commentList
 
   } catch (error) {
     await router.push({name: 'not-found'})

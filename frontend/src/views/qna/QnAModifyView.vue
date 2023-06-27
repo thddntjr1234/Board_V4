@@ -83,9 +83,9 @@ const getPost = async () => {
     const response = await boardApi.getPost(`boards/qna/${route.params.postId}`)
 
     // 응답 데이터 추가
-    post.value = response.data.data.post
-    existingFileList.value = response.data.data.fileList
-    commentList.value = response.data.data.commentList
+    post.value = response.data.post
+    existingFileList.value = response.data.fileList
+    commentList.value = response.data.commentList
 
   } catch (error) {
     await router.push({name: 'not-found'})
@@ -100,7 +100,7 @@ const getPost = async () => {
 const getCategoryList = async () => {
   try {
     const response = await boardApi.getCategoryList('boards/qna/new')
-    categoryList.value = response.data.data.categoryList
+    categoryList.value = response.data.categoryList
 
   } catch (error) {
     console.error("비회원 접근, 이전 페이지로 리다이렉트한다.")

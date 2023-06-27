@@ -126,7 +126,7 @@ const getPostList = async () => {
   })
 
   // console.log('response data: ' + JSON.stringify(response.data));
-  pagingValues.value = response.data.data.pagingValues;
+  pagingValues.value = response.data.pagingValues;
 
   // 배열 초기화
   pageRange.value.length = 0
@@ -137,13 +137,13 @@ const getPostList = async () => {
   }
 
   // 데이터 입력
-  postList.value = convertPostListFormat(response.data.data.postList)
-  categoryList.value = response.data.data.categoryList
+  postList.value = convertPostListFormat(response.data.postList)
+  categoryList.value = response.data.categoryList
 }
 
 const getFixedNoticeList = async () => {
   const response = await boardApi.getFixedNoticeList('community')
-  noticeList.value  = convertPostListFormat(response.data.data)
+  noticeList.value  = convertPostListFormat(response.data)
 }
 
 /**

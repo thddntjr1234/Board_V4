@@ -92,9 +92,9 @@ const getPost = async () => {
   try {
     const response = await boardApi.getPost(`boards/notice/${route.params.postId}`)
 
-    post.value = convertPostFormat(response.data.data.post)
-    fileList.value = response.data.data.fileList
-    commentList.value = convertCommentListDataFormat(response.data.data.commentList)
+    post.value = convertPostFormat(response.data.post)
+    fileList.value = response.data.fileList
+    commentList.value = convertCommentListDataFormat(response.data.commentList)
 
     // 수정 삭제 버튼을 보여주기 위한 flag 변수 처리
     if (store.getters.isValidToken) {
