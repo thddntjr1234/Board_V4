@@ -1,10 +1,10 @@
 package com.ebstudy.board.notice.controller;
 
 import com.ebstudy.board.dto.CommentDTO;
-import com.ebstudy.board.dto.response.CommonApiResponseDTO;
 import com.ebstudy.board.notice.service.NoticeCommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,12 +21,10 @@ public class NoticeCommentController {
      * @return 성공 여부를 담은 Response 객체
      */
     @PostMapping("/api/boards/notice/comment")
-    public CommonApiResponseDTO<?> saveComment(@RequestBody CommentDTO comment) {
+    public ResponseEntity saveComment(@RequestBody CommentDTO comment) {
         commentService.saveComment(comment);
 
-        return CommonApiResponseDTO.builder()
-                .success(true)
-                .build();
+        return ResponseEntity.ok(null);
     }
 
     /**
@@ -36,12 +34,10 @@ public class NoticeCommentController {
      * @return 성공 여부를 담은 Response 객체
      */
     @DeleteMapping("/api/boards/notice/comment/{commentId}")
-    public CommonApiResponseDTO<?> deleteComment(@PathVariable Long commentId) {
+    public ResponseEntity deleteComment(@PathVariable Long commentId) {
         commentService.deleteComment(commentId);
 
-        return CommonApiResponseDTO.builder()
-                .success(true)
-                .build();
+        return ResponseEntity.ok(null);
     }
 
     /**
@@ -51,11 +47,9 @@ public class NoticeCommentController {
      * @return 성공 여부를 담은 Response 객체
      */
     @PutMapping("/api/boards/notice/comment")
-    public CommonApiResponseDTO<?> updateComment(@RequestBody CommentDTO comment) {
+    public ResponseEntity updateComment(@RequestBody CommentDTO comment) {
         commentService.updateComment(comment);
 
-        return CommonApiResponseDTO.builder()
-                .success(true)
-                .build();
+        return ResponseEntity.ok(null);
     }
 }

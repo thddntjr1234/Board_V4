@@ -1,14 +1,14 @@
 package com.ebstudy.board.gallery.controller;
 
 import com.ebstudy.board.dto.*;
-import com.ebstudy.board.dto.response.CommonApiResponseDTO;
-import com.ebstudy.board.global.validator.CustomValidation;
 import com.ebstudy.board.gallery.service.GalleryCommentService;
 import com.ebstudy.board.gallery.service.GalleryFileService;
 import com.ebstudy.board.gallery.service.GalleryPostService;
+import com.ebstudy.board.global.validator.CustomValidation;
 import com.ebstudy.board.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +34,7 @@ public class GalleryPostController {
      * @return 페이지 번호별로 로딩한 게시글 리스트
      */
     @GetMapping("/api/boards/gallery")
-    public CommonApiResponseDTO<?> getPostList(@ModelAttribute SearchDTO searchValues) {
+    public ResponseEntity getPostList(@ModelAttribute SearchDTO searchValues) {
 
         // 받아온 검색조건을 입력해 pagingValues를 가져온다
         PaginationDTO pagingValues = postService.getPaginationValues(searchValues);
@@ -45,10 +45,7 @@ public class GalleryPostController {
         postListResponse.put("pagingValues", pagingValues);
         postListResponse.put("postList", postList);
 
-        return CommonApiResponseDTO.builder()
-                .success(true)
-                .data(postListResponse)
-                .build();
+        return ResponseEntity.ok(postListResponse);
     }
 
     /**
@@ -58,21 +55,16 @@ public class GalleryPostController {
      * @return 가져온 게시글 데이터
      */
     @GetMapping("/api/boards/gallery/{postId}")
-    public CommonApiResponseDTO<?> getPost(@PathVariable Long postId) {
+    public ResponseEntity getPost(@PathVariable Long postId) {
 
         PostDTO post = postService.getPost(postId);
         List<CommentDTO> commentList = commentService.getCommentList(postId);
-
-        log.info("getPost 정상 수행에 따른 게시글 로드 완료");
 
         HashMap<String, Object> postResponse = new HashMap<>();
         postResponse.put("post", post);
         postResponse.put("commentList", commentList);
 
-        return CommonApiResponseDTO.builder()
-                .success(true)
-                .data(postResponse)
-                .build();
+        return ResponseEntity.ok(postResponse);
     }
 
     /**
@@ -81,17 +73,14 @@ public class GalleryPostController {
      * @return 게시글 폼 데이터
      */
     @GetMapping("/api/boards/gallery/new")
-    public CommonApiResponseDTO<?> getWriteForm() {
+    public ResponseEntity getWriteForm() {
 
         UserDTO user = userService.getUserFromContext();
 
         HashMap<String, Object> data = new HashMap<>();
         data.put("user", user);
 
-        return CommonApiResponseDTO.builder()
-                .success(true)
-                .data(data)
-                .build();
+        return ResponseEntity.ok(data);
     }
 
     /**
@@ -102,7 +91,7 @@ public class GalleryPostController {
      */
     @PostMapping("/api/boards/gallery")
     // ResponseEntity 로 리턴하면 raw type 경고가 나타나므로 와일드카드 ?를 선언해서 raw type의 불안정성을 제거
-    public CommonApiResponseDTO<?> savePost(@CustomValidation(value = {"title", "content"}) @ModelAttribute PostDTO post,
+    public ResponseEntity savePost(@CustomValidation(value = {"title", "content"}) @ModelAttribute PostDTO post,
                                             @RequestPart(required = false) List<FileDTO> registeredFileList) throws IOException {
 
         postService.savePost(post);
@@ -118,9 +107,7 @@ public class GalleryPostController {
             postService.addThumbnailId(post.getPostId(), thumbnailId);
         }
 
-        return CommonApiResponseDTO.builder()
-                .success(true)
-                .build();
+        return ResponseEntity.ok(null);
     }
 
     /**
@@ -130,7 +117,7 @@ public class GalleryPostController {
      * @return 공통 반환타입 CommonApiResponseDTO 객체
      */
     @PutMapping("/api/boards/gallery/{postId}")
-    public CommonApiResponseDTO<?> updatePost(@CustomValidation(value = {"title", "content"}) @ModelAttribute PostDTO post,
+    public ResponseEntity updatePost(@CustomValidation(value = {"title", "content"}) @ModelAttribute PostDTO post,
                                               @RequestPart(required = false) List<FileDTO> registeredFileList) throws IOException {
         // Multipart/Form-Data 방식과 json타입의 객체를 같이 사용하려면 json파트에 대해 @RequestPart 어노테이션을 적용해 주면 된다.
 
@@ -157,9 +144,7 @@ public class GalleryPostController {
             fileService.deleteThumbnail(beforeThumbnailId);
         }
 
-        return CommonApiResponseDTO.builder()
-                .success(true)
-                .build();
+        return ResponseEntity.ok(null);
     }
 
     /**
@@ -169,21 +154,17 @@ public class GalleryPostController {
      * @return 게시글 정보를 가진 CommonResponseApi 객체
      */
     @GetMapping("/api/boards/gallery/{postId}/edit")
-    public CommonApiResponseDTO<?> getPostWithFileList(@PathVariable Long postId) {
+    public ResponseEntity getPostWithFileList(@PathVariable Long postId) {
 
         PostDTO post = postService.getPost(postId);
         List<FileDTO> fileList = fileService.getFileList(postId);
 
-        log.info("getPost 정상 수행에 따른 게시글 로드 완료");
 
         HashMap<String, Object> postResponse = new HashMap<>();
         postResponse.put("post", post);
         postResponse.put("fileList", fileList);
 
-        return CommonApiResponseDTO.builder()
-                .success(true)
-                .data(postResponse)
-                .build();
+        return ResponseEntity.ok(postResponse);
     }
 
     /**
@@ -193,7 +174,7 @@ public class GalleryPostController {
      * @return 공통 반환타입 CommonApiResponseDTO 객체
      */
     @DeleteMapping("/api/boards/gallery/{postId}")
-    public CommonApiResponseDTO<?> deletePost(@ModelAttribute PostDTO post) {
+    public ResponseEntity deletePost(@ModelAttribute PostDTO post) {
 
         // 수정 요청한 게시글의 작성자와 JWT안의 요청자 정보가 일치하는지 확인
         PostDTO originPost = postService.getPost(post.getPostId());
@@ -201,8 +182,6 @@ public class GalleryPostController {
 
         postService.deletePost(post);
 
-        return CommonApiResponseDTO.builder()
-                .success(true)
-                .build();
+        return ResponseEntity.ok(null);
     }
 }

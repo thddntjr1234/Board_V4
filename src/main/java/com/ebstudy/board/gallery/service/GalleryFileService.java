@@ -188,7 +188,7 @@ public class GalleryFileService {
             try {
                 resource = new InputStreamResource(Files.newInputStream(filePath));
             } catch (NoSuchFileException temp) {
-                throw new CustomException(CustomErrorCode.NOT_FOUND);
+                throw new CustomException(CustomErrorCode.FILE_NOT_FOUND);
             }
         }
 

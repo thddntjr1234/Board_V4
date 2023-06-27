@@ -46,7 +46,7 @@ public class CustomValidator implements ConstraintValidator<CustomValidation, Ob
             Object value = parameters.get(targetField);
 
             if (value == null) {
-                String errorMessage = targetField + " 유효성 검증 실패: 필드에 유효한 값이 존재하지 않습니다.";
+                String errorMessage = "게시글 작성을 위해 필요한 정보가 존재하지 않습니다.";
                 throw new ValidationException(errorMessage);
             }
 
@@ -67,13 +67,6 @@ public class CustomValidator implements ConstraintValidator<CustomValidation, Ob
     private void validateLength(String value, int minLength, int maxLength, String errorMessage) {
         if (!(value.length() >= minLength) || !(value.length() < maxLength)) {
             throw new ValidationException(errorMessage);
-        }
-    }
-
-    private void validatePassword(String password) {
-        String regex = "^.*(?=^.{4,15}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$";
-        if (!password.matches(regex)) {
-            throw new ValidationException("비밀번호는 4글자 이상 16글자 미만, 영문과 숫자, 특수문자를 포함해야 합니다");
         }
     }
 }

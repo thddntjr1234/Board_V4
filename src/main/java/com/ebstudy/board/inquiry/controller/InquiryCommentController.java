@@ -1,11 +1,11 @@
 package com.ebstudy.board.inquiry.controller;
 
 import com.ebstudy.board.dto.CommentDTO;
-import com.ebstudy.board.dto.response.CommonApiResponseDTO;
 import com.ebstudy.board.inquiry.service.InquiryCommentService;
 import com.ebstudy.board.inquiry.service.InquiryPostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,13 +23,11 @@ public class InquiryCommentController {
      * @return 성공 여부를 담은 Response 객체
      */
     @PostMapping("/api/boards/inquiry/comment")
-    public CommonApiResponseDTO<?> saveComment(@RequestBody CommentDTO comment) {
+    public ResponseEntity saveComment(@RequestBody CommentDTO comment) {
         commentService.saveComment(comment);
 
         // 게시글 카테고리 변경
-        return CommonApiResponseDTO.builder()
-                .success(true)
-                .build();
+        return ResponseEntity.ok(null);
     }
 
     /**
@@ -39,12 +37,10 @@ public class InquiryCommentController {
      * @return 성공 여부를 담은 Response 객체
      */
     @DeleteMapping("/api/boards/inquiry/comment/{commentId}")
-    public CommonApiResponseDTO<?> deleteComment(@PathVariable Long commentId) {
+    public ResponseEntity deleteComment(@PathVariable Long commentId) {
         commentService.deleteComment(commentId);
         // 게시글 카테고리 변경
-        return CommonApiResponseDTO.builder()
-                .success(true)
-                .build();
+        return ResponseEntity.ok(null);
     }
 
     /**
@@ -54,11 +50,9 @@ public class InquiryCommentController {
      * @return 성공 여부를 담은 Response 객체
      */
     @PutMapping("/api/boards/inquiry/comment")
-    public CommonApiResponseDTO<?> updateComment(@RequestBody CommentDTO comment) {
+    public ResponseEntity updateComment(@RequestBody CommentDTO comment) {
         commentService.updateComment(comment);
 
-        return CommonApiResponseDTO.builder()
-                .success(true)
-                .build();
+        return ResponseEntity.ok(null);
     }
 }

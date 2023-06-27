@@ -1,11 +1,12 @@
 package com.ebstudy.board.gallery.controller;
 
 import com.ebstudy.board.dto.CommentDTO;
-import com.ebstudy.board.dto.response.CommonApiResponseDTO;
 import com.ebstudy.board.gallery.service.GalleryCommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.AsyncRequestTimeoutException;
 
 @RestController
 @Slf4j
@@ -21,12 +22,10 @@ public class GalleryCommentController {
      * @return 성공 여부를 담은 Response 객체
      */
     @PostMapping("/api/boards/gallery/comment")
-    public CommonApiResponseDTO<?> saveComment(@RequestBody CommentDTO comment) {
+    public ResponseEntity saveComment(@RequestBody CommentDTO comment) {
         commentService.saveComment(comment);
 
-        return CommonApiResponseDTO.builder()
-                .success(true)
-                .build();
+        return ResponseEntity.ok(null);
     }
 
     /**
@@ -36,12 +35,10 @@ public class GalleryCommentController {
      * @return 성공 여부를 담은 Response 객체
      */
     @DeleteMapping("/api/boards/gallery/comment/{commentId}")
-    public CommonApiResponseDTO<?> deleteComment(@PathVariable Long commentId) {
+    public ResponseEntity deleteComment(@PathVariable Long commentId) {
         commentService.deleteComment(commentId);
 
-        return CommonApiResponseDTO.builder()
-                .success(true)
-                .build();
+        return ResponseEntity.ok(null);
     }
 
     /**
@@ -51,11 +48,15 @@ public class GalleryCommentController {
      * @return 성공 여부를 담은 Response 객체
      */
     @PutMapping("/api/boards/gallery/comment")
-    public CommonApiResponseDTO<?> updateComment(@RequestBody CommentDTO comment) {
+    public ResponseEntity updateComment(@RequestBody CommentDTO comment) {
         commentService.updateComment(comment);
 
-        return CommonApiResponseDTO.builder()
-                .success(true)
-                .build();
+        return ResponseEntity.ok(null);
+    }
+
+
+    @GetMapping("/api/test")
+    public ResponseEntity test() {
+        throw new AsyncRequestTimeoutException();
     }
 }

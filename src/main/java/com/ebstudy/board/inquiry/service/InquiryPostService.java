@@ -115,7 +115,7 @@ public class InquiryPostService {
 
             // 게시글 작성자와 api 요청자가 동일한지 확인한다.
             if (!userInfo.getRole().equals(Role.ROLE_ADMIN) && !userInfo.getUserId().equals(post.getAuthorId())) {
-                throw new CustomException(CustomErrorCode.DENIED_POST_REQUEST);
+                throw new CustomException(CustomErrorCode.INVALID_POST_REQUEST);
             }
         }
 

@@ -1,7 +1,6 @@
 package com.ebstudy.board.gallery.controller;
 
 import com.ebstudy.board.dto.FileDTO;
-import com.ebstudy.board.dto.response.CommonApiResponseDTO;
 import com.ebstudy.board.gallery.service.GalleryFileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,11 +46,8 @@ public class GalleryFileController {
      * @return 업로드 이미지에 간접 접근이 가능한 url
      */
     @PostMapping("/api/boards/gallery/file")
-    public CommonApiResponseDTO<?> saveFile(@RequestPart MultipartFile file) throws IOException {
+    public ResponseEntity saveFile(@RequestPart MultipartFile file) throws IOException {
         FileDTO imageInfo = fileService.saveFile(file);
-        return CommonApiResponseDTO.builder()
-                .success(true)
-                .data(imageInfo)
-                .build();
+        return ResponseEntity.ok(imageInfo);
     }
 }
