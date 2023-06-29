@@ -92,8 +92,7 @@ public class InquiryPostController {
      * @return HttpStatus를 가진 ResponseEntity<> 객체
      */
     @PostMapping("/api/boards/inquiry")
-    // ResponseEntity 로 리턴하면 raw type 경고가 나타나므로 와일드카드 ?를 선언해서 raw type의 불안정성을 제거
-    public ResponseEntity savePost(@CustomValidation(value = {"title", "content"})
+    public ResponseEntity savePost(@CustomValidation(value = {"title", "content", "secret"})
                                             @ModelAttribute PostDTO post) throws IOException {
         postService.savePost(post);
         fileService.saveFile(post.getPostId(), post.getFile());
@@ -108,7 +107,7 @@ public class InquiryPostController {
      * @return 공통 반환타입 CommonApiResponseDTO 객체
      */
     @PutMapping("/api/boards/inquiry/{postId}")
-    public ResponseEntity updatePost(@CustomValidation(value = {"title", "content"}) @ModelAttribute PostDTO post,
+    public ResponseEntity updatePost(@CustomValidation(value = {"title", "content", "secret"}) @ModelAttribute PostDTO post,
                                               @RequestPart(required = false) List<FileDTO> existingFiles) throws IOException {
         // Multipart/Form-Data 방식과 json타입의 객체를 같이 사용하려면 json파트에 대해 @RequestPart 어노테이션을 적용해 주면 된다.
 

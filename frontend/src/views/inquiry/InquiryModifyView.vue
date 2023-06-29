@@ -10,6 +10,18 @@
                required>
       </div>
     </div>
+
+    <div class="row mb-3">
+      <label for="categoryId" class="col-sm-2 col-form-label">비공개</label>
+      <div class="col-sm-10">
+        <select id="categoryId" class="form-select" name="secret" v-model="post.secret" required>
+          <option disabled value="">비공개 여부 선택</option>
+          <option value="false">공개 설정</option>
+          <option value="true">비공개 설정</option>
+        </select>
+      </div>
+    </div>
+
     <div class="row mb-3">
       <label for="content" class="col-sm-2 col-form-label">내용</label>
       <div class="col-sm-10">

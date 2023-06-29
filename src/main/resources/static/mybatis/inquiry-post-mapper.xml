@@ -92,10 +92,10 @@
     <insert id="savePost" parameterType="PostDTO" useGeneratedKeys="true"
             keyProperty="postId">
         INSERT INTO inquiry_posts(title, author_id, content,
-                                    created_date, modified_date)
+                                  secret, created_date, modified_date)
 
         VALUES (#{title}, #{authorId}, #{content},
-                #{createdDate}, #{modifiedDate})
+                #{secret}, #{createdDate}, #{modifiedDate})
     </insert>
 
     <!--postId값의 게시글을 수정-->
@@ -104,6 +104,7 @@
 
         SET title         = #{title},
             content       = #{content},
+            secret        = #{secret},
             modified_date = #{modifiedDate}
 
         WHERE post_id = #{postId}

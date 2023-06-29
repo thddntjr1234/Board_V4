@@ -11,6 +11,16 @@
       </div>
     </div>
     <div class="row mb-3">
+      <label for="categoryId" class="col-sm-2 col-form-label">비공개</label>
+      <div class="col-sm-10">
+        <select id="categoryId" class="form-select" name="secret" v-model="secret" required>
+          <option disabled value="">비공개 여부 선택</option>
+          <option value="false">공개 설정</option>
+          <option value="true">비공개 설정</option>
+        </select>
+      </div>
+    </div>
+    <div class="row mb-3">
       <label for="content" class="col-sm-2 col-form-label">내용</label>
       <div class="col-sm-10">
         <textarea class="form-control" id="content" v-model="content" name="content" rows="20" placeholder="내용을 입력하세요"
@@ -46,11 +56,11 @@ const router = useRouter()
 const store = useStore()
 
 const categoryList = ref()
-const jwt = store.state.token
 
 // 변수를 ref 혹은 reactive로 감싸면 반응형으로 바뀐다.
 const title = ref('')
 const content = ref('')
+const secret = ref('')
 const file = ref([])
 
 /**
@@ -62,6 +72,7 @@ const savePost = async () => {
   // ref에 접근하려면 .value옵션을 붙여야 함
   formData.append("title", title.value)
   formData.append("content", content.value)
+  formData.append("secret", secret.value)
 
   // 파일이 있다면 이를 일일히 append해야 리스트 단위로 들어가지 않는다.
   for (let i = 0; i < file.value.length; i++) {
