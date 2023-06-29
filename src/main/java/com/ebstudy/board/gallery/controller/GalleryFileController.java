@@ -29,7 +29,7 @@ public class GalleryFileController {
      * @return 사용자가 입력한 실제 파일명의 파일을 담은 ResponseEntity<Resource> 객체
      */
     @GetMapping("/api/boards/gallery/file")
-    public ResponseEntity<?> getFile(@RequestParam String fileName, @RequestParam String fileRealName) throws IOException {
+    public ResponseEntity<Object> getFile(@RequestParam String fileName, @RequestParam String fileRealName) throws IOException {
 
         HashMap<String, Object> headerAndResourece = fileService.getFile(fileName, fileRealName);
 
@@ -46,7 +46,7 @@ public class GalleryFileController {
      * @return 업로드 이미지에 간접 접근이 가능한 url
      */
     @PostMapping("/api/boards/gallery/file")
-    public ResponseEntity saveFile(@RequestPart MultipartFile file) throws IOException {
+    public ResponseEntity<Object> saveFile(@RequestPart MultipartFile file) throws IOException {
         FileDTO imageInfo = fileService.saveFile(file);
         return ResponseEntity.ok(imageInfo);
     }

@@ -1,12 +1,7 @@
 package com.ebstudy.board.global.exception;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.json.JSONObject;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -14,7 +9,6 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @Component
@@ -32,13 +26,8 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         // 에러 메세지 지정
         String msg = "로그인한 뒤 다시 시도해주세요.";
 
-
         JSONObject responseJson = new JSONObject();
-        try {
-            responseJson.put("errorMessage", msg);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
+        responseJson.put("errorMessage", msg);
 
         response.setStatus(401);
         response.setContentType("application/json;charset=UTF-8");

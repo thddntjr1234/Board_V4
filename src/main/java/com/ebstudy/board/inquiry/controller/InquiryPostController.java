@@ -34,7 +34,7 @@ public class InquiryPostController {
      * @return 페이지 번호별로 로딩한 게시글 리스트
      */
     @GetMapping("/api/boards/inquiry")
-    public ResponseEntity getPostList(@ModelAttribute SearchDTO searchValues) {
+    public ResponseEntity<Object> getPostList(@ModelAttribute SearchDTO searchValues) {
 
         // 받아온 검색조건을 입력해 pagingValues를 가져온다
         PaginationDTO pagingValues = postService.getPaginationValues(searchValues);
@@ -55,7 +55,7 @@ public class InquiryPostController {
      * @return 가져온 게시글 데이터
      */
     @GetMapping("/api/boards/inquiry/{postId}")
-    public ResponseEntity getPost(@PathVariable Long postId) {
+    public ResponseEntity<Object> getPost(@PathVariable Long postId) {
 
         PostDTO post = postService.getPost(postId);
         List<FileDTO> fileList = fileService.getFileList(postId);
@@ -75,7 +75,7 @@ public class InquiryPostController {
      * @return 게시글 폼 데이터
      */
     @GetMapping("/api/boards/inquiry/new")
-    public ResponseEntity getWriteForm() {
+    public ResponseEntity<Object> getWriteForm() {
 
         UserDTO user = userService.getUserFromContext();
 
@@ -92,7 +92,7 @@ public class InquiryPostController {
      * @return HttpStatus를 가진 ResponseEntity<> 객체
      */
     @PostMapping("/api/boards/inquiry")
-    public ResponseEntity savePost(@CustomValidation(value = {"title", "content", "secret"})
+    public ResponseEntity<Object> savePost(@CustomValidation(value = {"title", "content", "secret"})
                                             @ModelAttribute PostDTO post) throws IOException {
         postService.savePost(post);
         fileService.saveFile(post.getPostId(), post.getFile());
@@ -107,7 +107,7 @@ public class InquiryPostController {
      * @return 공통 반환타입 CommonApiResponseDTO 객체
      */
     @PutMapping("/api/boards/inquiry/{postId}")
-    public ResponseEntity updatePost(@CustomValidation(value = {"title", "content", "secret"}) @ModelAttribute PostDTO post,
+    public ResponseEntity<Object> updatePost(@CustomValidation(value = {"title", "content", "secret"}) @ModelAttribute PostDTO post,
                                               @RequestPart(required = false) List<FileDTO> existingFiles) throws IOException {
         // Multipart/Form-Data 방식과 json타입의 객체를 같이 사용하려면 json파트에 대해 @RequestPart 어노테이션을 적용해 주면 된다.
 
@@ -129,7 +129,7 @@ public class InquiryPostController {
      * @return 공통 반환타입 CommonApiResponseDTO 객체
      */
     @DeleteMapping("/api/boards/inquiry/{postId}")
-    public ResponseEntity deletePost(@ModelAttribute PostDTO post) {
+    public ResponseEntity<Object> deletePost(@ModelAttribute PostDTO post) {
 
         // 수정 요청한 게시글의 작성자와 JWT안의 요청자 정보가 일치하는지 확인
         PostDTO originPost = postService.getPost(post.getPostId());

@@ -77,8 +77,8 @@ public class GalleryFileService {
         file.setSize(multipartFile.getSize());
 
         // 파일 저장 시 가상 디렉토리에 먼저 저장한다.
-        String tempStoragePath = "temp/" + file.getFileName();
-        File storageFile = new File(tempStoragePath);
+        String tempLocalStoragePath = "temp/" + file.getFileName();
+        File storageFile = new File(tempLocalStoragePath);
 
         multipartFile.transferTo(storageFile);
 

@@ -1,20 +1,14 @@
 package com.ebstudy.board.global.exception;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
+import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @Component
@@ -27,11 +21,7 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
         String msg = "잘못된 권한으로 인해 요청이 거부되었습니다.";
 
         JSONObject responseJson = new JSONObject();
-        try {
-            responseJson.put("errorMessage", msg);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
+        responseJson.put("errorMessage", msg);
 
         response.setStatus(403);
         response.setContentType("application/json;charset=UTF-8");

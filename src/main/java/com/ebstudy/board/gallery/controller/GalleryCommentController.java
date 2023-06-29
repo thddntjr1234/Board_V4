@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.async.AsyncRequestTimeoutException;
 
 @RestController
 @Slf4j
@@ -22,7 +21,7 @@ public class GalleryCommentController {
      * @return 성공 여부를 담은 Response 객체
      */
     @PostMapping("/api/boards/gallery/comment")
-    public ResponseEntity saveComment(@RequestBody CommentDTO comment) {
+    public ResponseEntity<Object> saveComment(@RequestBody CommentDTO comment) {
         commentService.saveComment(comment);
 
         return ResponseEntity.ok(null);
@@ -35,7 +34,7 @@ public class GalleryCommentController {
      * @return 성공 여부를 담은 Response 객체
      */
     @DeleteMapping("/api/boards/gallery/comment/{commentId}")
-    public ResponseEntity deleteComment(@PathVariable Long commentId) {
+    public ResponseEntity<Object> deleteComment(@PathVariable Long commentId) {
         commentService.deleteComment(commentId);
 
         return ResponseEntity.ok(null);
@@ -48,15 +47,9 @@ public class GalleryCommentController {
      * @return 성공 여부를 담은 Response 객체
      */
     @PutMapping("/api/boards/gallery/comment")
-    public ResponseEntity updateComment(@RequestBody CommentDTO comment) {
+    public ResponseEntity<Object> updateComment(@RequestBody CommentDTO comment) {
         commentService.updateComment(comment);
 
         return ResponseEntity.ok(null);
-    }
-
-
-    @GetMapping("/api/test")
-    public ResponseEntity test() {
-        throw new AsyncRequestTimeoutException();
     }
 }

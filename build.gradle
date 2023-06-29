@@ -23,6 +23,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.3.0' // boot 2.5~2.7은 2.3 버전을 사용한다
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.json:json:20230618'
 
 
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'

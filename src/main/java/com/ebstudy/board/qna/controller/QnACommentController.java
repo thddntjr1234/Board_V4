@@ -21,7 +21,7 @@ public class QnACommentController {
      * @return 성공 여부를 담은 Response 객체
      */
     @PostMapping("/api/boards/qna/comment")
-    public ResponseEntity saveComment(@RequestBody CommentDTO comment) {
+    public ResponseEntity<Object> saveComment(@RequestBody CommentDTO comment) {
         commentService.saveComment(comment);
 
         return ResponseEntity.ok(null);
@@ -34,7 +34,7 @@ public class QnACommentController {
      * @return 성공 여부를 담은 Response 객체
      */
     @DeleteMapping("/api/boards/qna/comment/{commentId}")
-    public ResponseEntity deleteComment(@PathVariable Long commentId) {
+    public ResponseEntity<Object> deleteComment(@PathVariable Long commentId) {
         commentService.deleteComment(commentId);
 
         return ResponseEntity.ok(null);
@@ -47,7 +47,7 @@ public class QnACommentController {
      * @return 성공 여부를 담은 Response 객체
      */
     @PutMapping("/api/boards/qna/comment")
-    public ResponseEntity updateComment(@RequestBody CommentDTO comment) {
+    public ResponseEntity<Object> updateComment(@RequestBody CommentDTO comment) {
         commentService.updateComment(comment);
 
         return ResponseEntity.ok(null);

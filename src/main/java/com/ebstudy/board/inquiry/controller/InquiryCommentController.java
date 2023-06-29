@@ -23,7 +23,7 @@ public class InquiryCommentController {
      * @return 성공 여부를 담은 Response 객체
      */
     @PostMapping("/api/boards/inquiry/comment")
-    public ResponseEntity saveComment(@RequestBody CommentDTO comment) {
+    public ResponseEntity<Object> saveComment(@RequestBody CommentDTO comment) {
         commentService.saveComment(comment);
 
         // 게시글 카테고리 변경
@@ -37,7 +37,7 @@ public class InquiryCommentController {
      * @return 성공 여부를 담은 Response 객체
      */
     @DeleteMapping("/api/boards/inquiry/comment/{commentId}")
-    public ResponseEntity deleteComment(@PathVariable Long commentId) {
+    public ResponseEntity<Object> deleteComment(@PathVariable Long commentId) {
         commentService.deleteComment(commentId);
         // 게시글 카테고리 변경
         return ResponseEntity.ok(null);
@@ -50,7 +50,7 @@ public class InquiryCommentController {
      * @return 성공 여부를 담은 Response 객체
      */
     @PutMapping("/api/boards/inquiry/comment")
-    public ResponseEntity updateComment(@RequestBody CommentDTO comment) {
+    public ResponseEntity<Object> updateComment(@RequestBody CommentDTO comment) {
         commentService.updateComment(comment);
 
         return ResponseEntity.ok(null);

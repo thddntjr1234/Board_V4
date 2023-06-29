@@ -33,7 +33,7 @@ public class CustomValidator implements ConstraintValidator<CustomValidation, Ob
                 field.setAccessible(true); // private 필드 접근을 위한 설정
 
                 parameters.put(field.getName(), field.get(validationData));
-                System.out.println(field.getName() + "  " + field.get(validationData));
+                log.debug(field.getName() + "  " + field.get(validationData));
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
@@ -57,6 +57,8 @@ public class CustomValidator implements ConstraintValidator<CustomValidation, Ob
                         break;
                     case "content":
                         validateLength((String) value, 4, 2000, "내용은 4글자 이상 2000글자 미만이어야 합니다", errorMessages);
+                        break;
+                    default:
                         break;
                 }
             }
