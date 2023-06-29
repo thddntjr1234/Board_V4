@@ -60,7 +60,7 @@ public class CommunityPostService {
 
         if (postId == null || postId <= 0) {
             log.info("파라미터 postId값이 유효하지 않음");
-            throw new CustomException(CustomErrorCode.INVALID_REQUEST);
+            throw new CustomException(CustomErrorCode.INVALID_POST_REQUEST);
         }
 
         Optional<PostDTO> post = Optional.ofNullable(boardMapper.getPost(postId));

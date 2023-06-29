@@ -45,101 +45,82 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import {onMounted} from "vue";
 import {ref, reactive} from "vue";
 import {useStore} from "vuex"
 import {useRouter} from "vue-router";
+import {apiErrorHanlder} from "@/error/api-error-hanlder";
 import NavBar from "@/components/NavBar.vue";
 import * as boardApi from "@/apis/board"
 import * as userApi from "@/apis/user"
 
-export default {
-  name: "CommunityWriteFormView",
-  components: {NavBar},
+const store = useStore()
 
-  setup() {
-    const router = useRouter()
-    const store = useStore()
+const categoryList = ref()
+const jwt = store.state.token
 
-    const categoryList = ref()
-    const jwt = store.state.token
+// 변수를 ref 혹은 reactive로 감싸면 반응형으로 바뀐다.
+const categoryId = ref('')
+const title = ref('')
+const content = ref('')
+const file = ref([])
 
-    // 변수를 ref 혹은 reactive로 감싸면 반응형으로 바뀐다.
-    const categoryId = ref('')
-    const title = ref('')
-    const content = ref('')
-    const file = ref([])
+onMounted(() => {
+  getWriteFormData()
+})
 
-    /**
-     * 입력한 게시글 데이터를 서버 상으로 저장하도록 요청하는 메소드
-     */
-    const savePost = async () => {
-      const formData = new FormData()
+/**
+ * 입력한 게시글 데이터를 서버 상으로 저장하도록 요청하는 메소드
+ */
+const savePost = async () => {
+  const formData = new FormData()
 
-      // ref에 접근하려면 .value옵션을 붙여야 함
-      formData.append("title", title.value)
-      formData.append("content", content.value)
+  // ref에 접근하려면 .value옵션을 붙여야 함
+  formData.append("title", title.value)
+  formData.append("content", content.value)
+  formData.append("categoryId", categoryId.value)
 
-      // 파일이 있다면 이를 일일히 append해야 리스트 단위로 들어가지 않는다.
-      for (let i = 0; i < file.value.length; i++) {
-        if (file.value[i]) {
-          formData.append("file", file.value[i])
-        }
-      }
-
-      try {
-        const response = await boardApi.savePost('/boards/free', formData)
-        alert("게시글 저장 성공")
-
-      } catch (e) {
-        alert("게시글 저장에 실패했습니다. 에러: " + e)
-        await router.push({name: 'CommunityBoardView'})
-      }
-
-      await router.push({name: 'CommunityBoardView'})
-    }
-
-    /**
-     * 게시글 폼에 바인딩할 데이터 요청
-     * @returns categoryList, user(info)
-     */
-    const getWriteFormData = async () => {
-      try {
-        const response = await boardApi.getWriteFormData("boards/free/new")
-        categoryList.value = response.data.categoryList
-
-      } catch (error) {
-        console.error("비회원 접근, 이전 페이지로 리다이렉트한다.")
-        alert("게시글 작성은 회원만 가능합니다.")
-        await router.push({name: 'CommunityBoardView'})
-      }
-    }
-
-    // 파일 추가 시 file 리스트에 추가
-    const addFile = (number, event) => {
-      const files = event.target.files
-
-      // 입력한 파일이 존재하지 않으면 null값 입력
-      file.value[number] = files[0] || null
-    }
-
-    onMounted(() => {
-      getWriteFormData()
-    })
-
-    return {
-      categoryList,
-      categoryId,
-      title,
-      content,
-      file,
-      jwt,
-      addFile,
-      savePost
+  // 파일이 있다면 이를 일일히 append해야 리스트 단위로 들어가지 않는다.
+  for (let i = 0; i < file.value.length; i++) {
+    if (file.value[i]) {
+      formData.append("file", file.value[i])
     }
   }
+
+  try {
+    const response = await boardApi.savePost('/boards/free', formData)
+    alert("게시글 저장 성공")
+    router.push({name: 'CommunityBoardView'})
+  } catch (error) {
+    apiErrorHanlder(error)
+  }
+
 }
+
+/**
+ * 게시글 폼에 바인딩할 데이터 요청
+ * @returns categoryList, user(info)
+ */
+const getWriteFormData = async () => {
+  try {
+    const response = await boardApi.getWriteFormData("boards/free/new")
+    categoryList.value = response.data.categoryList
+
+  } catch (error) {
+    apiErrorHanlder(error)
+    router.push({name: 'CommunityBoardView'})
+  }
+}
+
+// 파일 추가 시 file 리스트에 추가
+const addFile = (number, event) => {
+  const files = event.target.files
+
+  // 입력한 파일이 존재하지 않으면 null값 입력
+  file.value[number] = files[0] || null
+}
+
 </script>
 
 <style scoped>

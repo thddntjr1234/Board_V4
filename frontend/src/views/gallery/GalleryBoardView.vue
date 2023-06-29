@@ -1,13 +1,13 @@
 <template>
   <NavBar></NavBar>
   <div class="container">
-    <h1> 이미지 갤러리 - 목록(page : {{ pagingValues.currentPage }} )</h1><br>
+    <h1> 이미지 갤러리 - 목록</h1><br>
   </div>
 
   <div class="container">
     <div class="row">
       <div class="col-3 d-flex justify-content-start">
-        <button class="btn btn-primary" @click="moveToWriteView">게시글 등록</button>
+        <button class="btn btn-primary" v-show="store.getters.isValidToken" @click="moveToWriteView">게시글 등록</button>
       </div>
       <div class="col-6">
         <form class="form-inline">

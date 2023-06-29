@@ -1,48 +1,53 @@
 <template>
   <div class="container">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <span class="d-inline-block text-truncate">
-      <router-link class="nav-link text-white" to="/">메인 페이지</router-link>
-    </span>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav flex-fill">
-          <li class="nav-item">
-            <router-link class="nav-link" to="/boards/notice">공지사항</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/boards/qna">Q&A</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/boards/free">커뮤니티</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/boards/gallery">이미지 갤러리</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/boards/inquiry">1:1문의</router-link>
-          </li>
-        </ul>
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <button v-if="!$store.getters.isValidToken" type="button" class="btn btn-primary" @click="showModal = true">
-              로그인
-            </button>
-            <button v-else type="button" class="btn btn-primary" @click="signout">
-              로그아웃
-            </button>
-          </li>
-        </ul>
+      <div class="d-flex justify-content-between align-items-center w-100 mx-5">
+      <span class="d-inline-block text-truncate me-4">
+        <router-link class="nav-link text-white" to="/">메인 페이지</router-link>
+      </span>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav flex-fill">
+            <li class="nav-item">
+              <router-link class="nav-link" to="/boards/notice">공지사항</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/boards/qna">Q&A</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/boards/free">커뮤니티</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/boards/gallery">이미지 갤러리</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/boards/inquiry">1:1문의</router-link>
+            </li>
+          </ul>
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <button v-if="!$store.getters.isValidToken" type="button" class="btn btn-primary"
+                      @click="showModal = true">
+                로그인
+              </button>
+              <button v-else type="button" class="btn btn-primary" @click="signout">
+                로그아웃
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
     </nav>
 
     <div>
       <!-- 로그인 모달 -->
       <div class="modal" tabindex="-1" role="dialog" :class="{ 'd-block': showModal }">
-        <div class="modal-dialog modal-dialog-centered position-absolute" role="document" style="top: 50%; left: 50%; transform: translate(-50%, -50%);">
-        <!--        <div class="modal-dialog" role="document">-->
+        <div class="modal-dialog modal-dialog-centered position-absolute" role="document"
+             style="top: 50%; left: 50%; transform: translate(-50%, -50%);">
+          <!--        <div class="modal-dialog" role="document">-->
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title">로그인</h5>
@@ -55,11 +60,11 @@
               <form>
                 <div class="form-group">
                   <label for="username">아이디</label>
-                  <input type="text" class="form-control" id="username" v-model="loginId" />
+                  <input type="text" class="form-control" id="username" v-model="loginId"/>
                 </div>
                 <div class="form-group">
                   <label for="password">비밀번호</label>
-                  <input type="password" class="form-control" id="password" v-model="password" />
+                  <input type="password" class="form-control" id="password" v-model="password"/>
                 </div>
               </form>
             </div>
@@ -97,12 +102,12 @@ export default {
      * 로그인 수행 메소드
      * @returns {Promise<void>}
      */
-    const signin = async() => {
+    const signin = async () => {
       const data = {
         loginId: loginId.value,
         password: password.value
       }
-      
+
       try {
         const response = await userApi.signin(data)
         console.log(response.data.token)

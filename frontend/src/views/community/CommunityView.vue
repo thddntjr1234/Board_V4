@@ -60,7 +60,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import {onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
 import {useStore} from "vuex";
@@ -70,168 +70,145 @@ import Comment from "@/components/Comment.vue"
 import * as boardApi from "@/apis/board"
 import * as userApi from "@/apis/user"
 import {convertCommentListDataFormat, convertPostFormat} from "@/utils/format-converter";
+import {apiErrorHanlder} from "@/error/api-error-hanlder";
 
-export default {
-  name: "CommunityView",
-  components: {NavBar, Comment},
+onMounted(() => {
+  getPost()
+})
 
-  setup() {
-    onMounted(() => {
-      getPost()
-    })
+const route = useRoute()
+const store = useStore()
 
-    const route = useRoute()
-    const store = useStore()
+const post = ref({})
+const fileList = ref({})
+const commentList = ref({})
+const authorOfPost = ref(false)
+const currentUserInfo = ref('')
 
-    const post = ref({})
-    const fileList = ref({})
-    const commentList = ref({})
-    const authorOfPost = ref(false)
-    const currentUserInfo = ref('')
+/**
+ * 게시글 요청 및 게시글 저자 여부 플래그 설정
+ * @returns post
+ */
+const getPost = async () => {
+  try {
+    const response = await boardApi.getPost(`boards/free/${route.params.postId}`)
 
-    /**
-     * 게시글 요청 및 게시글 저자 여부 플래그 설정
-     * @returns post
-     */
-    const getPost = async () => {
-      try {
-        const response = await boardApi.getPost(`boards/free/${route.params.postId}`)
+    post.value = convertPostFormat(response.data.post)
+    fileList.value = response.data.fileList
+    commentList.value = convertCommentListDataFormat(response.data.commentList)
 
-        post.value = convertPostFormat(response.data.post)
-        fileList.value = response.data.fileList
-        commentList.value = convertCommentListDataFormat(response.data.commentList)
+    // 수정 삭제 버튼을 보여주기 위한 flag 변수 처리
+    if (store.getters.isValidToken) {
+      const authorityResponse = await userApi.getMyInfo()
 
-        // 수정 삭제 버튼을 보여주기 위한 flag 변수 처리
-        if (store.getters.isValidToken) {
-          const authorityResponse = await userApi.getMyInfo()
-
-          currentUserInfo.value = authorityResponse.data
-          if (authorityResponse.data.userId === post.value.authorId) {
-            authorOfPost.value = true
-          }
-        }
-
-      } catch (error) {
-        await router.push({name: 'not-found'})
-        console.error("게시글 데이터를 받아오는 데 실패했습니다")
+      currentUserInfo.value = authorityResponse.data
+      if (authorityResponse.data.userId === post.value.authorId) {
+        authorOfPost.value = true
       }
     }
 
-    /**
-     * 게시글 삭제 메소드
-     */
-    const deletePost = async () => {
-      try {
-        const response = await boardApi.deletePost(`boards/free/${post.value.postId}`)
-        alert("게시글을 삭제하는 데 성공했습니다.")
-        router.back()
-      } catch (error) {
-        alert("게시글을 삭제하는 데 실패했습니다.")
-      }
-    }
-
-    /**
-     * 요청한 파일에 대해 다운로드를 수행하는 메소드
-     * @param file
-     * @returns 다운로드를 요청한 파일
-     */
-    const downloadFile = async (file) => {
-      try {
-        const response = await boardApi.downloadFile('boards/free/file', file)
-        const blob = new Blob([response.data], {type: response.headers['content-type']})
-        const url = URL.createObjectURL(blob)
-        const link = document.createElement('a')
-
-        link.href = url
-        link.download = file.fileRealName
-        document.body.appendChild(link)
-        link.click()
-
-      } catch (error) {
-        alert("파일 다운로드에 실패했습니다.")
-      }
-    }
-
-    /**
-     * 댓글 작성 메소드
-     * @param comment
-     */
-    const addComment = async (comment) => {
-      const data = {
-        postId: post.value.postId,
-        comment: comment.value
-      }
-
-      try {
-        const response = await boardApi.addComment('boards/free/comment', data)
-        alert("댓글을 성공적으로 등록했습니다.")
-        router.go(0)
-      } catch (error) {
-        alert("댓글을 등록하는 데 실패했습니다.")
-      }
-    }
-
-    /**
-     * 댓글 수정 메소드
-     */
-    const modifyComment = async (comment) => {
-      console.log("modifyComment: " + JSON.stringify(comment))
-      try {
-        const response = await boardApi.modifyComment('boards/free/comment', comment)
-        alert("댓글을 성공적으로 수정했습니다.")
-        router.go(0)
-      } catch (error) {
-        alert("댓글 수정하는 데 실패했습니다.")
-      }
-    }
-
-    /**
-     * 댓글 삭제 메소드
-     * @param comment
-     */
-    const deleteComment = async (comment) => {
-      try {
-        const response = await boardApi.deleteComment(`boards/free/comment/${comment.commentId}`)
-        alert("댓글을 성공적으로 삭제했습니다")
-        router.go(0)
-      } catch (error) {
-        alert("댓글을 삭제하는 데 실패했습니다.")
-      }
-    }
-
-    /**
-     * 이전 페이지(목록)으로 이동
-     */
-    const backToList = () => {
-      router.back()
-    }
-
-    /**
-     * 게시글 수정 페이지로 이동
-     */
-    const moveToModifyView = () => {
-      console.log("route path: " + route.path + '/edit')
-      router.push({name: "CommunityModifyView"})
-    }
-
-
-    return {
-      post,
-      fileList,
-      commentList,
-      authorOfPost,
-      currentUserInfo,
-      backToList,
-      moveToModifyView,
-      deletePost,
-      addComment,
-      modifyComment,
-      deleteComment,
-      downloadFile
-    }
+  } catch (error) {
+    apiErrorHanlder(error)
+    console.error("게시글 데이터를 받아오는 데 실패했습니다")
   }
 }
 
+/**
+ * 게시글 삭제 메소드
+ */
+const deletePost = async () => {
+  try {
+    const response = await boardApi.deletePost(`boards/free/${post.value.postId}`)
+    alert("게시글을 삭제하는 데 성공했습니다.")
+    router.back()
+  } catch (error) {
+    apiErrorHanlder(error)
+  }
+}
+
+/**
+ * 요청한 파일에 대해 다운로드를 수행하는 메소드
+ * @param file
+ * @returns 다운로드를 요청한 파일
+ */
+const downloadFile = async (file) => {
+  try {
+    const response = await boardApi.downloadFile('boards/free/file', file)
+    const blob = new Blob([response.data], {type: response.headers['content-type']})
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+
+    link.href = url
+    link.download = file.fileRealName
+    document.body.appendChild(link)
+    link.click()
+
+  } catch (error) {
+    apiErrorHanlder(error)
+  }
+}
+
+/**
+ * 댓글 작성 메소드
+ * @param comment
+ */
+const addComment = async (comment) => {
+  const data = {
+    postId: post.value.postId,
+    comment: comment.value
+  }
+
+  try {
+    const response = await boardApi.addComment('boards/free/comment', data)
+    alert("댓글을 성공적으로 등록했습니다.")
+    router.go(0)
+  } catch (error) {
+    apiErrorHanlder(error)
+  }
+}
+
+/**
+ * 댓글 수정 메소드
+ */
+const modifyComment = async (comment) => {
+  console.log("modifyComment: " + JSON.stringify(comment))
+  try {
+    const response = await boardApi.modifyComment('boards/free/comment', comment)
+    alert("댓글을 성공적으로 수정했습니다.")
+    router.go(0)
+  } catch (error) {
+    apiErrorHanlder(error)
+  }
+}
+
+/**
+ * 댓글 삭제 메소드
+ * @param comment
+ */
+const deleteComment = async (comment) => {
+  try {
+    const response = await boardApi.deleteComment(`boards/free/comment/${comment.commentId}`)
+    alert("댓글을 성공적으로 삭제했습니다")
+    router.go(0)
+  } catch (error) {
+    apiErrorHanlder(error)
+  }
+}
+
+/**
+ * 이전 페이지(목록)으로 이동
+ */
+const backToList = () => {
+  router.back()
+}
+
+/**
+ * 게시글 수정 페이지로 이동
+ */
+const moveToModifyView = () => {
+  console.log("route path: " + route.path + '/edit')
+  router.push({name: "CommunityModifyView"})
+}
 
 </script>
 

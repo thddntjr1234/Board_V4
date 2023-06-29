@@ -51,21 +51,18 @@ import {useStore} from "vuex";
 import {onMounted, ref} from "vue";
 import * as boardApi from "@/apis/board";
 import NavBar from "@/components/NavBar.vue";
+import {apiErrorHanlder} from "@/error/api-error-hanlder";
 
 const router = useRouter()
 const store = useStore()
 
 const categoryList = ref()
-const jwt = store.state.token
 
 // 변수를 ref 혹은 reactive로 감싸면 반응형으로 바뀐다.
-const categoryId = ref()
+const categoryId = ref('')
 const title = ref()
 const content = ref()
-const author = ref()
 const createdDate = ref()
-const passwd = ref()
-const confirmPasswd = ref()
 const file = ref([])
 
 /**
@@ -90,13 +87,10 @@ const savePost = async () => {
   try {
     const response = await boardApi.savePost('/boards/qna', formData)
     alert("게시글 저장 성공")
-
-  } catch (e) {4
-    alert("게시글 저장에 실패했습니다. 에러: " + e)
     await router.push({name: 'QnABoardView'})
+  } catch (error) {
+    apiErrorHanlder(error)
   }
-
-  await router.push({name: 'QnABoardView'})
 }
 
 /**
@@ -109,9 +103,8 @@ const getWriteFormData = async () => {
     categoryList.value = response.data.categoryList
 
   } catch (error) {
-    console.error("비회원 접근, 이전 페이지로 리다이렉트한다.")
-    alert("게시글 작성은 회원만 가능합니다.")
-    await router.push({name: 'QnABoardView'})
+    apiErrorHanlder(error)
+    router.back()
   }
 }
 

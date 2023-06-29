@@ -1,7 +1,7 @@
 <template>
   <NavBar></NavBar>
   <div class="container">
-    <h1>Q&A - 목록(page : {{ pagingValues.currentPage }} )</h1><br>
+    <h1>Q&A - 목록</h1><br>
   </div>
 
   <!-- 검색  -->
@@ -44,8 +44,8 @@
   <!-- 게시글 뷰 모드 및 작성부  -->
   <div class="container">
     <div class="d-flex justify-content-between">
-      <button class="btn btn-primary" @click="moveToWriteView">게시글 등록</button>
-      <div class="btn-group">
+      <button class="btn btn-primary" v-show="store.getters.isValidToken" @click="moveToWriteView">게시글 등록</button>
+      <div class="btn-group" style="margin-left: auto;">
         <button class="btn btn-outline-primary" @click="togglePostListComponent('list')">리스트</button>
         <button class="btn btn-outline-primary" @click="togglePostListComponent('card')">카드</button>
       </div>

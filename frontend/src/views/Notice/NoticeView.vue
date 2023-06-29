@@ -70,6 +70,7 @@ import router from "@/router/router";
 import NavBar from "@/components/NavBar.vue";
 import Comment from "@/components/Comment.vue";
 import {convertCommentListDataFormat, convertPostFormat} from "@/utils/format-converter";
+import {apiErrorHanlder} from "@/error/api-error-hanlder";
 
 onMounted(() => {
   getPost()
@@ -107,8 +108,7 @@ const getPost = async () => {
     }
 
   } catch (error) {
-    await router.push({name: 'not-found'})
-    console.error("게시글 데이터를 받아오는 데 실패했습니다")
+    apiErrorHanlder(error)
   }
 }
 
@@ -121,7 +121,7 @@ const deletePost = async () => {
     alert("게시글을 삭제하는 데 성공했습니다.")
     router.back()
   } catch (error) {
-    alert("게시글을 삭제하는 데 실패했습니다.")
+    apiErrorHanlder(error)
   }
 }
 
@@ -143,7 +143,7 @@ const downloadFile = async (file) => {
     link.click()
 
   } catch (error) {
-    alert("파일 다운로드에 실패했습니다.")
+    apiErrorHanlder(error)
   }
 }
 
@@ -162,7 +162,7 @@ const addComment = async (comment) => {
     alert("댓글을 성공적으로 등록했습니다.")
     router.go(0)
   } catch (error) {
-    alert("댓글을 등록하는 데 실패했습니다.")
+    apiErrorHanlder(error)
   }
 }
 
@@ -176,7 +176,7 @@ const modifyComment = async (comment) => {
     alert("댓글을 성공적으로 수정했습니다.")
     router.go(0)
   } catch (error) {
-    alert("댓글 수정하는 데 실패했습니다.")
+    apiErrorHanlder(error)
   }
 }
 
@@ -190,7 +190,7 @@ const deleteComment = async (comment) => {
     alert("댓글을 성공적으로 삭제했습니다")
     router.go(0)
   } catch (error) {
-    alert("댓글을 삭제하는 데 실패했습니다.")
+    apiErrorHanlder(error)
   }
 }
 

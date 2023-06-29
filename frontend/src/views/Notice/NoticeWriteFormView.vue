@@ -54,6 +54,7 @@ import {useStore} from "vuex";
 import {onMounted, ref} from "vue";
 import * as boardApi from "@/apis/board";
 import NavBar from "@/components/NavBar.vue";
+import {apiErrorHanlder} from "@/error/api-error-hanlder";
 
 const router = useRouter()
 const store = useStore()
@@ -89,13 +90,10 @@ const savePost = async () => {
   try {
     const response = await boardApi.savePost('/boards/notice', formData)
     alert("게시글 저장 성공")
-
-  } catch (e) {
-    alert("게시글 저장에 실패했습니다. 에러: " + e)
     await router.push({name: 'NoticeBoardView'})
+  } catch (error) {
+    apiErrorHanlder(error)
   }
-
-  await router.push({name: 'NoticeBoardView'})
 }
 
 /**
@@ -107,8 +105,8 @@ const getWriteFormData = async () => {
     const response = await boardApi.getWriteFormData("boards/notice/new")
 
   } catch (error) {
-    alert("게시글 작성은 관리자만 가능합니다.")
-    await router.push({name: 'NoticeBoardView'})
+    apiErrorHanlder(error)
+    router.back()
   }
 }
 

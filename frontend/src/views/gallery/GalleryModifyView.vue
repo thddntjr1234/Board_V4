@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import {onMounted} from "vue";
+import {onBeforeMount, onMounted} from "vue";
 import {ref, reactive} from "vue";
 import {useStore} from "vuex"
 import {useRoute} from "vue-router";
@@ -42,7 +42,7 @@ import Editor from "@toast-ui/editor";
 import {saveImage} from "@/apis/board";
 import Router from "@/router/router";
 import router from "@/router/router";
-
+import {apiErrorHanlder} from "@/error/api-error-hanlder";
 
 const route = useRoute()
 const store = useStore()
@@ -52,7 +52,7 @@ let editor
 const post = ref({})
 const addedImageList = ref([])
 
-onMounted(async () => {
+onBeforeMount(async () => {
   await getPost()
   setEditor()
 })
@@ -157,8 +157,8 @@ const getPost = async () => {
 
     console.log(addedImageList.value)
   } catch (error) {
-    console.error("게시글 데이터를 받아오는 데 실패했습니다" + error.message)
-    await router.push({name: 'not-found'})
+    apiErrorHanlder(error)
+    router.back()
   }
 }
 
@@ -185,7 +185,7 @@ const modifyPost = async () => {
     alert('게시글을 성공적으로 수정했습니다.')
     router.back()
   } catch (error) {
-    alert('게시글을 수정하는 데 실패했습니다.')
+    apiErrorHanlder(error)
   }
 }
 

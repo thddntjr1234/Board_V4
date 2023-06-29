@@ -107,7 +107,7 @@ public class UserService {
         UserDTO user = getUserFromContext();
 
         if (!user.getUserId().equals(authorId)) {
-            throw new CustomException(CustomErrorCode.UNAUTHORIZED_REQUEST);
+            throw new CustomException(CustomErrorCode.DENIED_POST_REQUEST);
         }
     }
 }

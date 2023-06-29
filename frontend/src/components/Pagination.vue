@@ -8,7 +8,7 @@
             <button class="page-link">이전</button>
       </li>
       <template v-for="i in pageRange" v-bind:key="i">
-        <li class="page-item" @click="getPage(i)">
+        <li :class="['page-item', { 'active': i === pagingValues.currentPage }]" @click="getPage(i)">
           <button class="page-link">{{ i }}</button>
         </li>
       </template>

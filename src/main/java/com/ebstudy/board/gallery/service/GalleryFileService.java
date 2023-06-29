@@ -64,7 +64,7 @@ public class GalleryFileService {
     public FileDTO saveFile(MultipartFile multipartFile) throws IOException {
 
         if (multipartFile == null) {
-            throw new CustomException(CustomErrorCode.INVALID_REQUEST);
+            throw new CustomException(CustomErrorCode.FAILD_FILE_SAVE);
         }
 
         // 파일 정보 입력

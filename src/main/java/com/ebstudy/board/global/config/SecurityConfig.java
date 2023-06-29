@@ -97,6 +97,7 @@ public class SecurityConfig {
                 //Form
                 .antMatchers("/api/boards/notice/new").access("isAuthenticated() and hasRole('ADMIN')")
                 .antMatchers("/api/boards/**/new").access("isAuthenticated()")
+                .antMatchers("/api/boards/**/**/edit").access("isAuthenticated()")
 
                  //User
                 .antMatchers("/api/user/signin").permitAll()

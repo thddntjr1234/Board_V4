@@ -1,4 +1,4 @@
-import {authApiService, nonAuthApiService} from "@/apis/service"
+import apiService from "@/apis/service"
 
 /**
  * 게시글 리스트를 요청하는 API
@@ -8,14 +8,14 @@ import {authApiService, nonAuthApiService} from "@/apis/service"
  */
 function getPostList(url, params) {
     if (params.filter === 'myPost') {
-        return authApiService.get(url, {params})
+        return apiService.get(url, {params})
     }
 
-    return nonAuthApiService.get(url, {params})
+    return apiService.get(url, {params})
 }
 
 function getFixedNoticeList(board) {
-    return nonAuthApiService.get('/boards/notice/fix', {
+    return apiService.get('/boards/notice/fix', {
         params: {
             target: board
         }
@@ -30,10 +30,10 @@ function getFixedNoticeList(board) {
 function getPost(url) {
     // 라우팅 방식으로 게시글 페이지로 이동하는 방식에선 비밀글만
     if (url.includes('inquiry')) {
-        return authApiService.get(url)
+        return apiService.get(url)
     }
 
-    return nonAuthApiService.get(url)
+    return apiService.get(url)
 }
 
 /**
@@ -42,7 +42,7 @@ function getPost(url) {
  * @returns post, fileList
  */
 function getPostWithFileList(url) {
-    return nonAuthApiService.get(url)
+    return apiService.get(url)
 }
 
 /**
@@ -51,11 +51,11 @@ function getPostWithFileList(url) {
  * @returns categoryList
  */
 function getCategoryList(url) {
-    return authApiService.get(url)
+    return apiService.get(url)
 }
 
 function getWriteFormData(url) {
-    return authApiService.get(url)
+    return apiService.get(url)
 }
 
 /**
@@ -65,7 +65,7 @@ function getWriteFormData(url) {
  * @returns CommonResponsseDTO
  */
 function modifyPost(url, formData) {
-    return authApiService.put(url, formData, {
+    return apiService.put(url, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
         }
@@ -73,7 +73,7 @@ function modifyPost(url, formData) {
 }
 
 function savePost(url, formData) {
-    return authApiService.post(url, formData, {
+    return apiService.post(url, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
         }
@@ -86,7 +86,7 @@ function savePost(url, formData) {
  * @returns CommonResponseDTO
  */
 function deletePost(url) {
-    return authApiService.delete(url)
+    return apiService.delete(url)
 }
 
 /**
@@ -96,7 +96,7 @@ function deletePost(url) {
  * @returns 다운로드 할 파일
  */
 function downloadFile(url, file) {
-    return nonAuthApiService.get(url, {
+    return apiService.get(url, {
         params: {
             fileName: file.fileName,
             fileRealName: file.fileRealName
@@ -109,7 +109,7 @@ function downloadFile(url, file) {
  *
  */
 function saveImage(formData) {
-    return authApiService.post('boards/gallery/file', formData, {
+    return apiService.post('boards/gallery/file', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
         }
@@ -123,7 +123,7 @@ function saveImage(formData) {
  * @returns CommonResponseDTO
  */
 function addComment(url, data) {
-    return authApiService.post(url, data)
+    return apiService.post(url, data)
 }
 
 /**
@@ -133,7 +133,7 @@ function addComment(url, data) {
  * @returns CommonResponseDTO
  */
 function modifyComment(url, data) {
-    return authApiService.put(url, data)
+    return apiService.put(url, data)
 }
 
 /**
@@ -142,11 +142,11 @@ function modifyComment(url, data) {
  * @returns CommonResponseDTO
  */
 function deleteComment(url) {
-    return authApiService.delete(url)
+    return apiService.delete(url)
 }
 
 function adoptComment(url, post) {
-    return authApiService.put(url, post)
+    return apiService.put(url, post)
 }
 
 export {

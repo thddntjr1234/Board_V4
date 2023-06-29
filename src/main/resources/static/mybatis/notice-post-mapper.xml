@@ -108,7 +108,7 @@
     <select id="getPost" parameterType="long" resultType="PostDTO"
             resultMap="mapPostDTO">
         SELECT A.post_id, A.created_date, A.modified_date, A.title, A.author_id,
-               A.content, A.hits, A.delete_flag, B.username AS author
+               A.content, A.hits, A.delete_flag, A.target, B.username AS author
 
         FROM v_notice_not_deleted_post A
             LEFT JOIN users B

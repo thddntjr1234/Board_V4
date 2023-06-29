@@ -47,6 +47,7 @@ import * as boardApi from "@/apis/board"
 import * as userApi from "@/apis/user"
 import {useRoute} from "vue-router";
 import {useStore} from "vuex";
+import {apiErrorHanlder} from "@/error/api-error-hanlder";
 
 
 const route = useRoute()
@@ -76,8 +77,7 @@ const getPost = async () => {
     commentList.value = response.data.commentList
 
   } catch (error) {
-    await router.push({name: 'not-found'})
-    console.error("게시글 데이터를 받아오는 데 실패했습니다")
+    apiErrorHanlder(error)
   }
 }
 
@@ -115,7 +115,7 @@ const modifyPost = async () => {
     alert('게시글을 성공적으로 수정했습니다.')
     router.back()
   } catch (error) {
-    alert('게시글을 수정하는 데 실패했습니다.')
+    apiErrorHanlder(error)
   }
 }
 

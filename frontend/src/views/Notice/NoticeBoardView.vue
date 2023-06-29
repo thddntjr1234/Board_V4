@@ -1,38 +1,38 @@
 <template>
   <NavBar></NavBar>
   <div class="container">
-    <h1> 공지사항 - 목록(page : {{ pagingValues.currentPage }} )</h1><br>
+    <h1> 공지사항 - 목록</h1><br>
   </div>
-
-  <!--검색-->
-  <div class="container col-sm-6">
-    <form class="form-inline">
-      <div class="input-group">
-        <select class="form-select" name="sort" v-model="sort">
-          <option value="" disabled>정렬 방식</option>
-          <option value="post_id">최신순</option>
-          <option value="comment_count">댓글순</option>
-          <option value="hits">조회순</option>
-        </select>
-        <input type="search" name="keyword" class="form-control" v-model="keyword" placeholder="제목/내용/작성자명 키워드"/>
-        <button class="btn btn-primary" type="submit">검색</button>
-      </div>
-    </form>
-
-  </div>
-  <br>
 
   <div class="container">
-    <div class="d-flex justify-content-between">
-      <button class="btn btn-primary" @click="moveToWriteView">게시글 등록</button>
-
-      <div class="btn-group">
-        <button class="btn btn-outline-primary" @click="togglePostListComponent('list')">리스트</button>
-        <button class="btn btn-outline-primary" @click="togglePostListComponent('card')">카드</button>
+    <div class="row">
+      <div class="col-3 d-flex justify-content-start">
+        <button class="btn btn-primary" v-show="store.getters.isValidToken" @click="moveToWriteView">게시글 등록</button>
+      </div>
+      <div class="col-6">
+        <form class="form-inline">
+          <div class="input-group">
+            <select class="form-select" name="sort" v-model="sort">
+              <option value="" disabled>정렬 방식</option>
+              <option value="post_id">최신순</option>
+              <option value="comment_count">댓글순</option>
+              <option value="hits">조회순</option>
+            </select>
+            <input type="search" name="keyword" class="form-control" v-model="keyword" placeholder="제목/내용/작성자명 키워드"/>
+            <button class="btn btn-primary" type="submit">검색</button>
+          </div>
+        </form>
+      </div>
+      <div class="col-3 d-flex justify-content-end">
+        <div class="btn-group">
+          <button class="btn btn-outline-primary" @click="togglePostListComponent('list')">리스트</button>
+          <button class="btn btn-outline-primary" @click="togglePostListComponent('card')">카드</button>
+        </div>
       </div>
     </div>
   </div>
   <br>
+
 
   <div class="container">
     <component :is="currentPostListComponent" :board-name="'notice'" :post-list="postList"></component>

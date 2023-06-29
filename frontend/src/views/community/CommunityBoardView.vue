@@ -1,7 +1,7 @@
 <template>
   <NavBar></NavBar>
   <div class="container">
-    <h1>커뮤니티 - 목록(page : {{ pagingValues.currentPage }} )</h1><br>
+    <h1>커뮤니티 - 목록</h1><br>
   </div>
 
   <!--검색-->
@@ -27,9 +27,9 @@
 
   <div class="container">
     <div class="d-flex justify-content-between">
-      <button class="btn btn-primary" @click="moveToWriteView">게시글 등록</button>
+      <button class="btn btn-primary" v-show="store.getters.isValidToken" @click="moveToWriteView">게시글 등록</button>
 
-      <div class="btn-group">
+      <div class="btn-group" style="margin-left: auto;">
         <button class="btn btn-outline-primary" @click="togglePostListComponent('list')">리스트</button>
         <button class="btn btn-outline-primary" @click="togglePostListComponent('card')">카드</button>
       </div>
@@ -165,7 +165,7 @@ const togglePostListComponent = (component) => {
   // 쿼리 파라미터용으로 사용할 변수
   // getBoardComponentByName(component)
 
-  router.replace({ path: route.path, query: {boardType: component}})
+  router.replace({ path: route.path, query: {boardType: component} })
 }
 
 /**

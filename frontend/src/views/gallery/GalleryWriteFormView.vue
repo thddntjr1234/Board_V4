@@ -34,6 +34,7 @@ import {onMounted} from "vue";
 import {ref, reactive} from "vue";
 import {useStore} from "vuex"
 import {useRouter} from "vue-router";
+import {apiErrorHanlder} from "@/error/api-error-hanlder";
 import '@toast-ui/editor/dist/toastui-editor.css'; // Editor 스타일
 import * as boardApi from "@/apis/board"
 import * as userApi from "@/apis/user"
@@ -157,10 +158,9 @@ const savePost = async () => {
   try {
     const response = await boardApi.savePost('boards/gallery', formData)
     alert("게시글 저장 성공")
-
     await router.push({name: 'GalleryBoardView'})
-  } catch (e) {
-    alert("게시글 저장 실패: " + e.message)
+  } catch (error) {
+    apiErrorHanlder(error)
   }
 
 }
@@ -174,8 +174,7 @@ const getWriteFormData = async () => {
     const response = await boardApi.getWriteFormData("boards/gallery/new")
 
   } catch (error) {
-    console.error("비회원 접근, 이전 페이지로 리다이렉트한다.")
-    alert("게시글 작성은 회원만 가능합니다.")
+    apiErrorHanlder(error)
     await router.push({name: 'GalleryBoardView'})
   }
 }

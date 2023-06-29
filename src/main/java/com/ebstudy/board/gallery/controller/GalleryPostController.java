@@ -155,10 +155,10 @@ public class GalleryPostController {
      */
     @GetMapping("/api/boards/gallery/{postId}/edit")
     public ResponseEntity getPostWithFileList(@PathVariable Long postId) {
-
         PostDTO post = postService.getPost(postId);
-        List<FileDTO> fileList = fileService.getFileList(postId);
+        userService.verifySameUser(post.getAuthorId());
 
+        List<FileDTO> fileList = fileService.getFileList(postId);
 
         HashMap<String, Object> postResponse = new HashMap<>();
         postResponse.put("post", post);

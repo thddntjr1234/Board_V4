@@ -7,10 +7,9 @@ import javax.validation.ConstraintValidatorContext;
 import javax.validation.ValidationException;
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
-/**
- * 어노테이션에 검사 대상으로 설정한 필드 대상으로 유효성 검증 수행
- */
 @Slf4j
 public class CustomValidator implements ConstraintValidator<CustomValidation, Object> {
 
@@ -40,33 +39,40 @@ public class CustomValidator implements ConstraintValidator<CustomValidation, Ob
             }
         }
 
+        List<String> errorMessages = new LinkedList<>();
+
         // 검사할 필드에 대하여 유효성 검증 진행
         for (String targetField : values) {
 
             Object value = parameters.get(targetField);
 
             if (value == null) {
-                String errorMessage = "게시글 작성을 위해 필요한 정보가 존재하지 않습니다.";
-                throw new ValidationException(errorMessage);
-            }
-
-            switch (targetField) {
-                case "categoryId":
-                    break;
-                case "title":
-                    validateLength((String) value, 4, 100, "제목은 4글자 이상 100글자 미만이어야 합니다");
-                    break;
-                case "content":
-                    validateLength((String) value, 4, 2000, "내용은 4글자 이상 2000글자 미만이어야 합니다");
-                    break;
+                errorMessages.add("게시글 작성을 위해 필요한 정보가 존재하지 않습니다.");
+            } else {
+                switch (targetField) {
+                    case "categoryId":
+                        break;
+                    case "title":
+                        validateLength((String) value, 4, 100, "제목은 4글자 이상 100글자 미만이어야 합니다", errorMessages);
+                        break;
+                    case "content":
+                        validateLength((String) value, 4, 2000, "내용은 4글자 이상 2000글자 미만이어야 합니다", errorMessages);
+                        break;
+                }
             }
         }
+
+        if (!errorMessages.isEmpty()) {
+            String errorMessage = String.join("\n", errorMessages);
+            throw new ValidationException(errorMessage);
+        }
+
         return true;
     }
 
-    private void validateLength(String value, int minLength, int maxLength, String errorMessage) {
+    private void validateLength(String value, int minLength, int maxLength, String errorMessage, List<String> errorMessages) {
         if (!(value.length() >= minLength) || !(value.length() < maxLength)) {
-            throw new ValidationException(errorMessage);
+            errorMessages.add(errorMessage);
         }
     }
 }

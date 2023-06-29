@@ -1,23 +1,35 @@
 import axios from "axios";
 import store from "@/store/storage"
+import {apiErrorHanlder} from "@/error/api-error-hanlder";
 
-// 토큰을 설정하는 부분에 axios 인터셉터를 적용할 수도 있으나 별도로 인터셉터에서 수행할 것이 없기 때문에 사용하지 않는다.
+const instance = axios.create({
+    baseURL: '/api/'
+})
 
-function createAxiosServiceWithAuth() {
-    return axios.create({
-        baseURL: '/api/',
-        headers: {
-            Authorization: `Bearer ${store.state.token}`,
+instance.interceptors.request.use(
+    (config) => {
+        if (store.getters.isValidToken) {
+            config.headers["Authorization"] = `Bearer ${store.getters.getToken}`
         }
-    })
-}
+        return config
+    },
+    (error) => {
+        return Promise.reject(error)
+    }
+)
 
-function createAxiosServiceWithoutAuth () {
-    return axios.create({
-        baseURL: '/api/',
-    })
-}
+instance.interceptors.response.use(
+    function (response) {
+        return response;
+    },
+    function (error) {
+        throw error
 
-export const nonAuthApiService = createAxiosServiceWithoutAuth()
-export const authApiService = createAxiosServiceWithAuth()
+        // apiErrorHanlder(error.response)
+        // return Promise.reject(error)
+    }
+)
+
+export default instance;
+
 
