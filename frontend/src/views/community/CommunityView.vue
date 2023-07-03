@@ -70,7 +70,7 @@ import Comment from "@/components/Comment.vue"
 import * as boardApi from "@/apis/board"
 import * as userApi from "@/apis/user"
 import {convertCommentListDataFormat, convertPostFormat} from "@/utils/format-converter";
-import {apiErrorHanlder} from "@/error/api-error-hanlder";
+import {apiErrorHandler} from "@/error/api-error-handler";
 
 onMounted(() => {
   getPost()
@@ -108,7 +108,7 @@ const getPost = async () => {
     }
 
   } catch (error) {
-    apiErrorHanlder(error)
+    apiErrorHandler(error)
     console.error("게시글 데이터를 받아오는 데 실패했습니다")
   }
 }
@@ -122,7 +122,7 @@ const deletePost = async () => {
     alert("게시글을 삭제하는 데 성공했습니다.")
     router.back()
   } catch (error) {
-    apiErrorHanlder(error)
+    apiErrorHandler(error)
   }
 }
 
@@ -144,7 +144,7 @@ const downloadFile = async (file) => {
     link.click()
 
   } catch (error) {
-    apiErrorHanlder(error)
+    apiErrorHandler(error)
   }
 }
 
@@ -163,7 +163,7 @@ const addComment = async (comment) => {
     alert("댓글을 성공적으로 등록했습니다.")
     router.go(0)
   } catch (error) {
-    apiErrorHanlder(error)
+    apiErrorHandler(error)
   }
 }
 
@@ -177,7 +177,7 @@ const modifyComment = async (comment) => {
     alert("댓글을 성공적으로 수정했습니다.")
     router.go(0)
   } catch (error) {
-    apiErrorHanlder(error)
+    apiErrorHandler(error)
   }
 }
 
@@ -191,7 +191,7 @@ const deleteComment = async (comment) => {
     alert("댓글을 성공적으로 삭제했습니다")
     router.go(0)
   } catch (error) {
-    apiErrorHanlder(error)
+    apiErrorHandler(error)
   }
 }
 

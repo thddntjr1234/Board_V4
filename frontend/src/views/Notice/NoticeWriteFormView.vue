@@ -54,7 +54,7 @@ import {useStore} from "vuex";
 import {onMounted, ref} from "vue";
 import * as boardApi from "@/apis/board";
 import NavBar from "@/components/NavBar.vue";
-import {apiErrorHanlder} from "@/error/api-error-hanlder";
+import {apiErrorHandler} from "@/error/api-error-handler";
 
 const router = useRouter()
 const store = useStore()
@@ -92,7 +92,7 @@ const savePost = async () => {
     alert("게시글 저장 성공")
     await router.push({name: 'NoticeBoardView'})
   } catch (error) {
-    apiErrorHanlder(error)
+    apiErrorHandler(error)
   }
 }
 
@@ -105,7 +105,7 @@ const getWriteFormData = async () => {
     const response = await boardApi.getWriteFormData("boards/notice/new")
 
   } catch (error) {
-    apiErrorHanlder(error)
+    apiErrorHandler(error)
     router.back()
   }
 }

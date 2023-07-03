@@ -42,7 +42,7 @@ import Editor from "@toast-ui/editor";
 import {saveImage} from "@/apis/board";
 import Router from "@/router/router";
 import router from "@/router/router";
-import {apiErrorHanlder} from "@/error/api-error-hanlder";
+import {apiErrorHandler} from "@/error/api-error-handler";
 
 const route = useRoute()
 const store = useStore()
@@ -157,7 +157,7 @@ const getPost = async () => {
 
     console.log(addedImageList.value)
   } catch (error) {
-    apiErrorHanlder(error)
+    apiErrorHandler(error)
     router.back()
   }
 }
@@ -185,7 +185,7 @@ const modifyPost = async () => {
     alert('게시글을 성공적으로 수정했습니다.')
     router.back()
   } catch (error) {
-    apiErrorHanlder(error)
+    apiErrorHandler(error)
   }
 }
 

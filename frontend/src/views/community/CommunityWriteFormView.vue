@@ -50,7 +50,7 @@ import {onMounted} from "vue";
 import {ref, reactive} from "vue";
 import {useStore} from "vuex"
 import {useRouter} from "vue-router";
-import {apiErrorHanlder} from "@/error/api-error-hanlder";
+import {apiErrorHandler} from "@/error/api-error-handler";
 import NavBar from "@/components/NavBar.vue";
 import * as boardApi from "@/apis/board"
 import * as userApi from "@/apis/user"
@@ -93,7 +93,7 @@ const savePost = async () => {
     alert("게시글 저장 성공")
     router.push({name: 'CommunityBoardView'})
   } catch (error) {
-    apiErrorHanlder(error)
+    apiErrorHandler(error)
   }
 
 }
@@ -108,7 +108,7 @@ const getWriteFormData = async () => {
     categoryList.value = response.data.categoryList
 
   } catch (error) {
-    apiErrorHanlder(error)
+    apiErrorHandler(error)
     router.push({name: 'CommunityBoardView'})
   }
 }

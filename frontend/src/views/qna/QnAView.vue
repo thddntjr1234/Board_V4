@@ -79,7 +79,7 @@ import * as boardApi from "@/apis/board";
 import * as userApi from "@/apis/user";
 import router from "@/router/router";
 import {convertCommentListDataFormat, convertPostFormat} from "@/utils/format-converter";
-import {apiErrorHanlder} from "@/error/api-error-hanlder";
+import {apiErrorHandler} from "@/error/api-error-handler";
 
 onMounted(() => {
   getPost()
@@ -117,7 +117,7 @@ const getPost = async () => {
     }
 
   } catch (error) {
-    apiErrorHanlder(error)
+    apiErrorHandler(error)
   }
 }
 
@@ -130,7 +130,7 @@ const deletePost = async () => {
     alert("게시글을 삭제하는 데 성공했습니다.")
     router.back()
   } catch (error) {
-    apiErrorHanlder(error)
+    apiErrorHandler(error)
   }
 }
 
@@ -152,7 +152,7 @@ const downloadFile = async (file) => {
     link.click()
 
   } catch (error) {
-    apiErrorHanlder(error)
+    apiErrorHandler(error)
   }
 }
 
@@ -171,7 +171,7 @@ const addComment = async (comment) => {
     alert("댓글을 성공적으로 등록했습니다.")
     router.go(0)
   } catch (error) {
-    apiErrorHanlder(error)
+    apiErrorHandler(error)
   }
 }
 
@@ -185,7 +185,7 @@ const modifyComment = async (comment) => {
     alert("댓글을 성공적으로 수정했습니다.")
     router.go(0)
   } catch (error) {
-    apiErrorHanlder(error)
+    apiErrorHandler(error)
   }
 }
 
@@ -199,7 +199,7 @@ const deleteComment = async (comment) => {
     alert("댓글을 성공적으로 삭제했습니다")
     router.go(0)
   } catch (error) {
-    apiErrorHanlder(error)
+    apiErrorHandler(error)
   }
 }
 
@@ -218,7 +218,7 @@ const adoptComment = async (comment) => {
     alert('채택 완료')
     router.go(0)
   } catch (error) {
-    apiErrorHanlder(error)
+    apiErrorHandler(error)
   }
 }
 

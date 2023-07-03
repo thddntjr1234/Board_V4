@@ -1,7 +1,7 @@
 import store from "@/store/storage";
 import router from "@/router/router";
 
-export async function apiErrorHanlder(error) {
+export async function apiErrorHandler(error) {
 
     alert(error.response.data.errorMessage)
 

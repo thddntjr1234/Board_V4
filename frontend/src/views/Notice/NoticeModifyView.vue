@@ -61,7 +61,7 @@ import * as boardApi from "@/apis/board"
 import * as userApi from "@/apis/user"
 import {useRoute} from "vue-router";
 import {useStore} from "vuex";
-import {apiErrorHanlder} from "@/error/api-error-hanlder";
+import {apiErrorHandler} from "@/error/api-error-handler";
 
 
 const route = useRoute()
@@ -88,7 +88,7 @@ const getPost = async () => {
     existingFileList.value = response.data.fileList
 
   } catch (error) {
-    apiErrorHanlder(error)
+    apiErrorHandler(error)
   }
 }
 
@@ -101,7 +101,7 @@ const getCategoryList = async () => {
     const response = await boardApi.getCategoryList('boards/notice/new')
 
   } catch (error) {
-    apiErrorHanlder(error)
+    apiErrorHandler(error)
     router.back()
   }
 }
@@ -139,7 +139,7 @@ const modifyPost = async () => {
     alert('게시글을 성공적으로 수정했습니다.')
     router.back()
   } catch (error) {
-    apiErrorHanlder(error)
+    apiErrorHandler(error)
   }
 }
 

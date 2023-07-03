@@ -59,7 +59,7 @@ import * as boardApi from "@/apis/board"
 import * as userApi from "@/apis/user"
 import {useRoute} from "vue-router";
 import {useStore} from "vuex";
-import {apiErrorHanlder} from "@/error/api-error-hanlder";
+import {apiErrorHandler} from "@/error/api-error-handler";
 
 
 const route = useRoute()
@@ -89,7 +89,7 @@ const getPost = async () => {
     commentList.value = response.data.commentList
 
   } catch (error) {
-    apiErrorHanlder(error)
+    apiErrorHandler(error)
   }
 }
 
@@ -127,7 +127,7 @@ const modifyPost = async () => {
     alert('게시글을 성공적으로 수정했습니다.')
     router.back()
   } catch (error) {
-    apiErrorHanlder(error)
+    apiErrorHandler(error)
   }
 }
 
