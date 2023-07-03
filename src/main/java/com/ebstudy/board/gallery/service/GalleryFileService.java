@@ -64,7 +64,7 @@ public class GalleryFileService {
     public FileDTO saveFile(MultipartFile multipartFile) throws IOException {
 
         if (multipartFile == null) {
-            throw new CustomException(CustomErrorCode.FAILD_FILE_SAVE);
+            throw new CustomException(CustomErrorCode.FAILED_FILE_SAVE);
         }
 
         // 파일 정보 입력
@@ -148,7 +148,7 @@ public class GalleryFileService {
         // 삭제 과정중 발생하는 오류에 대해 처리할 수 있도록 수정
         if (targetFile.exists()) {
             if (!targetFile.delete()) {
-                throw new CustomException(CustomErrorCode.FAILD_FILE_DELETE);
+                throw new CustomException(CustomErrorCode.FAILED_FILE_DELETE);
             }
         }
 

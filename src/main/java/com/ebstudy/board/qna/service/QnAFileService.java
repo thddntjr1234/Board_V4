@@ -134,7 +134,7 @@ public class QnAFileService {
 
         if (targetFile.exists()) {
             if (!targetFile.delete()) {
-                throw new CustomException(CustomErrorCode.FAILD_FILE_DELETE);
+                throw new CustomException(CustomErrorCode.FAILED_FILE_DELETE);
             }
         }
 

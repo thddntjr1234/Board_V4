@@ -139,7 +139,7 @@ public class InquiryFileService {
         // 삭제 과정중 발생하는 오류에 대해 처리할 수 있도록 수정
         if (targetFile.exists()) {
             if (!targetFile.delete()) {
-                throw new CustomException(CustomErrorCode.FAILD_FILE_DELETE);
+                throw new CustomException(CustomErrorCode.FAILED_FILE_DELETE);
             }
         }
 

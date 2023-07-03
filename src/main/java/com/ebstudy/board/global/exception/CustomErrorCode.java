@@ -15,7 +15,7 @@ public enum CustomErrorCode {
      * 400 BAD_REQUEST: 잘못된 요청
      */
     INVALID_REQUEST(HttpStatus.BAD_REQUEST,40001, "잘못된 요청입니다."),
-    FAILD_VALIDATION(HttpStatus.BAD_GATEWAY, 40003, ""), // 사용중인 에러 코드라는 것을 알리기 위해 선언
+    FAILED_VALIDATION(HttpStatus.BAD_GATEWAY, 40003, ""), // 사용중인 에러 코드라는 것을 알리기 위해 선언
 
     /**
      * 401 UNAUTHORIZED: 인증되지 않은 사용자의 요청
@@ -39,10 +39,10 @@ public enum CustomErrorCode {
     /**
      * 500 INTERNAL_SERVER_ERROR: 내부 서버 오류
      */
-    FAILD_POST_SAVE(HttpStatus.INTERNAL_SERVER_ERROR, 50001, "게시글 저장에 실패했습니다."),
-    FAILD_FILE_SAVE(HttpStatus.INTERNAL_SERVER_ERROR, 50002, "파일 저장에 실패했습니다."),
-    FAILD_FILE_DELETE(HttpStatus.INTERNAL_SERVER_ERROR, 50003, "파일 삭제에 실패했습니다."),
-    FAILD_COMMENT_SAVE(HttpStatus.INTERNAL_SERVER_ERROR, 50004, "댓글 저장에 실패했습니다."),
+    FAILED_POST_SAVE(HttpStatus.INTERNAL_SERVER_ERROR, 50001, "게시글 저장에 실패했습니다."),
+    FAILED_FILE_SAVE(HttpStatus.INTERNAL_SERVER_ERROR, 50002, "파일 저장에 실패했습니다."),
+    FAILED_FILE_DELETE(HttpStatus.INTERNAL_SERVER_ERROR, 50003, "파일 삭제에 실패했습니다."),
+    FAILED_COMMENT_SAVE(HttpStatus.INTERNAL_SERVER_ERROR, 50004, "댓글 저장에 실패했습니다."),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 50005, "서버에서 처리하는 중 오류가 발생했습니다.");
 
 
