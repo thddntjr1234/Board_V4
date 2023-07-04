@@ -52,6 +52,7 @@ import {onMounted, ref} from "vue";
 import * as boardApi from "@/apis/board";
 import NavBar from "@/components/NavBar.vue";
 import {apiErrorHandler} from "@/error/api-error-handler";
+import {validateFormData} from "@/utils/validation";
 
 const router = useRouter()
 const store = useStore()
@@ -62,7 +63,6 @@ const categoryList = ref()
 const categoryId = ref('')
 const title = ref()
 const content = ref()
-const createdDate = ref()
 const file = ref([])
 
 /**
@@ -75,7 +75,10 @@ const savePost = async () => {
   formData.append("categoryId", categoryId.value)
   formData.append("title", title.value)
   formData.append("content", content.value)
-  formData.append("createdDate", createdDate.value)
+
+  if (!validateFormData(formData)) {
+    return
+  }
 
   // 파일이 있다면 이를 일일히 append해야 리스트 단위로 들어가지 않는다.
   for (let i = 0; i < file.value.length; i++) {

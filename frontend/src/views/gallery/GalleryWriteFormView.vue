@@ -40,6 +40,7 @@ import * as boardApi from "@/apis/board"
 import * as userApi from "@/apis/user"
 import NavBar from "@/components/NavBar.vue";
 import Editor from "@toast-ui/editor";
+import {validateFormData} from "@/utils/validation";
 
 
 const router = useRouter()
@@ -154,6 +155,10 @@ const savePost = async () => {
   formData.append("title", title.value)
   formData.append("content", editor.getHTML())
   formData.append("registeredFileList", blob)
+
+  if (!validateFormData(formData)) {
+    return
+  }
 
   try {
     const response = await boardApi.savePost('boards/gallery', formData)

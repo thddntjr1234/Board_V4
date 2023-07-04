@@ -60,6 +60,7 @@ import * as userApi from "@/apis/user"
 import {useRoute} from "vue-router";
 import {useStore} from "vuex";
 import {apiErrorHandler} from "@/error/api-error-handler";
+import {validateFormData} from "@/utils/validation";
 
 
 const route = useRoute()
@@ -104,6 +105,10 @@ const modifyPost = async () => {
     if (post.value[key]) {
       formData.append(key, post.value[key])
     }
+  }
+
+  if (!validateFormData(formData)) {
+    return
   }
 
   // 신규 파일 입력

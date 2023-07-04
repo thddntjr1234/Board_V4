@@ -46,25 +46,26 @@
 </template>
 
 <script setup>
-import {onMounted} from "vue";
-import {ref, reactive} from "vue";
+import {onMounted, ref} from "vue";
 import {useStore} from "vuex"
-import {useRouter} from "vue-router";
 import {apiErrorHandler} from "@/error/api-error-handler";
+import {validateFormData} from "@/utils/validation";
 import NavBar from "@/components/NavBar.vue";
 import * as boardApi from "@/apis/board"
-import * as userApi from "@/apis/user"
+import {useRouter} from "vue-router";
 
 const store = useStore()
 
 const categoryList = ref()
-const jwt = store.state.token
+const router = useRouter()
 
 // 변수를 ref 혹은 reactive로 감싸면 반응형으로 바뀐다.
 const categoryId = ref('')
 const title = ref('')
 const content = ref('')
 const file = ref([])
+const post = ref({})
+
 
 onMounted(() => {
   getWriteFormData()
@@ -81,6 +82,10 @@ const savePost = async () => {
   formData.append("content", content.value)
   formData.append("categoryId", categoryId.value)
 
+  if (!validateFormData(formData)) {
+    return
+  }
+
   // 파일이 있다면 이를 일일히 append해야 리스트 단위로 들어가지 않는다.
   for (let i = 0; i < file.value.length; i++) {
     if (file.value[i]) {
@@ -92,10 +97,10 @@ const savePost = async () => {
     const response = await boardApi.savePost('/boards/free', formData)
     alert("게시글 저장 성공")
     router.push({name: 'CommunityBoardView'})
+
   } catch (error) {
     apiErrorHandler(error)
   }
-
 }
 
 /**

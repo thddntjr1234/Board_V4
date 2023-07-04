@@ -1,6 +1,5 @@
 import axios from "axios";
 import store from "@/store/storage"
-import {apiErrorHanlder} from "@/error/api-error-hanlder";
 
 const instance = axios.create({
     baseURL: '/api/'
@@ -24,9 +23,6 @@ instance.interceptors.response.use(
     },
     function (error) {
         throw error
-
-        // apiErrorHanlder(error.response)
-        // return Promise.reject(error)
     }
 )
 

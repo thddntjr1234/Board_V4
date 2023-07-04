@@ -53,13 +53,12 @@
 <script setup>
 import NavBar from "@/components/NavBar.vue"
 import router from "@/router/router";
-import {defineComponent, onBeforeMount, onMounted, ref} from "vue";
+import {onMounted, ref} from "vue";
 import * as boardApi from "@/apis/board"
-import * as userApi from "@/apis/user"
 import {useRoute} from "vue-router";
 import {useStore} from "vuex";
 import {apiErrorHandler} from "@/error/api-error-handler";
-
+import {validateFormData} from "@/utils/validation";
 
 const route = useRoute()
 const store = useStore()
@@ -67,7 +66,7 @@ const store = useStore()
 const post = ref({})
 const fileList = ref([])
 const commentList = ref({})
-const categoryList = ref({})
+const categoryList = ref('')
 const existingFileList = ref({})
 
 onMounted(() => {
@@ -120,6 +119,10 @@ const modifyPost = async () => {
     if (post.value[key]) {
       formData.append(key, post.value[key])
     }
+  }
+
+  if (!validateFormData(formData)) {
+    return
   }
 
   // 신규 파일 입력

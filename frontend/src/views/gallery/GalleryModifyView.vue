@@ -43,6 +43,7 @@ import {saveImage} from "@/apis/board";
 import Router from "@/router/router";
 import router from "@/router/router";
 import {apiErrorHandler} from "@/error/api-error-handler";
+import {validateFormData} from "@/utils/validation";
 
 const route = useRoute()
 const store = useStore()
@@ -179,6 +180,10 @@ const modifyPost = async () => {
   formData.append("title", post.value.title)
   formData.append("content", editor.getHTML())
   formData.append("registeredFileList", blob)
+
+  if (!validateFormData(formData)) {
+    return
+  }
 
   try {
     const response = await boardApi.modifyPost(`boards/gallery/${post.value.postId}`, formData)
