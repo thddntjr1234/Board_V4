@@ -115,7 +115,11 @@ const getWriteFormData = async () => {
   }
 }
 
-// 파일 추가 시 file 리스트에 추가
+/**
+ * 파일 추가 시 file 리스트에 추가
+ * @param number
+ * @param event
+ */
 const addFile = (number, event) => {
   const files = event.target.files
 

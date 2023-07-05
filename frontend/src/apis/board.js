@@ -10,6 +10,11 @@ function getPostList(url, params) {
     return apiService.get(url, {params})
 }
 
+/**
+ * 상당 고정 공지사항 게시글 리스트를 요청하는 API
+ * @param board
+ * @returns {Promise<axios.AxiosResponse<any>>}
+ */
 function getFixedNoticeList(board) {
     return apiService.get('/boards/notice/fix', {
         params: {
@@ -50,6 +55,11 @@ function getCategoryList(url) {
     return apiService.get(url)
 }
 
+/**
+ * 게시글 작성에 필요한 데이터를 요청하는 API
+ * @param url
+ * @returns {Promise<axios.AxiosResponse<any>>}
+ */
 function getWriteFormData(url) {
     return apiService.get(url)
 }
@@ -102,7 +112,9 @@ function downloadFile(url, file) {
 }
 
 /**
- *
+ * 에디터에 추가된 이미지를 저장하도록 요청하는 API
+ * @param formData
+ * @returns {Promise<axios.AxiosResponse<any>>}
  */
 function saveImage(formData) {
     return apiService.post('boards/gallery/file', formData, {
@@ -141,6 +153,12 @@ function deleteComment(url) {
     return apiService.delete(url)
 }
 
+/**
+ * 댓글 채택 요청 API
+ * @param url
+ * @param post
+ * @returns {Promise<axios.AxiosResponse<any>>}
+ */
 function adoptComment(url, post) {
     return apiService.put(url, post)
 }

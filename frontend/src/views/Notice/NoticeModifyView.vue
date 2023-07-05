@@ -94,20 +94,6 @@ const getPost = async () => {
 }
 
 /**
- * 게시글 폼에 바인딩할 데이터 요청
- * @returns categoryList, user(info)
- */
-const getCategoryList = async () => {
-  try {
-    const response = await boardApi.getCategoryList('boards/notice/new')
-
-  } catch (error) {
-    apiErrorHandler(error)
-    router.back()
-  }
-}
-
-/**
  * 게시글 수정
  */
 const modifyPost = async () => {

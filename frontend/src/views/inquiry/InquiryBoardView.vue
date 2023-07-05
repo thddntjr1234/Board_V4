@@ -150,6 +150,10 @@ const getPostList = async () => {
   categoryList.value = response.data.categoryList
 }
 
+/**
+ * 상단 고정 공지사항 게시글 리스트를 가져와 설정한다.
+ * @returns {Promise<void>}
+ */
 const getFixedNoticeList = async () => {
   const response = await boardApi.getFixedNoticeList('inquiry')
   noticeList.value = convertPostListFormat(response.data)
@@ -191,34 +195,6 @@ const getBoardComponentByName = (componentName) => {
       break
   }
 }
-
-// /**
-//  * 필터를 선택하여 쿼리 파라미터에 추가
-//  * @param filterName 쿼리 필터명
-//  */
-// const toggleFilter = (filterName) => {
-//   const query = {...route.query}
-//
-//   switch (filterName) {
-//     case 'all':
-//       delete query['filter']
-//       break
-//     case 'noComment':
-//       query['filter'] = filterName
-//       break
-//   }
-//   router.replace({query})
-// }
-//
-// const setFilterName = (filterName) => {
-//   switch (filterName) {
-//     case 'noComment':
-//       selectedFilter.value = '답변 없음'
-//       break
-//     default:
-//       selectedFilter.value = '전체'
-//   }
-// }
 </script>
 
 <style scoped>

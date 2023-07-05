@@ -114,11 +114,16 @@ export default {
         await store.dispatch('setToken', response.data.token)
         alert("로그인에 성공했습니다.")
         location.reload()
+
       } catch (e) {
         alert("아이디 혹은 패스워드가 잘못되었습니다.")
       }
     }
 
+    /**
+     * 로그아웃시 토큰을 vuex 스토리지에서 제거
+     * @returns {Promise<void>}
+     */
     const signout = async () => {
       console.log(store.getters.isValidToken)
       if (store.getters.isValidToken) {

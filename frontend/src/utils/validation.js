@@ -1,3 +1,8 @@
+/**
+ * 게시글 유효성 검증을 수행
+ * @param formData
+ * @returns {boolean}
+ */
 export function validateFormData(formData) {
 
     let errors = []; // 에러 리스트

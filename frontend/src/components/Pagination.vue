@@ -23,8 +23,7 @@
 </template>
 
 <script>
-import {computed, getCurrentInstance} from 'vue';
-import {useRoute} from 'vue-router';
+import {getCurrentInstance} from 'vue';
 
 export default {
   name: 'Pagination',

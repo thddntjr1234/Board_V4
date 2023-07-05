@@ -123,6 +123,10 @@ const getPostList = async () => {
   postList.value  = convertPostListFormat(response.data.postList)
 }
 
+/**
+ * 상단 고정 공지사항 게시글 리스트를 가져와 설정한다.
+ * @returns {Promise<void>}
+ */
 const getFixedNoticeList = async () => {
   const response = await boardApi.getFixedNoticeList('gallery')
   noticeList.value  = convertPostListFormat(response.data)

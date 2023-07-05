@@ -101,6 +101,9 @@ const getPost = async () => {
   }
 }
 
+/**
+ * Toast UI Editor에 내장된 뷰어를 설정
+ */
 const setViewer = () => {
   viewer.value = Editor.factory({
     el: document.querySelector('#viewer'),

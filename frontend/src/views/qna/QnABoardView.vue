@@ -162,6 +162,10 @@ const getPostList = async () => {
   categoryList.value = response.data.categoryList
 }
 
+/**
+ * 상단 고정 공지사항 게시글 리스트를 가져와 설정한다.
+ * @returns {Promise<void>}
+ */
 const getFixedNotice = async () => {
   const response = await boardApi.getFixedNoticeList('qna')
   noticeList.value  = convertPostListFormat(response.data)
