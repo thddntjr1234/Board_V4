@@ -12,13 +12,13 @@
     <!--    FileDAO가 사용하는 부분-->
     <!--게시글 저장 시 첨부한 파일의 정보를 저장-->
     <insert id="saveFile" parameterType="com.ebstudy.board.dto.FileDTO" useGeneratedKeys="true" keyProperty="fileId">
-        INSERT INTO image_files(file_name, file_realname, extension, size)
+        INSERT INTO gallery_files(file_name, file_realname, extension, size)
 
         VALUES (#{fileName}, #{fileRealName}, #{extension}, #{size})
     </insert>
 
     <insert id="saveThumbnail" parameterType="com.ebstudy.board.dto.FileDTO" useGeneratedKeys="true" keyProperty="fileId">
-        INSERT INTO image_files(file_name, file_realname, extension, size, post_id, thumbnail_path)
+        INSERT INTO gallery_files(file_name, file_realname, extension, size, post_id, thumbnail_path)
 
         VALUES (#{fileName}, #{fileRealName}, #{extension}, #{size}, #{postId}, #{imgAccessUrl})
     </insert>
@@ -28,7 +28,7 @@
             resultMap="mapFileDTO">
         SELECT *
 
-        FROM image_files
+        FROM gallery_files
 
         WHERE post_id = #{postId} AND file_name NOT REGEXP '^thumb_'
 
@@ -38,13 +38,13 @@
     <delete id="deleteFile" parameterType="long">
         DELETE
 
-        FROM image_files
+        FROM gallery_files
 
         WHERE file_id = #{fileId}
     </delete>
 
     <update id="updatePostIdFromFile">
-        UPDATE image_files
+        UPDATE gallery_files
 
         SET post_id = #{postId}
 

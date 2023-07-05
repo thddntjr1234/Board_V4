@@ -33,13 +33,13 @@
         A.content, A.hits, A.title, A.delete_flag, C.username AS author,
         (
         SELECT thumbnail_path
-        FROM image_files
+        FROM gallery_files
         WHERE A.thumbnail_id = file_id
         ) AS thumbnail_path
 
 
         # view 적용
-        FROM v_image_not_deleted_post A
+        FROM v_gallery_not_deleted_post A
         LEFT JOIN users C
         ON A.author_id = C.user_id
 
@@ -62,7 +62,7 @@
     <select id="getPostCount" parameterType="SearchDTO" resultType="int">
         SELECT COUNT(post_id)
 
-        FROM v_image_not_deleted_post A
+        FROM v_gallery_not_deleted_post A
         LEFT JOIN users B
         ON A.author_id = B.user_id
 
@@ -78,7 +78,7 @@
         SELECT post_id, created_date, modified_date, title, author_id,
                content, hits, delete_flag, username AS author, thumbnail_id
 
-        FROM v_image_not_deleted_post A
+        FROM v_gallery_not_deleted_post A
                  LEFT JOIN users C ON A.author_id = C.user_id
 
         WHERE post_id = #{postId}
@@ -88,7 +88,7 @@
     <!--PostDTO 객체에 담긴 게시글 값을 저장-->
     <insert id="savePost" parameterType="PostDTO" useGeneratedKeys="true"
             keyProperty="postId">
-        INSERT INTO image_posts(title, author_id, content,
+        INSERT INTO gallery_posts(title, author_id, content,
                                 created_date, modified_date)
 
         VALUES (#{title}, #{authorId}, #{content},
@@ -97,7 +97,7 @@
 
     <!--postId값의 게시글을 수정-->
     <update id="updatePost" parameterType="PostDTO">
-        UPDATE image_posts
+        UPDATE gallery_posts
 
         SET title         = #{title},
             content       = #{content},
@@ -107,7 +107,7 @@
     </update>
 
     <update id="addThumbnailId">
-        UPDATE  image_posts
+        UPDATE  gallery_posts
 
         SET thumbnail_id = #{thumbnailId}
 
@@ -116,7 +116,7 @@
 
     <!--해당 postId값의 게시글을 삭제-->
     <update id="deletePost" parameterType="long">
-        UPDATE image_posts
+        UPDATE gallery_posts
 
         SET delete_flag = true
 
@@ -125,7 +125,7 @@
 
     <!--postId값을 가진 열의 조회수를 증가-->
     <update id="increaseHits" parameterType="long">
-        UPDATE image_posts
+        UPDATE gallery_posts
 
         SET hits = hits + 1
 

@@ -15,7 +15,7 @@
             resultMap="mapCommentDTO">
         SELECT A.comment_id, A.post_id, A.user_id, B.username, A.created_date, A.comment
 
-        FROM image_comments A
+        FROM gallery_comments A
                  LEFT JOIN users B
                            ON A.user_id = B.user_id
 
@@ -27,14 +27,14 @@
 
     <!--댓글 저장-->
     <insert id="saveComment" parameterType="com.ebstudy.board.dto.CommentDTO">
-        INSERT INTO image_comments(comment, created_date, post_id, user_id)
+        INSERT INTO gallery_comments(comment, created_date, post_id, user_id)
 
         VALUES (#{comment}, #{createdDate}, #{postId}, #{userId})
     </insert>
 
     <!--댓글 삭제-->
     <update id="deleteComment" parameterType="long">
-        UPDATE image_comments
+        UPDATE gallery_comments
 
         SET delete_flag = true
 
@@ -45,14 +45,14 @@
     <select id="findCommentByCommentId" parameterType="long" resultType="CommentDTO">
         SELECT *
 
-        FROM image_comments
+        FROM gallery_comments
 
         WHERE comment_id = #{commentId}
     </select>
 
     <!--댓글 수정-->
     <update id="updateComment" parameterType="CommentDTO">
-        UPDATE image_comments
+        UPDATE gallery_comments
 
         SET comment       = #{comment},
             modified_date = #{modifiedDate}
