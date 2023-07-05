@@ -7,10 +7,6 @@ import apiService from "@/apis/service"
  * @returns postList, pagingValues, categoryList
  */
 function getPostList(url, params) {
-    if (params.filter === 'myPost') {
-        return apiService.get(url, {params})
-    }
-
     return apiService.get(url, {params})
 }
 

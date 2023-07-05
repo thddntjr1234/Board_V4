@@ -32,4 +32,7 @@ public class SearchDTO {
 
     // 정렬 방식
     private String sort;
+
+    // 게시글 개수
+    private Long userDisplay;
 }

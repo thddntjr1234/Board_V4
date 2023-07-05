@@ -69,9 +69,9 @@ const keyword = ref(route.query.keyword || null)
 const currentPostListComponent = ref(BoardPostList)
 
 onMounted(() => {
+  getBoardComponentByName(route.query.boardType)
   getFixedNoticeList()
   getPostList()
-  getBoardComponentByName(route.query.boardType)
 })
 
 /**
@@ -96,18 +96,18 @@ const getPage = async (pageNumber) => {
  * api 서버로 게시글 리스트를 전송받아 관련 데이터를 설정하는 메소드
  */
 const getPostList = async () => {
+  let userDisplay = null
+  if (currentPostListComponent.value.__name === 'GalleryPostList') {
+    userDisplay = 12
+  }
+
   const response = await boardApi.getPostList('boards/gallery', {
     pageNumber: route.query.pageNumber,
-    categoryId: route.query.categoryId,
-
+    userDisplay: userDisplay,
     // spread를 사용하지 않으면 String 타입이라 ""값이 전송돼서 mybatis if문에서 제대로 걸러지지 않는다.
     // 반면 spread를 사용하면 쿼리 파라미터가 존재하지 않을 때 null값을 반환시킨다.
-    ...(route.query.keyword && {keyword: route.query.keyword}),
-    ...(route.query.startDate && {startDate: route.query.startDate}),
-    ...(route.query.endDate && {endDate: route.query.endDate}),
-    ...(route.query.filter && {filter: route.query.filter}),
-    ...(route.query.secret && {secret: route.query.secret}),
-    ...(route.query.sort && {sort: route.query.sort})})
+    ...(route.query.keyword && {keyword: route.query.keyword})
+});
 
   pagingValues.value = response.data.pagingValues;
 

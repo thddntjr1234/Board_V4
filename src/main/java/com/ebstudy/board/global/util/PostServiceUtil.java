@@ -54,6 +54,7 @@ public class PostServiceUtil {
                 .filter(searchValues.getFilter())
                 .secret(searchValues.getSecret())
                 .sort(searchValues.getSort())
+                .userDisplay(searchValues.getUserDisplay())
                 .build();
     }
 
