@@ -63,7 +63,7 @@ public class GalleryFileService {
      */
     public FileDTO saveFile(MultipartFile multipartFile) throws IOException {
 
-        if (multipartFile == null) {
+        if (multipartFile == null || multipartFile.isEmpty()) {
             throw new CustomException(CustomErrorCode.FAILED_FILE_SAVE);
         }
 
