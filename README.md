@@ -1,12 +1,10 @@
 ## REST API 게시판 프로젝트
-특정 아이디어에 집중하지 않고 가장 기본적인 형태가 되는 게시판을 제작하고자 진행한 프로젝트입니다.
+특정 아이디어에 집중하지 않고 가장 기본적인 형태가 되는 게시판을 제작하고자 진행한 SPA 게시판 프로젝트입니다.
 
 ### 기술 스택
 #### Frontend
 - Vue.js
-- Vuex, vuex-persistedstate
 - Bootstrap
-- Javascript
 #### Backend
 - Java 11
 - Spring Boot 2.7.8
@@ -20,7 +18,6 @@
 ### 기능 설명
 #### 공통
 - 공지사항, Q&A, 커뮤니티, 1:1 문의, 이미지 갤러리 구현
-- 반환 데이터에 대한 공통 API Response 포맷으로 응답 데이터 일관화
 - JWT를 사용한 인증/인가(AccessToken만 사용)
 - Spring AOP를 이용한 전역 예외 핸들링, 어노테이션 필드 선언식의 사용자 지정 유효성 검증 수행
 #### 게시판별 상세 기능
@@ -44,6 +41,9 @@
   - 답변 완료된 게시글은 수정/삭제 불가 처리
 ### 동작 화면
 <hr>
+
+### API Docs
+링크: https://documenter.getpostman.com/view/20624430/2s93zB5McQ
 
 ### ERD
 링크: https://www.erdcloud.com/d/LXuKoB6WG5itgTh8J
