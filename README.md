@@ -53,7 +53,7 @@ http://ec2-13-209-162-46.ap-northeast-2.compute.amazonaws.com
 <img width="1085" alt="스크린샷 2023-07-08 오전 2 31 58" src="https://github.com/thddntjr1234/Board_V4/assets/29126159/a5c8b3b1-271d-4588-9ac8-579facfdc7b3">
 
 #### 파일 서비스 클래스의 updateFile()메소드
-<img width="886" alt="스크린샷 2023-07-08 오전 3 14 31" src="https://github.com/thddntjr1234/Board_V4/assets/29126159/7c5ec883-97ff-4a1a-a3c3-e81b9a90546b">
+<img width="886" alt="스크린샷 2023-07-08 오전 3 21 57" src="https://github.com/thddntjr1234/Board_V4/assets/29126159/49439887-9c23-4b3e-aafc-2a04ce843035">
 
 #### updateFile() 메소드 내에서 수행되는 deleteFileNotExistsDatabase(), deleteFile() 메소드
 <img width="699" alt="스크린샷 2023-07-08 오전 3 12 48" src="https://github.com/thddntjr1234/Board_V4/assets/29126159/6a5d8520-383d-45e2-8f08-1b9097d95710">
