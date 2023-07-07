@@ -7,11 +7,12 @@ export function validateFormData(formData) {
 
     let errors = []; // 에러 리스트
 
-    const titleRegex = /^.{4,100}$/;  // 4자 이상 100자 미만
-    const contentRegex = /^.{4,2000}$/;  // 4자 이상 2000자 미만
+    const titleRegex = /^[\s\S]{4,1999}$/;  // 4자 이상 100자 미만
+    const contentRegex = /^[\s\S]{4,1999}$/;  // 4자 이상 2000자 미만
     const formDataEntries = Array.from(formData.entries()); // formData 내의 key-value를 리스트화
 
     formDataEntries.forEach(([key, value]) => {
+        console.log(key + " ," + value)
         if (key === 'title') {
             const isTitleValid = titleRegex.test(value.toString());
             if (!isTitleValid) {
@@ -20,6 +21,7 @@ export function validateFormData(formData) {
         } else if (key === 'content') {
             const isContentValid = contentRegex.test(value.toString());
             if (!isContentValid) {
+                console.log(`value ${value.toString()}, isvalid? : ${isContentValid}`)
                 errors.push('게시글 내용은 4자 이상 2000자 이하여야 합니다.');
             }
         } else if (key === 'categoryId') {

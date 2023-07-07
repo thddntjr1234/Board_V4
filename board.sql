@@ -256,7 +256,7 @@ create table board.qna_files
         foreign key (post_id) references board.qna_posts (post_id)
 );
 
-create definer = root@localhost view board.v_community_not_deleted_post as
+create view board.v_community_not_deleted_post as
 select `board`.`community_posts`.`post_id`       AS `post_id`,
        `board`.`community_posts`.`created_date`  AS `created_date`,
        `board`.`community_posts`.`modified_date` AS `modified_date`,
@@ -269,7 +269,7 @@ select `board`.`community_posts`.`post_id`       AS `post_id`,
 from `board`.`community_posts`
 where `board`.`community_posts`.`delete_flag` = 0;
 
-create definer = root@localhost view board.v_gallery_not_deleted_post as
+create view board.v_gallery_not_deleted_post as
 select `board`.`gallery_posts`.`post_id`       AS `post_id`,
        `board`.`gallery_posts`.`created_date`  AS `created_date`,
        `board`.`gallery_posts`.`modified_date` AS `modified_date`,
@@ -282,7 +282,7 @@ select `board`.`gallery_posts`.`post_id`       AS `post_id`,
 from `board`.`gallery_posts`
 where `board`.`gallery_posts`.`delete_flag` = 0;
 
-create definer = root@localhost view board.v_inquiry_not_deleted_post as
+create view board.v_inquiry_not_deleted_post as
 select `board`.`inquiry_posts`.`post_id`       AS `post_id`,
        `board`.`inquiry_posts`.`created_date`  AS `created_date`,
        `board`.`inquiry_posts`.`modified_date` AS `modified_date`,
@@ -295,7 +295,7 @@ select `board`.`inquiry_posts`.`post_id`       AS `post_id`,
 from `board`.`inquiry_posts`
 where `board`.`inquiry_posts`.`delete_flag` = 0;
 
-create definer = root@localhost view board.v_notice_not_deleted_post as
+create view board.v_notice_not_deleted_post as
 select `board`.`notice_posts`.`post_id`       AS `post_id`,
        `board`.`notice_posts`.`created_date`  AS `created_date`,
        `board`.`notice_posts`.`modified_date` AS `modified_date`,
@@ -308,7 +308,7 @@ select `board`.`notice_posts`.`post_id`       AS `post_id`,
 from `board`.`notice_posts`
 where `board`.`notice_posts`.`delete_flag` = 0;
 
-create definer = root@localhost view board.v_qna_not_deleted_post as
+create view board.v_qna_not_deleted_post as
 select `board`.`qna_posts`.`post_id`            AS `post_id`,
        `board`.`qna_posts`.`created_date`       AS `created_date`,
        `board`.`qna_posts`.`modified_date`      AS `modified_date`,
