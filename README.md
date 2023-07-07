@@ -41,15 +41,21 @@ http://ec2-13-209-162-46.ap-northeast-2.compute.amazonaws.com
   - 비밀글 설정 및 답변 여부 표시
   - 관리자가 댓글 작성시 답변완료 표시
   - 답변 완료된 게시글은 수정/삭제 불가 처리
+<hr>
+
 ### 동작 화면
+대략적인 동작 화면은 다음과 같습니다.
 #### 로그인
-![로그인_AdobeExpress](https://github.com/thddntjr1234/Board_V4/assets/29126159/4bd8a7b2-2736-47bd-915a-3f2f9d0f506f)
+![로그인](https://github.com/thddntjr1234/Board_V4/assets/29126159/dc497771-608b-4471-899c-fbd8fa360cca)
+
 #### 이미지 게시판
-![이미지_게시판_AdobeExpress](https://github.com/thddntjr1234/Board_V4/assets/29126159/fc513ecd-e1a1-4688-862b-fdd2325a7ebe)
+![이미지-게시판](https://github.com/thddntjr1234/Board_V4/assets/29126159/6cafa181-b661-45d4-9cf1-7cd056eb0407)
+
 ### 댓글 기능
-![댓글_AdobeExpress](https://github.com/thddntjr1234/Board_V4/assets/29126159/146c8237-b429-4886-8d5c-910de91c4769)
+![댓글](https://github.com/thddntjr1234/Board_V4/assets/29126159/41bb1732-0299-46bb-87af-80e8cd1f1f86)
+
 ### Q&A 게시판 댓글 채택
-![Q_A_채택_AdobeExpress](https://github.com/thddntjr1234/Board_V4/assets/29126159/78bfedfd-ad78-4176-a64e-b74ebfcd2336)
+![Q_A-채택](https://github.com/thddntjr1234/Board_V4/assets/29126159/9d515213-b932-4f1e-a7cb-0d7697a6b201)
 <hr>
 
 ### API Docs
