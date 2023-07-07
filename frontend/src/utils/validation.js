@@ -7,8 +7,8 @@ export function validateFormData(formData) {
 
     let errors = []; // 에러 리스트
 
-    const titleRegex = /^.{4,100}$/;  // 4자 이상 100자 미만
-    const contentRegex = /^.{4,2000}$/;  // 4자 이상 2000자 미만
+    const titleRegex = /^[\s\S]{4,99}$/;  // 4자 이상 100자 미만
+    const contentRegex = /^[\s\S]{4,1999}$/;  // 4자 이상 2000자 미만
     const formDataEntries = Array.from(formData.entries()); // formData 내의 key-value를 리스트화
 
     formDataEntries.forEach(([key, value]) => {
