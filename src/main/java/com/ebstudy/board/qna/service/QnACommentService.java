@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.xml.stream.events.Comment;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -27,6 +28,13 @@ public class QnACommentService {
     public List<CommentDTO> getCommentList(Long postId) {
         return commentMapper.getCommentList(postId);
     }
+
+    /**
+     * 댓글 id를 사용하여 DB에서 댓글 정보를 가져온다.
+     * @param commentId 가져올 댓글의 id값
+     * @return 댓글 정보
+     */
+    public CommentDTO findCommentByCommentId(Long commentId) { return commentMapper.findCommentByCommentId(commentId); }
 
     /**
      * 댓글 저장 메소드

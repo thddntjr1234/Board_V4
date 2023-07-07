@@ -17,10 +17,10 @@
           </div>
           <div class="col-sm-3 text-end">
             <slot name="adoption" :adoptCommentEvent="adoptCommentEvent" :adoptedCommentId="adoptedCommentId" :comment="comment"></slot>
-            <button class="btn btn-outline-primary" v-if="!isEditMode && comment.userId === currentUserInfo.userId"
+            <button class="btn btn-outline-primary" v-if="!isEditMode && comment.userId === currentUserInfo.userId && adoptedCommentId === null"
                     @click="enableEditMode(comment)">수정
             </button>
-            <button class="btn btn-outline-secondary" v-if="!isEditMode && comment.userId === currentUserInfo.userId"
+            <button class="btn btn-outline-secondary" v-if="!isEditMode && comment.userId === currentUserInfo.userId && adoptedCommentId === null"
                     @click="deleteComment(comment)">삭제
             </button>
           </div>

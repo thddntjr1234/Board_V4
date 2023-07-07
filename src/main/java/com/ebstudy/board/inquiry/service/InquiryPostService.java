@@ -154,7 +154,7 @@ public class InquiryPostService {
     public void updatePost(PostDTO post, PostDTO originPost) {
         // 답변된 게시글이면 수정 거부 예외를 throw
         if (checkPostAnswerStatus(originPost)) {
-            throw new CustomException(CustomErrorCode.DENIED_POST_UPDATE);
+            throw new CustomException(CustomErrorCode.INVALID_POST_UPDATE);
         }
 
         post.setModifiedDate(String.valueOf(LocalDateTime.now()));
@@ -169,7 +169,7 @@ public class InquiryPostService {
     public void deletePost(PostDTO post, PostDTO originPost) {
         // 답변된 게시글이면 삭제 거부 예외를 throw
         if (checkPostAnswerStatus(originPost)) {
-            throw new CustomException(CustomErrorCode.DENIED_POST_DELETE);
+            throw new CustomException(CustomErrorCode.INVALID_POST_DELETE);
         }
 
         boardMapper.deletePost(post);

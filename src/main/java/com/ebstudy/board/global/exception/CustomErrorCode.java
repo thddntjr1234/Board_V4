@@ -16,7 +16,10 @@ public enum CustomErrorCode {
      */
     INVALID_REQUEST(HttpStatus.BAD_REQUEST,40001, "잘못된 요청입니다."),
     FAILED_VALIDATION(HttpStatus.BAD_GATEWAY, 40003, ""), // 사용중인 에러 코드라는 것을 알리기 위해 선언
-
+    INVALID_POST_UPDATE(HttpStatus.BAD_REQUEST, 40004, "답변된 게시글은 더이상 수정할 수 없습니다."),
+    INVALID_POST_DELETE(HttpStatus.BAD_REQUEST, 40005, "답변된 게시글은 더이상 삭제할 수 없습니다."),
+    INVALID_COMMENT_DELETE(HttpStatus.BAD_REQUEST, 40006, "채택된 댓글은 더이상 삭제할 수 없습니다."),
+    INVALID_COMMENT_UPDATE(HttpStatus.BAD_REQUEST, 40007, "채택된 댓글은 더이상 수정할 수 없습니다."),
     /**
      * 401 UNAUTHORIZED: 인증되지 않은 사용자의 요청
      */
@@ -26,8 +29,7 @@ public enum CustomErrorCode {
      * 403 FORBIDDEN: 인증되었으나 권한이 없는 사용자
      */
     DENIED_POST_REQUEST(HttpStatus.FORBIDDEN,40301, "게시글의 작성자가 아닙니다."),
-    DENIED_POST_UPDATE(HttpStatus.FORBIDDEN, 40302, "답변된 게시글은 더이상 수정할 수 없습니다."),
-    DENIED_POST_DELETE(HttpStatus.FORBIDDEN, 40303, "답변된 게시글은 더이상 삭제할 수 없습니다."),
+
     ALREADY_ANSWERED_POST(HttpStatus.FORBIDDEN, 40304, "해당 게시글은 더이상 댓글을 작성할 수 없습니다."),
 
     /**
