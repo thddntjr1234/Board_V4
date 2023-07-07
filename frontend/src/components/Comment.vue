@@ -54,7 +54,10 @@ export default {
     commentList: {},
     currentUserInfo: '',
     authorOfPost: false,
-    adoptedCommentId: null,
+    adoptedCommentId: {
+      type: null,
+      default: null
+    },
   },
 
   setup(props) {
