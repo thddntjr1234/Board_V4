@@ -105,6 +105,7 @@
             resultMap="mapCategoryDTO">
         SELECT *
         FROM categories
+        WHERE category_id &gt; 3
     </select>
 
     <!--  useGeneratedKeys의 keyProperty는 dto에 담겨 반환되므로 db PK에 해당하는 dto의 필드명을 써야 한다.   -->
