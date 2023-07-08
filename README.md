@@ -15,6 +15,10 @@ http://ec2-13-209-162-46.ap-northeast-2.compute.amazonaws.com
 - Spring Security
 - JWT
 - MyBatis
+#### Infrastructure
+- AWS EC2
+- AWS RDS
+- Nginx
 - MariaDB
 <hr>
 
@@ -44,6 +48,17 @@ http://ec2-13-209-162-46.ap-northeast-2.compute.amazonaws.com
   - 답변 완료된 게시글은 수정/삭제 불가 처리
 <hr>
 
+### 동작 화면
+대략적인 동작 화면은 다음과 같습니다.
+| 로그인 | 이미지 게시판 |
+|--------|--------------|
+| ![로그인](https://github.com/thddntjr1234/Board_V4/assets/29126159/dc497771-608b-4471-899c-fbd8fa360cca) | ![이미지 게시판](https://github.com/thddntjr1234/Board_V4/assets/29126159/6cafa181-b661-45d4-9cf1-7cd056eb0407) |
+
+| 댓글 기능 | Q&A 게시판 댓글 채택 |
+|----------|----------------------|
+| ![댓글 기능](https://github.com/thddntjr1234/Board_V4/assets/29126159/41bb1732-0299-46bb-87af-80e8cd1f1f86) | ![Q&A 게시판 댓글 채택](https://github.com/thddntjr1234/Board_V4/assets/29126159/9d515213-b932-4f1e-a7cb-0d7697a6b201) |
+<hr>
+
 ### 저는 이러한 방식으로 코드를 작성합니다.
 #### 파일 첨부기능을 가진 게시글 수정 과정 소개
 컨트롤러 계층은 주요 비즈니스 로직별로 메소드를 수행하도록 순서를 정의합니다.<br>
@@ -65,27 +80,12 @@ http://ec2-13-209-162-46.ap-northeast-2.compute.amazonaws.com
 <img width="800" alt="스크린샷 2023-07-08 오전 2 37 13" src="https://github.com/thddntjr1234/Board_V4/assets/29126159/29d352b7-1c84-472f-9dea-8714aeadaac3">
 <hr>
 
-### 동작 화면
-대략적인 동작 화면은 다음과 같습니다.
-| 로그인 | 이미지 게시판 |
-|--------|--------------|
-| ![로그인](https://github.com/thddntjr1234/Board_V4/assets/29126159/dc497771-608b-4471-899c-fbd8fa360cca) | ![이미지 게시판](https://github.com/thddntjr1234/Board_V4/assets/29126159/6cafa181-b661-45d4-9cf1-7cd056eb0407) |
-
-| 댓글 기능 | Q&A 게시판 댓글 채택 |
-|----------|----------------------|
-| ![댓글 기능](https://github.com/thddntjr1234/Board_V4/assets/29126159/41bb1732-0299-46bb-87af-80e8cd1f1f86) | ![Q&A 게시판 댓글 채택](https://github.com/thddntjr1234/Board_V4/assets/29126159/9d515213-b932-4f1e-a7cb-0d7697a6b201) |
-
-<hr>
-
 ### API Docs
 링크: https://documenter.getpostman.com/view/20624430/2s93zB5McQ
-<hr>
 
 ### ERD
 링크: https://www.erdcloud.com/d/LXuKoB6WG5itgTh8J
 <img width="1993" alt="스크린샷 2023-07-08 오전 3 25 02" src="https://github.com/thddntjr1234/Board_V4/assets/29126159/c9617b37-7bb6-4b34-b7f7-3917d7973e5d">
 
-
 ### 아키텍쳐
-AWS 배포 후 추가 예정
-
+<img width="1895" alt="스크린샷 2023-07-08 오후 2 56 38" src="https://github.com/thddntjr1234/Board_V4/assets/29126159/4afed953-11d9-4b00-8c28-cae387669516">
