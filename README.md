@@ -3,6 +3,10 @@
 
 ### 배포 URL
 http://ec2-13-209-162-46.ap-northeast-2.compute.amazonaws.com
+#### 계정 리스트
+1. ID: admin / PW: admin
+2. ID: user / PW: user
+3. ID: user1 / PW: user1
 <hr>
 
 ### 기술 스택
