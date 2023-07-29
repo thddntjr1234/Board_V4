@@ -12,13 +12,13 @@ http://3.39.111.253
 
 ### 기술 스택
 - **Frontend**
-    - JavaScript, Vue.js
+    - `JavaScript`, `Vue.js`
 - **Backend**
-    - Java 11, Spring Boot 2.7.8, Spring Security
-    - JWT, MyBatis  
+    - `Java 11`, `Spring Boot 2.7.8`, `Spring Security`
+    - `JWT`, `MyBatis`  
 - **Infrastructure**
-    - AWS EC2, Nginx
-    - AWS RDS, MariaDB
+    - `AWS EC2`, `Nginx`
+    - `AWS RDS`, `MariaDB`
 <hr>
 
 ### 기능 설명
