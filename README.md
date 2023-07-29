@@ -12,7 +12,7 @@ http://3.39.111.253
 
 ### 기술 스택
 - **Frontend**
-    - Vue.js, Bootstrap 5
+    - JavaScript, Vue.js
 - **Backend**
     - Java 11, Spring Boot 2.7.8, Spring Security
     - JWT, MyBatis  
