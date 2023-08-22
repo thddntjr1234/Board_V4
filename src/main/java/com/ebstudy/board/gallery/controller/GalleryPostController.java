@@ -114,7 +114,7 @@ public class GalleryPostController {
      * 게시글 수정
      *
      * @param post 수정할 내용이 담긴 게시글 DTO
-     * @return 공통 반환타입 CommonApiResponseDTO 객체
+     * @return ResponseEntity 객체
      */
     @PutMapping("/api/boards/gallery/{postId}")
     public ResponseEntity<Object> updatePost(@CustomValidation(value = {"title", "content"}) @ModelAttribute PostDTO post,
@@ -171,7 +171,7 @@ public class GalleryPostController {
      * 게시글 삭제, flag 설정으로 숨김 처리
      *
      * @param post postId, passwd 값 전달
-     * @return 공통 반환타입 CommonApiResponseDTO 객체
+     * @return ResponseEntity 객체
      */
     @DeleteMapping("/api/boards/gallery/{postId}")
     public ResponseEntity<Object> deletePost(@ModelAttribute PostDTO post) {

@@ -99,7 +99,7 @@ public class CommunityPostController {
     @PostMapping("/api/boards/free")
     // ResponseEntity 로 리턴하면 raw type 경고가 나타나므로 와일드카드 ?를 선언해서 raw type의 불안정성을 제거
     public ResponseEntity<Object> savePost(@CustomValidation(value = {"categoryId", "title", "content"})
-                                            @ModelAttribute PostDTO post) throws IOException {
+                                           @ModelAttribute PostDTO post) throws IOException {
         postService.savePost(post);
         fileService.saveFile(post.getPostId(), post.getFile());
 
@@ -110,11 +110,11 @@ public class CommunityPostController {
      * 게시글 수정
      *
      * @param post 수정할 내용이 담긴 게시글 DTO
-     * @return 공통 반환타입 CommonApiResponseDTO 객체
+     * @return ResponseEntity 객체
      */
     @PutMapping("/api/boards/free/{postId}")
     public ResponseEntity<Object> updatePost(@CustomValidation(value = {"title", "content"}) @ModelAttribute PostDTO post,
-                                              @RequestPart(required = false) List<FileDTO> existingFiles) throws IOException {
+                                             @RequestPart(required = false) List<FileDTO> existingFiles) throws IOException {
         // Multipart/Form-Data 방식과 json타입의 객체를 같이 사용하려면 json파트에 대해 @RequestPart 어노테이션을 적용해 주면 된다.
 
         // 수정 요청한 게시글 데이터를 DB에서 가져와서 해당 정보 기준으로 비교한다(postId를 다르게 하고 authorId를 일치시키는 방식으로 위조할 수 있기 때문에)
@@ -132,7 +132,7 @@ public class CommunityPostController {
      * 게시글 삭제, flag 설정으로 숨김 처리
      *
      * @param post postId, passwd 값 전달
-     * @return 공통 반환타입 CommonApiResponseDTO 객체
+     * @return ResponseEntity 객체
      */
     @DeleteMapping("/api/boards/free/{postId}")
     public ResponseEntity<Object> deletePost(@ModelAttribute PostDTO post) {

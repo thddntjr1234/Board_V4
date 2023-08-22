@@ -84,7 +84,6 @@ public class CommunityFileService {
      * @param postId            수정할 파일들의 부모 게시글 id
      * @param deliveryFiles     입력된 기존 파일
      * @param multipartFileList 새로 입력할 파일(수정됨, 혹은 추가)
-     * @throws IOException
      */
     public void updateFile(Long postId, List<FileDTO> deliveryFiles, List<MultipartFile> multipartFileList) throws IOException {
 
